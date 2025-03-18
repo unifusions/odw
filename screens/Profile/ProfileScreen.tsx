@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import { ArrowRightOnRectangleIcon, BellIcon, ChevronRightIcon, Cog6ToothIcon, HeartIcon, QuestionMarkCircleIcon, ShieldCheckIcon, UserIcon } from "react-native-heroicons/outline";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
+import ScreenHeader from "../../components/ScreenHeader";
 
 export default function ProfileScreen({ navigation }) {
 
@@ -12,10 +13,10 @@ export default function ProfileScreen({ navigation }) {
     const styles = getGlobalStyles(theme);
 
     const menuItems = [
-        { id: "1", title: "Edit Profile", icon: UserIcon, onPress: () => console.log("Edit Profile") },
+        { id: "1", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
         { id: "2", title: "Favorite", icon: HeartIcon, onPress: () => console.log("Favorite") },
         { id: "3", title: "Notifications", icon: BellIcon, onPress: () => console.log("Notifications") },
-        { id: "4", title: "Settings", icon: Cog6ToothIcon, onPress: () => console.log("Settings") },
+        { id: "4", title: "Settings", icon: Cog6ToothIcon, onPress: () =>navigation.navigate("Settings") },
         { id: "5", title: "Help and Support", icon: QuestionMarkCircleIcon, onPress: () => console.log("Help") },
         { id: "6", title: "Terms and Conditions", icon: ShieldCheckIcon, onPress: () => console.log("Terms") },
         { id: "7", title: "Log Out", icon: ArrowRightOnRectangleIcon, onPress: () => console.log("Logout"), logout: true },
@@ -23,15 +24,21 @@ export default function ProfileScreen({ navigation }) {
     const [isLogoutVisible, setLogoutVisible] = useState(false);
 
     const handleLogout = () => {
-        console.log("User logged out");
+        // console.log("User logged out");
         setLogoutVisible(false);
     };
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={styles.container}>
-                <View>
-                    <Text style={[styles.screenTitle, styles.textCenter]}>Profile</Text>
+            <SafeAreaView style={styles.safeAreaContainer}>
+            <ScreenHeader
+                        title="Profile"
+                        onBackPress={() => navigation.goBack()}
+                        // RightIcon={CalendarIcon} // Optional Right Icon
+                        // onRightPress={() => console.log("Calendar Pressed")                    }
+                    />
+                <View style={styles.container}>
+                    
                     <Image source={{}} style={styles.profileAvatar} />
                     <View style={{ marginBottom: 16 }}>
                         <Text style={[styles.textCenter, styles.profileUserName]}>User Name</Text>

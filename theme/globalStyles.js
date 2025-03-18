@@ -4,12 +4,18 @@ const { height, width } = Dimensions.get('window');
 
 const getGlobalStyles = (theme) =>
     StyleSheet.create({
-        container: {
-            flex: 1,
+        safeAreaContainer :{
+            flex:1,
             justifyContent: 'flex-start',
+            backgroundColor: theme.background,
+        },
+
+        container: {
+            // flex: 1,
+            
             // marginHorizontal:12,
             // marginTop:12,
-            backgroundColor: theme.background,
+          
             padding: 20,
 
         },

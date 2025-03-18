@@ -1,0 +1,1 @@
+export default function OtpScreen(second) {third}

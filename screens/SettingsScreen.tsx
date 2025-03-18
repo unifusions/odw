@@ -2,6 +2,9 @@ import React, { useContext } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { ThemeContext } from "../theme/ThemeProvider";
 import getGlobalStyles from "../theme/globalStyles";
+import ScreenHeader from "../components/ScreenHeader";
+import { useNavigation } from "@react-navigation/native";
+import { CalendarIcon } from "react-native-heroicons/outline";
 
 const SettingsScreen = () => {
   const { theme, toggleTheme, resetTheme } = useContext(ThemeContext);
@@ -9,8 +12,7 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Settings</Text>
-
+      
       <TouchableOpacity style={styles.button} onPress={toggleTheme}>
         <Text style={styles.buttonText}>Toggle Theme</Text>
       </TouchableOpacity>
