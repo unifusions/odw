@@ -4,25 +4,43 @@ const { height, width } = Dimensions.get('window');
 
 const getGlobalStyles = (theme) =>
     StyleSheet.create({
-        safeAreaContainer :{
-            flex:1,
+        safeAreaContainer: {
+            flex: 1,
             justifyContent: 'flex-start',
             backgroundColor: theme.background,
         },
 
         container: {
             // flex: 1,
-            
+
             // marginHorizontal:12,
             // marginTop:12,
-          
+
             padding: 20,
 
         },
 
-        flexJustifyBetween:{
-            flex:1,
-            justifyContent:'space-between'
+        font700:{
+            fontFamily:"Manrope_700Bold"
+        },  
+
+        
+        font500:{
+            fontFamily:"Manrope_500Medium"
+        },  
+
+
+        font400:{
+            fontFamily:'Manrope_400Regular'
+        },
+
+        textUpperCase:{
+            textTransform:"uppercase"
+        },
+
+        flexJustifyBetween: {
+            flex: 1,
+            justifyContent: 'space-between'
         },
 
         dFlexRow: {
@@ -52,19 +70,19 @@ const getGlobalStyles = (theme) =>
         },
         appointmentCard: {
             height: (width / 3),
-            width: (width / 2) - 32,
-            backgroundColor: '#BEC8F9',
-            padding: 12,
+            width: (width / 2.35),
+            backgroundColor: "#BEC8F9", // Light purple background
             borderRadius: 12,
-            marginEnd: 6
+            padding: 12,       
+            justifyContent: "space-between",
         },
         compareCard: {
             height: (width / 3),
-            width: (width / 2) - 32,
+            width: (width / 2.35),
             backgroundColor: '#C9E0DD',
-            padding: 12,
             borderRadius: 12,
-            marginStart: 6
+            padding: 12,       
+            justifyContent: "space-between",
         },
 
         text: {
@@ -80,7 +98,7 @@ const getGlobalStyles = (theme) =>
             alignItems: "center",
             marginTop: 10,
         },
-        cta:{
+        cta: {
             backgroundColor: theme.primary,
             paddingVertical: 15,
             paddingHorizontal: 20,
@@ -158,12 +176,19 @@ const getGlobalStyles = (theme) =>
 
         },
 
-
+        title: {
+            fontSize: 16,
+            fontFamily: "Manrope_700Bold",
+            color: "#2d3748",
+            marginBottom: 10,
+        },
         message: {
-            fontSize: 14,
+            fontSize: 16,
             color: "#4A4A4A",
             marginBottom: 20,
             textAlign: "center",
+            fontFamily: "Manrope_400Regular",
+            padding: 20
         },
         buttonContainer: {
             flexDirection: "row",
@@ -196,44 +221,77 @@ const getGlobalStyles = (theme) =>
         },
 
 
-        // BOOKING SCREEN
+        //SERVICES SCREEN
 
-        bookingAvatar:{
-            alignSelf:"center",
-            borderRadius: 50,
-            height: 100,
-            width:100,
-            marginBottom:12
+        serviceTitle:{
+            fontSize:11,
+            textAlign:"center",
+            fontFamily:"Manrope_500Medium"
         },
 
-        dentistName:{
-            textAlign:"center",
-            color:theme.primary,
+        // LOCATION SCREEN
+
+        locationTitle:{
+            fontFamily:"Manrope_700Bold",
+            textAlign:"left",
+            fontSize: 16
+        },
+
+        locationAddress:{
+            fontFamily:"Manrope_400Regular",
+            color:"$1B1F26",
+            fontSize: 12
+        },
+
+        // BOOKING SCREEN
+
+        bookingAvatar: {
+            alignSelf: "center",
+            borderRadius: 50,
+            height: 100,
+            width: 100,
+            marginBottom: 12
+        },
+
+        dentistName: {
+            textAlign: "center",
+            color: theme.primary,
             fontFamily: "Manrope_700Bold",
             fontSize: 16
 
         },
 
-        calenderContainer:{
+        calenderContainer: {
             marginTop: 12,
             borderTopWidth: 2,
             borderTopColor: theme.primary,
-            flexDirection:"row"
+            flexDirection: "row"
         },
 
-        calenderDayContainer:{
-            textAlign:"center",
+        calenderDayContainer: {
+            textAlign: "center",
             minHeight: 65,
-            backgroundColor:theme.primary
-        },  
+            backgroundColor: theme.primary
+        },
+
+        fixedBottomContainer: {
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            padding: 15,
+            backgroundColor: "#fff", // Ensure it's visible
+            borderTopWidth: 1,
+            borderColor: "#E5E7EB",
+          },
         //UTILITES
 
         textGrey: {
             color: theme.gray
         },
 
-        textFont : {
-            fontFamily:"Manrope_400Regular"
+        textFont: {
+            fontFamily: "Manrope_400Regular"
         }
 
 

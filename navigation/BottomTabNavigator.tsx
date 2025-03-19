@@ -9,43 +9,36 @@ import BookingScreen from "../screens/Appointment/BookingScreen";
 
 // import {} from "react-native-heroicons"
 
-const Tab = createBottomTabNavigator({
-    screens: {
-        Home: HomeScreen,
-        Profile: SettingsScreen,
-    }
-});
+const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
     return (
-        <ThemeProvider>
 
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    headerShown: false,
-                    tabBarIcon: ({ color, size, focused }) => {
-                        let IconComponent;
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarIcon: ({ color, size, focused }) => {
+                    let IconComponent;
 
-                        if (route.name === "Home") {
-                            IconComponent = HomeIcon;
-                        } else if (route.name === "Calendar") {
-                            IconComponent = CalendarDaysIcon;
-                        } else if (route.name === "Payments") {
-                            IconComponent = BanknotesIcon;
-                        } else if (route.name === "Profile") {
-                            IconComponent = UserIcon;
-                        }
+                    if (route.name === "Home") {
+                        IconComponent = HomeIcon;
+                    } else if (route.name === "Calendar") {
+                        IconComponent = CalendarDaysIcon;
+                    } else if (route.name === "Payments") {
+                        IconComponent = BanknotesIcon;
+                    } else if (route.name === "Profile") {
+                        IconComponent = UserIcon;
+                    }
 
-                        return <IconComponent size={size} color={color} />;
-                    },
-                    tabBarActiveTintColor: "#1E3A8A", // Dark blue
-                    tabBarInactiveTintColor: "#64748B", // Grayish blue
-                })}>
-                <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
-                <Tab.Screen name="Calendar" component={BookingScreen} />
-                <Tab.Screen name="Payments" component={HomeScreen} />
-                <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
-            </Tab.Navigator>
-        </ThemeProvider>
+                    return <IconComponent size={size} color={color} />;
+                },
+                tabBarActiveTintColor: "#1E3A8A", // Dark blue
+                tabBarInactiveTintColor: "#64748B", // Grayish blue
+            })}>
+            <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
+            <Tab.Screen name="Calendar" component={BookingScreen} />
+            <Tab.Screen name="Payments" component={HomeScreen} />
+            <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
+        </Tab.Navigator>
     )
 }

@@ -8,6 +8,7 @@ import LoginScreen from "./screens/Auth/LoginScreen";
 import { ThemeProvider } from "./theme/ThemeProvider";
 import AuthStackNavigation from "./navigation/AuthStackNavigation";
 import BookingScreen from "./screens/Appointment/BookingScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -23,12 +24,13 @@ export default function App() {
 
     <ThemeProvider>
       <NavigationContainer>
-       
-        {/* <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="OtpScreen" component={AuthStackNavigation} />
           <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
-        </Stack.Navigator> */}
-        <BookingScreen />
+        </Stack.Navigator>
+
+        {/* <HomeScreen /> */}
       </NavigationContainer>
     </ThemeProvider>
 
