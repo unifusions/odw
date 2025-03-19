@@ -12,13 +12,13 @@ export default function AuthStackNavigation() {
 
     const { theme } = useContext(ThemeContext);
     return (
-        <NavigationContainer>
-            <AuthStack.Navigator>
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="AuthOtp" component={OtpScreen} />
+       
+            <AuthStack.Navigator screenOptions={{ headerShown:false }}>
+                <AuthStack.Screen name="Login" component={LoginScreen} />
+                <AuthStack.Screen name="AuthOtp" component={OtpScreen} />
 
             </AuthStack.Navigator>
-        </NavigationContainer>
+      
 
     )
 }

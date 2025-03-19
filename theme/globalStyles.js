@@ -20,6 +20,11 @@ const getGlobalStyles = (theme) =>
 
         },
 
+        flexJustifyBetween:{
+            flex:1,
+            justifyContent:'space-between'
+        },
+
         dFlexRow: {
             display: 'flex',
             flexDirection: 'row',
@@ -75,10 +80,18 @@ const getGlobalStyles = (theme) =>
             alignItems: "center",
             marginTop: 10,
         },
+        cta:{
+            backgroundColor: theme.primary,
+            paddingVertical: 15,
+            paddingHorizontal: 20,
+            alignItems: "center",
+            marginTop: 10,
+        },
         buttonText: {
+
             color: "#FFF",
             fontSize: 16,
-            fontWeight: "bold",
+            fontFamily: "Manrope_600SemiBold"
         },
 
         screenTitle: {

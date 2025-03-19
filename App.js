@@ -1,11 +1,12 @@
 import "@expo/metro-runtime";
-import { useFonts,Manrope_500Medium, Manrope_400Regular, Manrope_600SemiBold, Manrope_700Bold } from "@expo-google-fonts/manrope";
+import { useFonts, Manrope_500Medium, Manrope_400Regular, Manrope_600SemiBold, Manrope_700Bold } from "@expo-google-fonts/manrope";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LoginScreen from "./screens/Auth/LoginScreen";
 import { ThemeProvider } from "./theme/ThemeProvider";
+import AuthStackNavigation from "./navigation/AuthStackNavigation";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -13,16 +14,22 @@ export default function App() {
   });
   const Stack = createStackNavigator();
   return (
-   
-      // <NavigationContainer>
-         
-      //   {/* <BottomTabNavigator /> */}
-      // </NavigationContainer>
 
-      <ThemeProvider>
-        <LoginScreen />
-      </ThemeProvider>
-  
+    // <NavigationContainer>
+
+    //   {/* <BottomTabNavigator /> */}
+    // </NavigationContainer>
+
+    <ThemeProvider>
+      <NavigationContainer>
+        {/* <AuthStackNavigation /> */}
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="OtpScreen" component={AuthStackNavigation} />
+          <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
+
 
   );
 }

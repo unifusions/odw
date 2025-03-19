@@ -90,6 +90,7 @@
 //     },
 // });
 
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
     View,
@@ -106,6 +107,7 @@ import {
 } from "react-native";
 
 const LoginScreen = () => {
+    const navigation = useNavigation();
     return (
         <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -124,7 +126,7 @@ const LoginScreen = () => {
                         />
                     </View>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("AuthOtp")}>
                         <Text style={styles.buttonText}>Log In</Text>
                     </TouchableOpacity>
                 </ScrollView>

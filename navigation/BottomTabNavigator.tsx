@@ -5,6 +5,7 @@ import { useContext } from "react";
 import SettingsScreen from "../screens/SettingsScreen";
 import { HomeIcon, CalendarDaysIcon, BanknotesIcon, UserIcon } from "react-native-heroicons/outline"; // Import icons
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import BookingScreen from "../screens/Appointment/BookingScreen";
 
 // import {} from "react-native-heroicons"
 
@@ -41,7 +42,7 @@ export default function BottomTabNavigator() {
                     tabBarInactiveTintColor: "#64748B", // Grayish blue
                 })}>
                 <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
-                <Tab.Screen name="Calendar" component={HomeScreen} />
+                <Tab.Screen name="Calendar" component={BookingScreen} />
                 <Tab.Screen name="Payments" component={HomeScreen} />
                 <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
             </Tab.Navigator>
