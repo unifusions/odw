@@ -195,11 +195,46 @@ const getGlobalStyles = (theme) =>
             fontWeight: "bold",
         },
 
+
+        // BOOKING SCREEN
+
+        bookingAvatar:{
+            alignSelf:"center",
+            borderRadius: 50,
+            height: 100,
+            width:100,
+            marginBottom:12
+        },
+
+        dentistName:{
+            textAlign:"center",
+            color:theme.primary,
+            fontFamily: "Manrope_700Bold",
+            fontSize: 16
+
+        },
+
+        calenderContainer:{
+            marginTop: 12,
+            borderTopWidth: 2,
+            borderTopColor: theme.primary,
+            flexDirection:"row"
+        },
+
+        calenderDayContainer:{
+            textAlign:"center",
+            minHeight: 65,
+            backgroundColor:theme.primary
+        },  
         //UTILITES
 
         textGrey: {
             color: theme.gray
         },
+
+        textFont : {
+            fontFamily:"Manrope_400Regular"
+        }
 
 
 
