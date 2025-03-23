@@ -4,44 +4,50 @@ import { useFonts, Manrope_500Medium, Manrope_400Regular, Manrope_600SemiBold, M
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import LoginScreen from "./screens/Auth/LoginScreen";
+
 import { ThemeProvider } from "./theme/ThemeProvider";
 import AuthStackNavigation from "./navigation/AuthStackNavigation";
-import BookingScreen from "./screens/Appointment/BookingScreen";
-import HomeScreen from "./screens/HomeScreen";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext, AuthProvider } from "./context/AuthContext";
+
 
 export default function App() {
   let [fontsLoaded] = useFonts({
     Manrope_700Bold, Manrope_400Regular, Manrope_500Medium, Manrope_600SemiBold
   });
   const Stack = createStackNavigator();
-  return (
 
-    // <NavigationContainer>
+  const { token } = useContext(AuthContext);
+  console.log("Token inside AppNavigator:", token); // Debugging: Check if token updates
 
-    //   {/* <BottomTabNavigator /> */}
-    // </NavigationContainer>
 
-    <ThemeProvider>
+  const AppNavigator = () => {
+
+    const { token } = useContext(AuthContext);
+
+    console.log("Token inside AppNavigator:", token); // Debugging: Check if token updates
+
+    return (
       <NavigationContainer>
-
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="OtpScreen" component={AuthStackNavigation} />
-          <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
+          {token ? (
+            <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
+          ) : (
+            <Stack.Screen name="AuthStack" component={AuthStackNavigation} />
+          )}
         </Stack.Navigator>
-
-        {/* <HomeScreen /> */}
       </NavigationContainer>
-    </ThemeProvider>
+    );
+  }
 
-
-  );
-}
-const MainScreen = () => {
-  const { theme, toggleTheme } = useContext(ThemeContext);
   return (
-    <NavigationContainer>
-      <BottomTabNavigator />
-    </NavigationContainer>
-  )
+
+
+    <AuthProvider>
+      <ThemeProvider>
+        <AppNavigator />
+      </ThemeProvider>
+
+    </AuthProvider>
+  );
 }

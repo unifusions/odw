@@ -1,17 +1,47 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import { ThemeProvider, ThemeContext } from "../theme/ThemeProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import SettingsScreen from "../screens/SettingsScreen";
 import { HomeIcon, CalendarDaysIcon, BanknotesIcon, UserIcon } from "react-native-heroicons/outline"; // Import icons
 import ProfileStackNavigator from "./ProfileStackNavigator";
 import BookingScreen from "../screens/Appointment/BookingScreen";
+import HomeStackNavigator from "./HomeStackNavigator";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 // import {} from "react-native-heroicons"
 
 const Tab = createBottomTabNavigator();
 
+
 export default function BottomTabNavigator() {
+
+    const navigation = useNavigation();
+    const[userToken, setUserToken] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    // useEffect(() => {
+
+    //     const checkToken = async () => {
+    //         try {
+    //             const token = await AsyncStorage.getItem('authToken');
+    //             setUserToken(token);
+    //             if (!token) {
+    //                 navigation.reset({
+    //                     index: 0,
+    //                     routes: [{ name: 'AuthStack' }],
+    //                 })
+    //             }
+    //         } catch (error) {
+    //             console.error('Error checking token:', error);
+    //         } finally {
+    //             setIsLoading(false);
+    //         }
+    //     };
+
+    //     checkToken();
+    // }, []);
     return (
 
         <Tab.Navigator
@@ -35,10 +65,11 @@ export default function BottomTabNavigator() {
                 tabBarActiveTintColor: "#1E3A8A", // Dark blue
                 tabBarInactiveTintColor: "#64748B", // Grayish blue
             })}>
-            <Tab.Screen name="Home" component={HomeScreen}></Tab.Screen>
+            <Tab.Screen name="Home" component={HomeStackNavigator}></Tab.Screen>
             <Tab.Screen name="Calendar" component={BookingScreen} />
             <Tab.Screen name="Payments" component={HomeScreen} />
             <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
+
         </Tab.Navigator>
     )
 }

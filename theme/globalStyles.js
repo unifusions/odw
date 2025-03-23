@@ -11,31 +11,23 @@ const getGlobalStyles = (theme) =>
         },
 
         container: {
-            // flex: 1,
-
-            // marginHorizontal:12,
-            // marginTop:12,
-
             padding: 20,
-
         },
 
-        font700:{
-            fontFamily:"Manrope_700Bold"
-        },  
-
-        
-        font500:{
-            fontFamily:"Manrope_500Medium"
-        },  
-
-
-        font400:{
-            fontFamily:'Manrope_400Regular'
+        font700: {
+            fontFamily: "Manrope_700Bold"
         },
 
-        textUpperCase:{
-            textTransform:"uppercase"
+        font500: {
+            fontFamily: "Manrope_500Medium"
+        },
+
+        font400: {
+            fontFamily: 'Manrope_400Regular'
+        },
+
+        textUpperCase: {
+            textTransform: "uppercase"
         },
 
         flexJustifyBetween: {
@@ -73,7 +65,7 @@ const getGlobalStyles = (theme) =>
             width: (width / 2.35),
             backgroundColor: "#BEC8F9", // Light purple background
             borderRadius: 12,
-            padding: 12,       
+            padding: 12,
             justifyContent: "space-between",
         },
         compareCard: {
@@ -81,7 +73,7 @@ const getGlobalStyles = (theme) =>
             width: (width / 2.35),
             backgroundColor: '#C9E0DD',
             borderRadius: 12,
-            padding: 12,       
+            padding: 12,
             justifyContent: "space-between",
         },
 
@@ -104,6 +96,25 @@ const getGlobalStyles = (theme) =>
             paddingHorizontal: 20,
             alignItems: "center",
             marginTop: 10,
+            height: 50,
+            width: '100%'
+        },
+
+        ctaText: {
+            color: theme.white,
+            fontSize: 16,
+            fontFamily: theme.font700,
+        },
+
+        textInput: {
+            width: "100%",
+            height: 50,
+            borderWidth: 1,
+            borderColor: "#ccc",
+            borderRadius: 5,
+            paddingHorizontal: 15,
+            marginBottom: 20,
+            fontFamily:theme.font500
         },
         buttonText: {
 
@@ -223,23 +234,23 @@ const getGlobalStyles = (theme) =>
 
         //SERVICES SCREEN
 
-        serviceTitle:{
-            fontSize:11,
-            textAlign:"center",
-            fontFamily:"Manrope_500Medium"
+        serviceTitle: {
+            fontSize: 11,
+            textAlign: "center",
+            fontFamily: "Manrope_500Medium"
         },
 
         // LOCATION SCREEN
 
-        locationTitle:{
-            fontFamily:"Manrope_700Bold",
-            textAlign:"left",
+        locationTitle: {
+            fontFamily: "Manrope_700Bold",
+            textAlign: "left",
             fontSize: 16
         },
 
-        locationAddress:{
-            fontFamily:"Manrope_400Regular",
-            color:"$1B1F26",
+        locationAddress: {
+            fontFamily: "Manrope_400Regular",
+            color: "$1B1F26",
             fontSize: 12
         },
 
@@ -283,7 +294,7 @@ const getGlobalStyles = (theme) =>
             backgroundColor: "#fff", // Ensure it's visible
             borderTopWidth: 1,
             borderColor: "#E5E7EB",
-          },
+        },
         //UTILITES
 
         textGrey: {

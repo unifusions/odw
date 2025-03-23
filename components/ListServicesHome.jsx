@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react"
 import { getDentalServices } from "../services/dentalServices";
-import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
+import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, ActivityIndicator } from "react-native";
 import { ThemeContext } from "../theme/ThemeProvider";
-import { BASE_URL } from "../config";
+import { APP_URL } from "../config";
 import getGlobalStyles from "../theme/globalStyles";
 
 const { width, height } = Dimensions.get('window');
@@ -10,17 +10,17 @@ const { width, height } = Dimensions.get('window');
 const ListServicesHome = () => {
     const [services, setServices] = useState([]);
     const theme = useContext(ThemeContext);
-
+    const [loading, setLoading] = useState(false);
     const gStyles = getGlobalStyles(theme);
 
     useEffect(() => {
-        console.log('using effect')
+        
         const fetchDentalServices = async () => {
             try {
+                setLoading(true);
                 const data = await getDentalServices();
                 setServices(data);
-                console.log('function working')
-                console.log(data);
+                setLoading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -31,17 +31,26 @@ const ListServicesHome = () => {
         console.log('completed');
     }, []);
 
+    if (loading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color={theme.primary} />
+            </View>
+        );
+    }
+
     const ServiceItem = ({ item }) => {
         return (
 
             <TouchableOpacity style={styles.serviceItem}>
                 <View style={styles.icon}></View>
-                <Image source={{ uri: BASE_URL + '/storage/' + item.image_path }} style={styles.icon} />
+                <Image source={{ uri: APP_URL + '/public/storage/' + item.image_path }} style={styles.icon} />
                 <Text style={styles.serviceText}>{item.name}</Text>
             </TouchableOpacity>)
     }
     return (
         <View >
+
             <FlatList
                 data={services}
                 keyExtractor={(item) => item.id.toString()}
@@ -51,7 +60,7 @@ const ListServicesHome = () => {
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.card}>
                         <View style={{ width: 32, height: 32, marginBottom: 18 }}>
-                            <Image source={{ uri: BASE_URL + '/storage/' + item.image_path }} style={styles.image} />
+                            <Image source={{ uri: APP_URL + '/public/storage/' + item.image_path }} style={styles.image} />
 
                         </View>
                         <Text style={gStyles.serviceTitle}>{item.name}</Text>

@@ -91,7 +91,7 @@
 // });
 
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import {
     View,
     Text,
@@ -105,33 +105,61 @@ import {
     Keyboard,
     Platform,
 } from "react-native";
+import { ThemeContext } from "../../theme/ThemeProvider";
+import getGlobalStyles from "../../theme/globalStyles";
+import { registerUser } from "../../services/authservices";
 
 const LoginScreen = () => {
+    // const token =  AsyncStorage.getItem('authToken');
+    const { theme } = useContext(ThemeContext);
+    const gStyles = getGlobalStyles(theme);
     const navigation = useNavigation();
-    return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-        >
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                <ScrollView contentContainerStyle={styles.innerContainer}>
-                    <View style={{ alignItems:"center", width:"100%" }}>
-                        <Image source={require("../../assets/images/odw-logo-icon.png")} style={styles.logo} />
-                        <Text style={styles.welcomeText}>Welcome Back!</Text>
-                        <Text style={styles.subText}>Use Credentials to access your account</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Enter Username/Registered Phone Number"
-                            placeholderTextColor="#999"
-                        />
-                    </View>
 
-                    <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("AuthOtp")}>
-                        <Text style={styles.buttonText}>Log In</Text>
-                    </TouchableOpacity>
-                </ScrollView>
-            </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+    const [email, setEmail] = useState('');
+
+    const handleLogin = async () => {
+
+        const response = await registerUser(email);
+        if (response.status) {
+
+            otpDigits = response.otp;
+            navigation.navigate('AuthOtp', { email, otpDigits });
+        } else {
+            console.log(response.message)
+        }
+
+    }
+    return (
+        
+        <>
+
+            <KeyboardAvoidingView
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={styles.container}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView contentContainerStyle={styles.innerContainer}>
+                        <View style={{ alignItems: "center", width: "100%" }}>
+                            <Image source={require("../../assets/images/odw-logo-icon.png")} style={styles.logo} />
+                            <Text style={styles.welcomeText}>Welcome Back!</Text>
+                            <Text style={styles.subText}>Use Credentials to access your account</Text>
+                            <TextInput
+                                value={email}
+                                onChangeText={setEmail}
+                                style={gStyles.textInput}
+                                placeholder="Enter Username/Registered Phone Number"
+                                placeholderTextColor="#999"
+                            />
+
+                        </View>
+
+                        <TouchableOpacity style={gStyles.cta} onPress={handleLogin}>
+                            <Text style={gStyles.ctaText}>Log In</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </>
     );
 };
 
@@ -151,7 +179,7 @@ const styles = StyleSheet.create({
     logo: {
         width: 93,
         height: 100,
-        marginTop:40,
+        marginTop: 40,
         marginBottom: 20,
     },
     welcomeText: {
@@ -164,28 +192,7 @@ const styles = StyleSheet.create({
         color: "#4a5568",
         marginBottom: 20,
     },
-    input: {
-        width: "100%",
-        height: 50,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 5,
-        paddingHorizontal: 15,
-        marginBottom: 20,
-    },
-    button: {
-        width: "100%",
-        height: 50,
-        backgroundColor: "#49A5D5",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 5,
-    },
-    buttonText: {
-        color: "#fff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
+
 });
 
 export default LoginScreen;

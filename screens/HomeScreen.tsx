@@ -9,9 +9,11 @@ import getGlobalStyles from "../theme/globalStyles";
 import ListServicesHome from "../components/ListServicesHome";
 import { ArrowUpRightIcon, MagnifyingGlassIcon, MapIcon, MapPinIcon } from "react-native-heroicons/outline";
 import ListLocationHome from "../components/ListLocationsHome";
+import { useNavigation } from "@react-navigation/native";
 export default function HomeScreen() {
 
 
+    const navigation = useNavigation();
     const ratio = Math.max(PixelRatio.getFontScale(), 1.3);
     const { height, width } = Dimensions.get('window');
     const { theme, toggleTheme } = useContext(ThemeContext);
@@ -91,7 +93,11 @@ export default function HomeScreen() {
                     <Text style={styles.sectionHeading}>
                         Services
                     </Text>
-                    <Text>See All </Text>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('Home', {screen:'AllServices'})}>
+                        <Text>See All </Text>
+                    </TouchableOpacity>
+
 
 
                 </View>
