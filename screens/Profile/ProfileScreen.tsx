@@ -8,13 +8,14 @@ import BottomSheetDialog from "../../components/BottomSheetDialog";
 import ScreenHeader from "../../components/ScreenHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { AuthContext } from "../../context/AuthContext";
 
 
 export default function ProfileScreen() {
 
     const { theme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
-
+    const {logout} = useContext(AuthContext);
     const menuItems = [
         { id: "1", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
         { id: "2", title: "Favorite", icon: HeartIcon, onPress: () => console.log("Favorite") },
@@ -30,7 +31,7 @@ export default function ProfileScreen() {
 
 
         // await logout();
-        
+        logout();
         setLogoutVisible(false);
 
     };

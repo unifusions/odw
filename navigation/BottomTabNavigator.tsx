@@ -9,6 +9,7 @@ import BookingScreen from "../screens/Appointment/BookingScreen";
 import HomeStackNavigator from "./HomeStackNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
+import BookingStackNavigator from "./BookingStackNavigator";
 
 // import {} from "react-native-heroicons"
 
@@ -66,7 +67,7 @@ export default function BottomTabNavigator() {
                 tabBarInactiveTintColor: "#64748B", // Grayish blue
             })}>
             <Tab.Screen name="Home" component={HomeStackNavigator}></Tab.Screen>
-            <Tab.Screen name="Calendar" component={BookingScreen} />
+            <Tab.Screen name="Calendar" component={BookingStackNavigator} />
             <Tab.Screen name="Payments" component={HomeScreen} />
             <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
 

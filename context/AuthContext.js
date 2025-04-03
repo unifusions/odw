@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
                 await AsyncStorage.setItem('auth_token', response.data.token);
                 api.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
                 setToken(response.data.token); // Update state
-                console.log("Login Sucess")
             }
 
 
@@ -37,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        await api.post('/logout');
+        // await api.post('/logout');
         // setUser(null);
         setToken(null);
     };

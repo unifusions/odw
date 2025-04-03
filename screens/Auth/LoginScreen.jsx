@@ -1,95 +1,3 @@
-// import { useContext } from "react";
-// import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-// import { ThemeContext, ThemeProvider } from "../../theme/ThemeProvider";
-// import getGlobalStyles from "../../theme/globalStyles";
-
-// export default function LoginScreen() {
-
-//     const { theme } = useContext(ThemeContext);
-//     const gStyles = getGlobalStyles(theme);
-//     return (
-
-//         <SafeAreaProvider>
-//             <SafeAreaView style={styles.container}>
-//                 <View style={{ width:'100%', alignItems:"center" }}>
-
-//                     <Image source={require("../../assets/images/odw-logo-icon.png")} style={styles.logo} />
-//                     <Text style={styles.welcomeText}>Welcome Back!</Text>
-//                     <Text style={styles.subText}>Use Credentials to access your account</Text>
-//                     <TextInput
-//                         style={styles.input}
-//                         placeholder="Enter Username/Registered Phone Number"
-//                         placeholderTextColor="#999"
-//                     />
-
-
-//                 </View>
-//                 <TouchableOpacity style={styles.button}>
-//                     <Text style={styles.buttonText}>Log In</Text>
-//                 </TouchableOpacity>
-//             </SafeAreaView>
-//         </SafeAreaProvider>
-
-//     )
-// }
-
-// const styles = StyleSheet.create({
-
-//     container: {
-//         flex: 1,
-//         justifyContent: "space-between",
-//         alignItems: "center",
-//         backgroundColor: "#fff",
-//         padding:20
-//     },
-//     flexCenter: {
-//         flex: 1,
-//         justifyContent: "space-between",
-
-//         backgroundColor: "#fff",
-//     },
-//     logo: {
-//         width: 93,
-//         height: 100,
-//         marginBottom: 20,
-//     },
-//     welcomeText: {
-//         fontSize: 24,
-//         fontWeight: "bold",
-//         color: "#2d3748",
-//     },
-//     subText: {
-//         fontSize: 14,
-//         color: "#4a5568",
-//         marginBottom: 20,
-//     },
-//     input: {
-//         width: "100%",
-//         height: 50,
-//         borderWidth: 1,
-//         borderColor: "#ccc",
-//         borderRadius: 0,
-//         paddingHorizontal: 15,
-//         justifyContent: "center",
-//         alignItems: "center",
-//         marginBottom: 20,
-//     },
-//     button: {
-//         width: "100%",
-//         height: 50,
-//         backgroundColor: "#49A5D5",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         borderRadius: 5,
-//     },
-//     buttonText: {
-//         color: "#fff",
-//         fontSize: 16,
-//         fontWeight: "bold",
-//     },
-// });
-
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import {
@@ -104,33 +12,113 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     Platform,
+    ActivityIndicator,
+    Alert,
 } from "react-native";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 import { registerUser } from "../../services/authservices";
+import ErrorDialog from "../../components/ErrorDialog";
 
 const LoginScreen = () => {
     // const token =  AsyncStorage.getItem('authToken');
     const { theme } = useContext(ThemeContext);
     const gStyles = getGlobalStyles(theme);
     const navigation = useNavigation();
-
+    const [processing, setProcessing] = useState(false);
     const [email, setEmail] = useState('');
-
+    const [isConfirmVisible, setConfirmVisible] = useState(false);
+    const [message, setMessage] = useState('');
+    const handleConfirm = () => {
+        setConfirmVisible(false);
+        setMessage(null);
+    }
     const handleLogin = async () => {
+        setProcessing(true);
 
         const response = await registerUser(email);
-        if (response.status) {
+
+        if (response.status === 200) {
 
             otpDigits = response.otp;
             navigation.navigate('AuthOtp', { email, otpDigits });
         } else {
-            console.log(response.message)
+
+            setConfirmVisible(true);
+            setMessage(response.data.error);
+            // Alert.alert("Error", response.data.error || "Something went wrong!");
+
         }
+        setProcessing(false);
 
     }
+
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: 'flex-start',
+            backgroundColor: "#fff",
+        },
+        innerContainer: {
+            flexGrow: 1,
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingHorizontal: 20,
+            paddingVertical: 40
+        },
+        logo: {
+            width: 93,
+            height: 100,
+            marginTop: 40,
+            marginBottom: 20,
+        },
+        welcomeText: {
+            fontSize: 24,
+            fontWeight: "bold",
+            color: "#2d3748",
+        },
+        subText: {
+            fontSize: 14,
+            color: "#4a5568",
+            marginBottom: 20,
+        },
+
+
+        buttonRegister: {
+            borderWidth: 1,
+            borderColor: '#475F73',
+        },
+
+        buttonLogin: {
+            backgroundColor: theme.primary,
+            borderColor: '#475F73',
+        },
+        buttonText: {
+            fontFamily: theme.font700
+        },
+        button: {
+            flex: 1,
+            paddingVertical: 15,
+            paddingHorizontal: 20,
+            alignItems: "center",
+            justifyContent: "center",
+            height: 49,
+            marginHorizontal: 5,
+
+        },
+
+        buttonRow: {
+            flexDirection: "row",
+            width: "100%",
+            justifyContent: "space-between",
+        },
+
+
+    });
+
+
     return (
-        
+
         <>
 
             <KeyboardAvoidingView
@@ -152,47 +140,29 @@ const LoginScreen = () => {
                             />
 
                         </View>
+                        {processing && <ActivityIndicator size="large" />
+                        }
+                        <View style={[styles.buttonRow]} >
+                            <TouchableOpacity style={[styles.button, styles.buttonRegister]} onPress={() => navigation.navigate('Register')}>
+                                <Text style={[styles.buttonText]} >Register</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
+                                <Text style={[styles.buttonText, { color: '#FFF' }]}>Log In</Text>
+                            </TouchableOpacity>
+                        </View>
 
-                        <TouchableOpacity style={gStyles.cta} onPress={handleLogin}>
-                            <Text style={gStyles.ctaText}>Log In</Text>
-                        </TouchableOpacity>
+
+                        <ErrorDialog visible={isConfirmVisible}
+                            title="Error"
+                            message={message}
+                            onConfirm={handleConfirm} />
                     </ScrollView>
+
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
         </>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'flex-start',
-        backgroundColor: "#fff",
-    },
-    innerContainer: {
-        flexGrow: 1,
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 40
-    },
-    logo: {
-        width: 93,
-        height: 100,
-        marginTop: 40,
-        marginBottom: 20,
-    },
-    welcomeText: {
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "#2d3748",
-    },
-    subText: {
-        fontSize: 14,
-        color: "#4a5568",
-        marginBottom: 20,
-    },
-
-});
 
 export default LoginScreen;
