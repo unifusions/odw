@@ -9,28 +9,13 @@ import {
 import { ThemeContext } from "../theme/ThemeProvider";
 import getGlobalStyles from "../theme/globalStyles";
 
-const ScrollableDatePicker = () => {
+const ScrollableDatePicker = ({dates, handleSelect, selectedDate}) => {
   const {theme} = useContext(ThemeContext);
   const gStyles = getGlobalStyles(theme);
-  const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
-
-  // Generate 30 days dynamically from today
-  const generateDates = () => {
-    return Array.from({ length: 30 }, (_, i) => {
-      const date = new Date();
-      date.setDate(date.getDate() + i);
-      return {
-        fullDate: date.toDateString(),
-        day: date.toLocaleDateString("en-US", { weekday: "short" }), // "Mon", "Tue"
-        dateNum: date.getDate(), // 15, 16, 17...
-      };
-    });
-  };
-
-  const dates = generateDates();
 
   return (
     <View style={styles.container}>
+
       <FlatList
         data={dates}
         horizontal
@@ -42,7 +27,7 @@ const ScrollableDatePicker = () => {
           return (
             <TouchableOpacity
               style={[styles.dateItem, isSelected && styles.selectedDate]}
-              onPress={() => setSelectedDate(item.fullDate)}
+              onPress={()=>handleSelect(item)}
             >
               <Text style={[styles.dateText, isSelected && styles.selectedDateText]}>
                 {item.dateNum}

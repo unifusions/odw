@@ -6,6 +6,7 @@ export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [patient, setPatient] = useState(null);
     const [token, setToken] = useState(null);
     const checkUser = async () => {
         const storedToken = await AsyncStorage.getItem('auth_token');
@@ -15,17 +16,20 @@ export const AuthProvider = ({ children }) => {
         }
         setLoading(false);
     };
-    const login = async (email, otp) => {
+    const login = async (email, fullname, phone, otp) => {
         try {
 
 
-            const response = await api.post('/verify-otp', { email, otp });
+
+            const response = await api.post('/verify-otp', { email, phone, otp, fullname });
             console.log(response);
             // // setUser(response.data.user);
             if (response.data.token) {
                 await AsyncStorage.setItem('auth_token', response.data.token);
                 api.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
                 setToken(response.data.token); // Update state
+                setUser(response.data.user);
+                setPatient(response.data.user.patient)
             }
 
 
@@ -37,8 +41,9 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         // await api.post('/logout');
-        // setUser(null);
         setToken(null);
+        setUser(null);
+
     };
 
     return (

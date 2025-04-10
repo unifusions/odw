@@ -11,6 +11,7 @@ import { ArrowUpRightIcon, MagnifyingGlassIcon, MapIcon, MapPinIcon } from "reac
 import ListLocationHome from "../components/ListLocationsHome";
 import { useNavigation } from "@react-navigation/native";
 import getLocation from "../services/getLocation";
+import DealsCarousel from "../components/DealsCarousel";
 
 export default function HomeScreen() {
 
@@ -32,13 +33,13 @@ export default function HomeScreen() {
         try {
             const loc = await getLocation.getLocation();
             setLocation(loc);
-       
+
             const cityName = await getLocation.getCityName(loc.coords.latitude, loc.coords.longitude);
             setCity(cityName);
         } catch (error) {
             Alert.alert("Error", error.message);
         }
-    }; 
+    };
     return (
         <SafeAreaProvider>
             <SafeAreaView style={[styles.container, styles.safeAreaContainer]} >
@@ -86,10 +87,8 @@ export default function HomeScreen() {
                         // }}
                         />
                     </View>
-                    <View style={styles.adContainer}>
-
-                    </View>
-                    <View style={styles.dFlexRow}>
+                    <DealsCarousel />
+                    <View style={styles.dFlexRow}>  
 
                         <TouchableOpacity style={[styles.appointmentCard]} >
                             <Text style={[localStyles.title, styles.font500]}>Book an{"\n"}Appointment</Text>
@@ -141,11 +140,6 @@ export default function HomeScreen() {
 
                     <ListLocationHome />
 
-                    {/* <View>
-                    <Text style={{ color: theme.text, fontFamily: theme.font, fontSize: 20 }}>Hello, Theming!</Text>
-                    <Text onPress={toggleTheme} style={{ color: theme.primary, marginTop: 20 }}>Switch Theme</Text>
-                    <Text>{height}, {width}</Text>
-                </View> */}
                 </ScrollView>
             </SafeAreaView>
         </SafeAreaProvider >

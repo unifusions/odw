@@ -15,7 +15,7 @@ export default function ProfileScreen() {
 
     const { theme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
-    const {logout} = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const menuItems = [
         { id: "1", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
         { id: "2", title: "Favorite", icon: HeartIcon, onPress: () => console.log("Favorite") },
@@ -29,9 +29,9 @@ export default function ProfileScreen() {
     const navigation = useNavigation();
     const handleLogout = async () => {
 
-
+      
         // await logout();
-        logout();
+        // logout();
         setLogoutVisible(false);
 
     };
@@ -39,6 +39,7 @@ export default function ProfileScreen() {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.safeAreaContainer}>
+
                 <ScreenHeader
                     title="Profile"
                     onBackPress={() => navigation.goBack()}
@@ -47,11 +48,26 @@ export default function ProfileScreen() {
                 />
                 <View style={styles.container}>
 
-                    <Image source={{}} style={styles.profileAvatar} />
-                    <View style={{ marginBottom: 16 }}>
-                        <Text style={[styles.textCenter, styles.profileUserName]}>User Name</Text>
-                        <Text style={[styles.textCenter, styles.textGrey]}>+1 355 7856 965</Text>
-                    </View>
+                    {
+                        user && (
+                            <>
+                                {user.avatar ?
+                                    <Image source={{}} style={styles.profileAvatar} />
+                                    : (
+                                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                                            <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
+                                                <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
+                                            </View>
+                                        </View>
+                                    )}
+
+                                <View style={{ marginBottom: 16 }}>
+                                    <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
+                                    <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
+                                </View>
+                            </>
+                        )
+                    }
 
 
                     <FlatList
@@ -63,8 +79,7 @@ export default function ProfileScreen() {
                                 <ChevronRightIcon size={18} color="#B0B0B0" />
                             </TouchableOpacity>
                         )} />
-                    {/* <Button title="Personal Details" onPress={() => navigation.navigate("PersonalDetails")} />
-                    <Button title="Logout" onPress={() => console.log("Logout Functionality Here")} /> */}
+
                 </View>
 
             </SafeAreaView>
@@ -76,7 +91,7 @@ export default function ProfileScreen() {
                 onConfirm={handleLogout}
                 onCancel={() => setLogoutVisible(false)}
             />
-        </SafeAreaProvider>
+        </SafeAreaProvider >
 
     );
 }

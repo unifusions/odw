@@ -23,7 +23,7 @@ export default function OtpScreen({ route }) {
 
 
 
-  const { email, phone, otpDigits } = route.params;
+  const { email, phone, otpDigits, fullname } = route.params;
   const otpLength = 6;
   const [otp, setOtp] = useState(new Array(otpLength).fill(""));
   const inputRefs = useRef([]);
@@ -49,7 +49,8 @@ export default function OtpScreen({ route }) {
   };
   const handleVerify = () => {
 
-    login(email, otp);
+    // console.log(phone);
+    login(email, phone,fullname,  otp);
 
 
   };

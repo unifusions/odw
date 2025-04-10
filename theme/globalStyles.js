@@ -114,7 +114,7 @@ const getGlobalStyles = (theme) =>
             borderRadius: 5,
             paddingHorizontal: 15,
             marginBottom: 20,
-            fontFamily:theme.font500
+            fontFamily: theme.font500
         },
         buttonText: {
 
@@ -134,8 +134,20 @@ const getGlobalStyles = (theme) =>
         },
 
         profileAvatar: {
-            height: 168,
-            width: 168,
+            height: 100,
+            width: 100,
+        },
+        profileAvatorAltImg: {
+            borderRadius: 75,
+            backgroundColor: theme.primary,
+            alignItems:'center', 
+            justifyContent:"center"
+        },
+
+        profileAvatarText:{
+            color:theme.white,
+            fontFamily:"Manrope_400Regular",
+            fontSize : 40
         },
         profileUserName: {
             fontFamily: "Manrope_600SemiBold",

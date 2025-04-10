@@ -9,24 +9,10 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const services = [
-  "Teeth Cleaning",
-  "Cavity Filling",
-  "Root Canal",
-  "Braces",
-  "Whitening",
-  "Gum Surgery",
-  "Tooth Extraction",
-  "Implants",
-  "Crowns",
-  "Dentures",
-  "Scaling & Polishing",
-  "Fluoride Treatment",
-]; // Added more services for scrolling
 
-const ServiceDropdown = () => {
-  const [selectedService, setSelectedService] = useState(null);
+const ServiceDropdown = ({ services, onSelect, selectedService = null }) => {
   const [modalVisible, setModalVisible] = useState(false);
+
 
   return (
     <View style={styles.container}>
@@ -35,7 +21,7 @@ const ServiceDropdown = () => {
       {/* Dropdown Button */}
       <TouchableOpacity style={styles.dropdown} onPress={() => setModalVisible(true)}>
         <Text style={[styles.dropdownText, !selectedService && { color: "#9CA3AF" }]}>
-          {selectedService || "Select Service"}
+          {selectedService && selectedService.name || "Select Service"}
         </Text>
         <MaterialIcons name="keyboard-arrow-down" size={20} color="#9CA3AF" />
       </TouchableOpacity>
@@ -46,16 +32,16 @@ const ServiceDropdown = () => {
         <View style={styles.modal}>
           <FlatList
             data={services}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.name}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.option}
                 onPress={() => {
-                  setSelectedService(item);
+                  onSelect(item);
                   setModalVisible(false);
                 }}
               >
-                <Text style={styles.optionText}>{item}</Text>
+                <Text style={styles.optionText}>{item.name}</Text>
               </TouchableOpacity>
             )}
             showsVerticalScrollIndicator={false}

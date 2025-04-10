@@ -35,15 +35,11 @@ export const loginUser = async (email, phone) => {
         Alert.alert("Error", data.error);
     }
 }
-export const registerUser = async (email, phone) => {
+export const registerUser = async (email, phone, fullname) => {
     try {
-        const response = await api.post(`${BASE_URL}/register`, { email, phone });
+        const response = await api.post(`${BASE_URL}/register`, { email, phone, fullname });
+        return response;
         
-        // if (response.status === 200) {  // Check if request was successful
-            // Alert.alert("Success", response.data.message);
-            return response; 
-        // }
-        // return response.data;
     } catch (error) {
         return error.response
         // if (error.response) {

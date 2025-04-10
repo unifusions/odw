@@ -20,13 +20,19 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
         "package": "com.odw.dentis"
-      }
+      },
+      "package": "com.dentis.odw"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "419c24b7-1581-41a9-bfd1-9ac566de1c67"
+      }
+    }
   }
 }
