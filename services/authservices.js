@@ -27,9 +27,9 @@ export const verifyOtp = async (email, phone, otp) => {
 
 export const loginUser = async (email, phone) => {
     try {
-        const response = await api.post(`${BASE_URL}/register`, { email, phone });
+        const response = await api.post(`${BASE_URL}/login`, { email, phone });
 
-        return response.data;
+        return response;
     } catch (error) {
         console.log(error)
         Alert.alert("Error", data.error);

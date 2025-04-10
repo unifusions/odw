@@ -1,6 +1,6 @@
 
-import { useContext, useState } from "react";
-import { Text, View, PixelRatio, Dimensions, TouchableOpacity, TextInput, StyleSheet, ScrollView } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { Text, View, PixelRatio, Dimensions, TouchableOpacity, TextInput, StyleSheet, ScrollView, Alert } from "react-native";
 
 
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
@@ -10,6 +10,8 @@ import ListServicesHome from "../components/ListServicesHome";
 import { ArrowUpRightIcon, MagnifyingGlassIcon, MapIcon, MapPinIcon } from "react-native-heroicons/outline";
 import ListLocationHome from "../components/ListLocationsHome";
 import { useNavigation } from "@react-navigation/native";
+import getLocation from "../services/getLocation";
+
 export default function HomeScreen() {
 
 
@@ -19,6 +21,24 @@ export default function HomeScreen() {
     const { theme, toggleTheme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
 
+    const [location, setLocation] = useState(null);
+    const [city, setCity] = useState("Fetching...");
+
+    useEffect(() => {
+        fetchLocation();
+    }, []);
+
+    const fetchLocation = async () => {
+        try {
+            const loc = await getLocation.getLocation();
+            setLocation(loc);
+       
+            const cityName = await getLocation.getCityName(loc.coords.latitude, loc.coords.longitude);
+            setCity(cityName);
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        }
+    }; 
     return (
         <SafeAreaProvider>
             <SafeAreaView style={[styles.container, styles.safeAreaContainer]} >
@@ -31,7 +51,7 @@ export default function HomeScreen() {
                             <Text style={{ fontSize: 12, color: '#475F73', fontFamily: 'Manrope_700Bold' }}>Location</Text>
                             <View style={{ flexDirection: "row", alignItems: "center" }}>
                                 <MapPinIcon color={"#50E0D4"} style={{ paddingEnd: 8 }} />
-                                <Text style={{ fontSize: 16, color: '#4f4f4f', fontFamily: 'Manrope_600SemiBold' }}>Las Vegas</Text>
+                                <Text style={{ fontSize: 16, color: '#4f4f4f', fontFamily: 'Manrope_600SemiBold' }}>{city}</Text>
 
                             </View>
                         </View>

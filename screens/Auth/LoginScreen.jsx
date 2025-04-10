@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
-import { registerUser } from "../../services/authservices";
+import { loginUser, registerUser } from "../../services/authservices";
 import ErrorDialog from "../../components/ErrorDialog";
 
 const LoginScreen = () => {
@@ -36,12 +36,13 @@ const LoginScreen = () => {
     const handleLogin = async () => {
         setProcessing(true);
 
-        const response = await registerUser(email);
+        const response = await loginUser(email);
 
         if (response.status === 200) {
 
-            otpDigits = response.otp;
-            navigation.navigate('AuthOtp', { email, otpDigits });
+            otpDigits = response.data.otp;
+            // console.log(response.data);
+            navigation.navigate('AuthOtp', { email, otpDigits: otpDigits });
         } else {
 
             setConfirmVisible(true);

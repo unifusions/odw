@@ -10,6 +10,7 @@ import HomeStackNavigator from "./HomeStackNavigator";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import BookingStackNavigator from "./BookingStackNavigator";
+import CompareScreen from "../screens/CompareScreen";
 
 // import {} from "react-native-heroicons"
 
@@ -55,7 +56,7 @@ export default function BottomTabNavigator() {
                         IconComponent = HomeIcon;
                     } else if (route.name === "Calendar") {
                         IconComponent = CalendarDaysIcon;
-                    } else if (route.name === "Payments") {
+                    } else if (route.name === "Compare") {
                         IconComponent = BanknotesIcon;
                     } else if (route.name === "Profile") {
                         IconComponent = UserIcon;
@@ -68,7 +69,7 @@ export default function BottomTabNavigator() {
             })}>
             <Tab.Screen name="Home" component={HomeStackNavigator}></Tab.Screen>
             <Tab.Screen name="Calendar" component={BookingStackNavigator} />
-            <Tab.Screen name="Payments" component={HomeScreen} />
+            <Tab.Screen name="Compare" component={CompareScreen} />
             <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
 
         </Tab.Navigator>

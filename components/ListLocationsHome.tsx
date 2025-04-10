@@ -25,11 +25,12 @@ export default function ListLocationHome() {
 
     return (
         <>
-            {console.log(navigation.getState())}
+
             {
 
                 clinics.map((item) => (
                     <View key={item.id.toString()} >
+                    
                         <TouchableOpacity style={styles.locationItemContainer} onPress={() => navigation.navigate('Calendar', { screen: 'ClinicBooking', params: { clinic: item } })}>
                             <View style={{ height: imageWidth, width: imageWidth, backgroundColor: "green", marginEnd: 18 }}>
                                 <Image source={{ uri: "https://placehold.co/100x100.png" }} style={styles.image} />
@@ -44,8 +45,8 @@ export default function ListLocationHome() {
                                     <View>
                                         <Text>
 
-                                        {item.branches?.[0]?.address_line_1 ?? "No Address"} {"\n"} 
-  {item.branches?.[0]?.address_line_2 ?? "No Address"}
+                                            {item.branches?.[0]?.address_line_1 ?? "No Address"} {"\n"}
+                                            {item.branches?.[0]?.address_line_2 ?? "No Address"}  
                                         </Text>
                                     </View>
 

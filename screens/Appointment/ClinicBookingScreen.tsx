@@ -39,7 +39,7 @@ export default function ClinicBookingScreen() {
                         <Text style={[gStyles.textCenter, gStyles.textGrey, gStyles.textFont]}>{clinic.id}</Text>
                         <ScrollableDatePicker />
                         <TimeSlotPicker start={clinic.branches[0].opening_time} 
-                        end = {clinic.branches[0].closing_time} />
+                        end = {clinic.branches[0].closing_time} /> 
                         <ServiceDropdown />
                     </View>
                 </ScrollView>

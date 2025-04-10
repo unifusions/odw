@@ -50,12 +50,12 @@ export default function OtpScreen({ route }) {
   const handleVerify = () => {
 
     login(email, otp);
-    
+
 
   };
 
 
-  
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
