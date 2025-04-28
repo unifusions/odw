@@ -35,7 +35,7 @@ const generateTimeSlots = (start = "12:00", end = "20:00", interval = 30) => {
 const TimeSlotPicker = ({ start, end, selectedTimeSlot, handleSelect }) => {
     const screenWidth = Dimensions.get("window").width;
     const numColumns = 5; // Max slots per row
-    const slotWidth =( screenWidth / numColumns )- 22;
+    const slotWidth = (screenWidth / numColumns) - 22;
     const [selectedSlot, setSelectedSlot] = useState(null);
     const timeSlots = generateTimeSlots(start, end);
 
@@ -43,7 +43,7 @@ const TimeSlotPicker = ({ start, end, selectedTimeSlot, handleSelect }) => {
     const renderItem = ({ item }) => {
         const isSelected = item === selectedTimeSlot;
         return (
-            <TouchableOpacity
+            <TouchableOpacity key={item}
                 style={[styles.slot, { width: slotWidth }, isSelected && styles.selectedSlot]}
                 onPress={() => handleSelect(item)}
             >
