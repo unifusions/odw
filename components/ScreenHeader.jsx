@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { ArrowLeftIcon } from "react-native-heroicons/outline";
+import { ArrowLeftIcon, ChevronLeftIcon } from "react-native-heroicons/outline";
 import getGlobalStyles from "../theme/globalStyles";
 import { ThemeContext } from "../theme/ThemeProvider";
 
@@ -12,7 +12,7 @@ export default function ScreenHeader({ title, onBackPress, RightIcon }) {
         <View style={styles.header}>
             {/* Back Button */}
             <TouchableOpacity onPress={onBackPress} style={styles.iconContainer}>
-                <ArrowLeftIcon size={22} color="#4A4A4A" />
+                <ChevronLeftIcon size={22} color="#4A4A4A" />
             </TouchableOpacity>
 
             {/* Title */}

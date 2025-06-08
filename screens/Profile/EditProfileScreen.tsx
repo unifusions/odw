@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { ThemeContext } from "../../theme/ThemeProvider";
@@ -8,8 +8,12 @@ import ScreenHeader from "../../components/ScreenHeader";
 import { CalendarIcon, ChevronDownIcon, PencilIcon } from "react-native-heroicons/outline";
 import { View, TextInput, TouchableOpacity, Image, StyleSheet, Text } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../context/AuthContext";
+import { GenderAmbiguous } from "react-bootstrap-icons";
 
 export default function EditProfileScreen() {
+    const { user } = useContext(AuthContext);
     const { theme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
     const navigation = useNavigation();
@@ -17,11 +21,11 @@ export default function EditProfileScreen() {
     const [date, setDate] = useState(new Date());
 
     const [profile, setProfile] = useState({
-        name: "",
-        nickname: "",
-        email: "",
-        dob: "",
-        gender: "",
+        name: user.patient.first_name || '',
+        nickname: user.patient.last_name || "",
+        email: user.email || "",
+        dob: user.patient.dob || "",
+        gender: user.patient.gender || "",
         profileImage: "https://placehold.co/160x160",
     });
 
@@ -30,6 +34,21 @@ export default function EditProfileScreen() {
         setProfile({ ...profile, dob: selectedDate.toISOString().split("T")[0] });
         setOpenDatePicker(false);
     };
+
+    useEffect(() => {
+
+        // const _retrieveData = async () => {
+        //     try {
+        //         const value = await AsyncStorage.getItem('TASKS');
+        //         if (value !== null) {
+        //             // We have data!!
+        //             console.log(value);
+        //         }
+        //     } catch (error) {
+        //         // Error retrieving data
+        //     }
+        // };
+    }, [])
 
     return (
         <>
@@ -58,7 +77,7 @@ export default function EditProfileScreen() {
                             <CalendarIcon size={18} color="#9E9E9E" />
                             <Text style={localStyles.dateText}>{profile.dob || "Date of Birth"}</Text>
                         </TouchableOpacity>
-{/* 
+                        {/* 
                         <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
                             <Text>Select Date: {date.toDateString()}</Text>
                         </TouchableOpacity> */}
@@ -81,10 +100,11 @@ export default function EditProfileScreen() {
                         />
 
                         {/* Gender Dropdown */}
-                        <View style={localStyles.inputIconContainer}>
-                            <TextInput style={localStyles.inputIcon} placeholder="Gender" />
+                        <TouchableOpacity style={localStyles.inputIconContainer}>
+                           
+                            <Text style={localStyles.dateText}>{profile.gender || "Gender"}</Text>
                             <ChevronDownIcon size={18} color="#9E9E9E" />
-                        </View>
+                        </TouchableOpacity>
                     </View>
 
 

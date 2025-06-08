@@ -29,10 +29,10 @@ const ScrollableDatePicker = ({dates, handleSelect, selectedDate}) => {
               style={[styles.dateItem, isSelected && styles.selectedDate]}
               onPress={()=>handleSelect(item)}
             >
-              <Text style={[styles.dateText, isSelected && styles.selectedDateText]}>
+              <Text style={[styles.dateText, isSelected && styles.selectedDateText, {fontFamily: theme.font600}]}>
                 {item.dateNum}
               </Text>
-              <Text style={[styles.dayText, isSelected && styles.selectedDayText]}>
+              <Text style={[styles.dayText, isSelected && styles.selectedDayText, {fontFamily: theme.font500}]}>
                 {item.day}
               </Text>
             </TouchableOpacity>

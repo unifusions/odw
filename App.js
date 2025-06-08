@@ -25,11 +25,13 @@ export default function App() {
 
     const { token } = useContext(AuthContext);
 
-    console.log("Token inside AppNavigator:", token); // Debugging: Check if token updates
 
     return (
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+
+          {/* <Stack.Screen name="BottomTabs" component={BottomTabNavigator} /> */}
+
           {token ? (
             <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />
           ) : (
@@ -48,6 +50,6 @@ export default function App() {
         <AppNavigator />
       </ThemeProvider>
 
-    </AuthProvider>
+     </AuthProvider>
   );
 }

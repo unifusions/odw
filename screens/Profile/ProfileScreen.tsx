@@ -1,9 +1,9 @@
-import { View, Text, Button, Image, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, Button, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import getGlobalStyles from "../../theme/globalStyles";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeProvider";
-import { ArrowRightOnRectangleIcon, BellIcon, ChevronRightIcon, Cog6ToothIcon, HeartIcon, QuestionMarkCircleIcon, ShieldCheckIcon, UserIcon } from "react-native-heroicons/outline";
+import { ArrowRightOnRectangleIcon, BellIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, ChevronRightIcon, Cog6ToothIcon, CurrencyDollarIcon, HeartIcon, LifebuoyIcon, QuestionMarkCircleIcon, ShieldCheckIcon, UserIcon } from "react-native-heroicons/outline";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
 import ScreenHeader from "../../components/ScreenHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -17,19 +17,22 @@ export default function ProfileScreen() {
     const styles = getGlobalStyles(theme);
     const { user, logout } = useContext(AuthContext);
     const menuItems = [
-        { id: "1", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
-        { id: "2", title: "Favorite", icon: HeartIcon, onPress: () => console.log("Favorite") },
-        { id: "3", title: "Notifications", icon: BellIcon, onPress: () => console.log("Notifications") },
-        { id: "4", title: "Settings", icon: Cog6ToothIcon, onPress: () => navigation.navigate("Settings") },
-        { id: "5", title: "Help and Support", icon: QuestionMarkCircleIcon, onPress: () => console.log("Help") },
-        { id: "6", title: "Terms and Conditions", icon: ShieldCheckIcon, onPress: () => console.log("Terms") },
-        { id: "7", title: "Log Out", icon: ArrowRightOnRectangleIcon, onPress: () => console.log("Logout"), logout: true },
+        { id: "0", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
+        { id: "1", title: "My Appointments", icon: CalendarDaysIcon, onPress: () => navigation.navigate("MyAppointments") },
+        { id: "2", title: "My Estimates", icon: CurrencyDollarIcon, onPress: () => navigation.navigate("MyEstimates") },
+        { id: "3", title: "My Second Opinions", icon: ChatBubbleLeftRightIcon, onPress: () => navigation.navigate("MySecondOpinions") },
+        { id: "4", title: "My Insurance", icon: HeartIcon, onPress: () => navigation.navigate("MyInsurance") },
+
+        { id: "6", title: "Help and Support", icon: LifebuoyIcon, onPress: () => navigation.navigate("HelpSupport") },
+        { id: "7", title: "Terms and Conditions", icon: ShieldCheckIcon, onPress: () => console.log("Terms") },
+        { id: "5", title: "Settings", icon: Cog6ToothIcon, onPress: () => navigation.navigate("Settings") },
+        { id: "8", title: "Log Out", icon: ArrowRightOnRectangleIcon, onPress: () => console.log("Logout"), logout: true }
     ]
     const [isLogoutVisible, setLogoutVisible] = useState(false);
     const navigation = useNavigation();
     const handleLogout = async () => {
 
-      
+
         await logout();
         // logout();
         setLogoutVisible(false);
@@ -46,41 +49,44 @@ export default function ProfileScreen() {
                 // RightIcon={CalendarIcon} // Optional Right Icon
                 // onRightPress={() => console.log("Calendar Pressed")                    }
                 />
-                <View style={styles.container}>
+                <ScrollView >
+                    <View style={styles.container}>
 
-                    {
-                        user && (
-                            <>
-                                {user.avatar ?
-                                    <Image source={{}} style={styles.profileAvatar} />
-                                    : (
-                                        <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
-                                            <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
-                                                <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
+                        {
+                            user && (
+                                <>
+                                    {user.avatar ?
+                                        <Image source={{}} style={styles.profileAvatar} />
+                                        : (
+                                            <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                                                <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
+                                                    <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
+                                                </View>
                                             </View>
-                                        </View>
-                                    )}
+                                        )}
 
-                                <View style={{ marginBottom: 16 }}>
-                                    <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
-                                    <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
-                                </View>
-                            </>
-                        )
-                    }
+                                    <View style={{ marginBottom: 16 }}>
+                                        <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
+                                        <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
+                                    </View>
+                                </>
+                            )
+                        }
 
 
-                    <FlatList
-                        data={menuItems} keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <TouchableOpacity style={[styles.menuItem, item.logout && styles.logoutItem]} onPress={item.logout ? () => setLogoutVisible(true) : item.onPress}>
-                                <item.icon size={22} color={item.logout ? "#E63946" : "#4A4A4A"} />
-                                <Text style={[styles.menuText, item.logout && styles.logoutText]}>{item.title}</Text>
-                                <ChevronRightIcon size={18} color="#B0B0B0" />
-                            </TouchableOpacity>
-                        )} />
+                        <FlatList
+                            data={menuItems} keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity style={[styles.menuItem, item.logout && styles.logoutItem]} onPress={item.logout ? () => setLogoutVisible(true) : item.onPress}>
+                                    <item.icon size={22} color={item.logout ? "#E63946" : "#4A4A4A"} />
+                                    <Text style={[styles.menuText, item.logout && styles.logoutText]}>{item.title}</Text>
+                                    <ChevronRightIcon size={18} color="#B0B0B0" />
+                                </TouchableOpacity>
+                            )} />
 
-                </View>
+                    </View>
+                </ScrollView>
+
 
             </SafeAreaView>
 

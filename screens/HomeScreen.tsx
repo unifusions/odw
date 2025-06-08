@@ -90,15 +90,17 @@ export default function HomeScreen() {
                     <DealsCarousel />
                     <View style={styles.dFlexRow}>  
 
-                        <TouchableOpacity style={[styles.appointmentCard]} >
-                            <Text style={[localStyles.title, styles.font500]}>Book an{"\n"}Appointment</Text>
+                        <TouchableOpacity style={[styles.appointmentCard]} onPress={() => navigation.navigate('Home', {screen: "SecondOpinion"})}>
+                            <Text style={[localStyles.title, styles.font500]}>Get a {"\n"} 
+                            Second Opinion </Text>
                             <View style={localStyles.iconContainer}>
                                 <ArrowUpRightIcon size={20} color="#5A5A5A" />
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.compareCard} >
-                            <Text style={[localStyles.title, styles.font500]}>Compare{"\n"}Costs</Text>
+                        <TouchableOpacity style={styles.compareCard} onPress={() => navigation.navigate('Home', {screen: "Estimate"})}>
+                            <Text style={[localStyles.title, styles.font500]}>Get an {"\n"} 
+                            Estimate</Text>
                             <View style={localStyles.iconContainer}>
                                 <ArrowUpRightIcon size={20} color="#5A5A5A" />
                             </View>

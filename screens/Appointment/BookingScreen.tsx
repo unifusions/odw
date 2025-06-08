@@ -21,12 +21,14 @@ export default function BookingScreen() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={[gStyles.safeAreaContainer, { flex: 1 }]}>
-        <ScreenHeader
+        {/* <ScreenHeader
           title="New Appointment"
           onBackPress={() => navigation.goBack()}
           RightIcon={CalendarDaysIcon}
-        />
-
+        /> */}
+        <View style={gStyles.container}>
+          <Text style={gStyles.screenTitle}>Appointment</Text>
+        </View>
         {/* Scrollable Content */}
         <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
           <View style={gStyles.container}>

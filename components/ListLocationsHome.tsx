@@ -31,7 +31,7 @@ export default function ListLocationHome() {
                 clinics.map((item) => (
                     <View key={item.id.toString()} >
 
-                        <TouchableOpacity style={styles.locationItemContainer} onPress={() => navigation.navigate('Calendar', { screen: 'ClinicBooking', params: { clinic: item } })}>
+                        <TouchableOpacity style={styles.locationItemContainer} onPress={() => navigation.navigate('Appointments', { screen: 'ClinicBooking', params: { clinic: item } })}>
                             <View style={{ height: imageWidth, width: imageWidth, backgroundColor: "green", marginEnd: 18 }}>
                                 <Image source={{ uri: "https://placehold.co/100x100.png" }} style={styles.image} />
                             </View>

@@ -1,10 +1,10 @@
 import api from "./api";
 
-export const ClinicLocationServices = async () => {
+export const getDentalCare = async () => {
     try {
-        const response = await api.get('/clinics');
+        const response = await api.get('/dentalcare');
+        console.log(api.get('/dentalcare'));
         return response.data;
-        
     }
     catch (error) {
         console.error('Error fetching ', error)

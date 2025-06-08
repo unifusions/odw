@@ -11,11 +11,16 @@ const getGlobalStyles = (theme) =>
         },
 
         container: {
-            padding: 20,
+            paddingTop: 20,
+            paddingHorizontal: 20,
         },
 
         font700: {
             fontFamily: "Manrope_700Bold"
+        },
+
+        font600: {
+            fontFamily: "Manrope_600SemiBold"
         },
 
         font500: {
@@ -42,6 +47,10 @@ const getGlobalStyles = (theme) =>
             alignItems: 'center',
             marginBottom: 12
 
+        },
+        flexRow : {
+            display: 'flex',
+            flexDirection: 'row',
         },
 
         adContainer: {
@@ -124,9 +133,9 @@ const getGlobalStyles = (theme) =>
         },
 
         screenTitle: {
-            fontSize: 20,
+            fontSize: 24,
             color: theme.primary,
-            fontFamily: "Manrope_600SemiBold"
+            fontFamily: "Manrope_700Bold"
         },
 
         textCenter: {
@@ -140,14 +149,14 @@ const getGlobalStyles = (theme) =>
         profileAvatorAltImg: {
             borderRadius: 75,
             backgroundColor: theme.primary,
-            alignItems:'center', 
-            justifyContent:"center"
+            alignItems: 'center',
+            justifyContent: "center"
         },
 
-        profileAvatarText:{
-            color:theme.white,
-            fontFamily:"Manrope_400Regular",
-            fontSize : 40
+        profileAvatarText: {
+            color: theme.white,
+            fontFamily: "Manrope_400Regular",
+            fontSize: 40
         },
         profileUserName: {
             fontFamily: "Manrope_600SemiBold",
@@ -249,7 +258,7 @@ const getGlobalStyles = (theme) =>
         serviceTitle: {
             fontSize: 11,
             textAlign: "center",
-            fontFamily: "Manrope_500Medium"
+            fontFamily: "Manrope_600SemiBold"
         },
 
         // LOCATION SCREEN
@@ -315,9 +324,14 @@ const getGlobalStyles = (theme) =>
 
         textFont: {
             fontFamily: "Manrope_400Regular"
+        },
+
+
+        // APPOINTMENT SCREENS
+
+        stepFormScreenTitle: {
+            fontFamily: theme.font700, fontSize: 24, marginBottom: 16,
         }
-
-
 
 
 

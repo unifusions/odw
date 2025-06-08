@@ -4,6 +4,7 @@ import { FlatList, Text, View, StyleSheet, Image, TouchableOpacity, Dimensions, 
 import { ThemeContext } from "../theme/ThemeProvider";
 import { APP_URL } from "../config";
 import getGlobalStyles from "../theme/globalStyles";
+import { useNavigation } from "@react-navigation/native";
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,7 +15,7 @@ const ListServicesHome = () => {
     const gStyles = getGlobalStyles(theme);
 
     useEffect(() => {
-        
+
         const fetchDentalServices = async () => {
             try {
                 setLoading(true);
@@ -42,12 +43,15 @@ const ListServicesHome = () => {
     const ServiceItem = ({ item }) => {
         return (
 
-            <TouchableOpacity style={styles.serviceItem}>
+
+            <TouchableOpacity style={styles.serviceItem} >
                 <View style={styles.icon}></View>
                 <Image source={{ uri: APP_URL + '/public/storage/' + item.image_path }} style={styles.icon} />
                 <Text style={styles.serviceText}>{item.name}</Text>
             </TouchableOpacity>)
     }
+
+    const navigation = useNavigation();
     return (
         <View >
 
@@ -58,7 +62,7 @@ const ListServicesHome = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.list}
                 renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.card}>
+                    <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Home', { screen: 'ServiceItem',  params: { serviceItem: item } })}>
                         <View style={{ width: 32, height: 32, marginBottom: 18 }}>
                             <Image source={{ uri: APP_URL + '/public/storage/' + item.image_path }} style={styles.image} />
 
