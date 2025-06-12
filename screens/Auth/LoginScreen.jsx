@@ -99,7 +99,7 @@ const LoginScreen = () => {
         },
         button: {
             flex: 1,
-            paddingVertical: 15,
+            // paddingVertical: 5,
             paddingHorizontal: 20,
             alignItems: "center",
             justifyContent: "center",
@@ -147,6 +147,7 @@ const LoginScreen = () => {
                             <TouchableOpacity style={[styles.button, styles.buttonRegister]} onPress={() => navigation.navigate('Register')}>
                                 <Text style={[styles.buttonText]} >Register</Text>
                             </TouchableOpacity>
+
                             <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
                                 <Text style={[styles.buttonText, { color: '#FFF' }]}>Log In</Text>
                             </TouchableOpacity>

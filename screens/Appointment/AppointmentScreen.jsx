@@ -49,18 +49,16 @@ const AppointmentScreen = () => {
         // let appointment_date = formData.selectedDate;
 
         let selectedService = formData.selectedItems.name;
-
+        let  service_id = formData.selectedItems.id;
         const inputFormat = "E MMM dd yyyy";
 
         const parsedDate = parse(formData.selectedDate, inputFormat, new Date());
         const outputFormat = "yyyy-MM-dd";
         const appointment_date = format(parsedDate, outputFormat);
 
-        
 
-      
        
-        const response = await bookAppointment(patient_id, clinic_id, appointment_date, clinic_branch_id, time_slot, clinic_dentist_id)
+        const response = await bookAppointment(patient_id, clinic_id, appointment_date, clinic_branch_id, time_slot, clinic_dentist_id, service_id)
 
 
         if (response.status === 200) {

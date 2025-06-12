@@ -1,10 +1,11 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
 import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import { BuildingOfficeIcon, UserCircleIcon } from "react-native-heroicons/outline";
 import { AuthContext } from "../../context/AuthContext";
 import { myAppointments } from "../../services/appointmentservices";
+import { format } from "date-fns";
 
 const MyAppointments = () => {
     const { theme } = useContext(ThemeContext);
@@ -65,7 +66,7 @@ const MyAppointments = () => {
                     backgroundColor: isOngoing ? theme.blue : theme.success
 
                 }}></View>
-                <Text style={{ marginStart: 8, fontFamily: theme.font600 }} >{isOngoing ? 'Upcoming' : ` Completed (${count}) `}</Text>
+                <Text style={{ marginStart: 8, fontFamily: theme.font600 }} >{isOngoing ? 'Upcoming' : ` Awaiting Confirmation (${count}) `}</Text>
                 <View style={{
                     marginTop: 6,
                     marginStart: 8,
@@ -140,38 +141,48 @@ const MyAppointments = () => {
         <SafeAreaContainer
             screenTitle="Appointments"
         >
-            <SectionHeader isOngoing={true} />
+            <ScrollView showsVerticalScrollIndicator={false}>
+                
+
+             
+
+                {openApps.length >0 && <>
+                    <SectionHeader isOngoing={true} />
+                    {openApps.map((item) => <>
+                      
+                        <View key={item.id} style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
+                            <DayItem month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
+                            <AppointmentCard timeSlot={item.appointment_time}
+                                dentalService={item.service}
+                                clinic={item.clinic}
+                                dentist={item.dentist}
+                            />
+
+                        </View>
+
+                    </>)}
+                </>}
 
 
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
-                <DayItem month="May" day="15" />
-                <AppointmentCard timeSlot="10:00 - 10.30 AM "
-                    dentalService="Tooth Scaling"
-                    clinic="Heavenly Smiles"
-                    dentist="Liung Young"
-                />
+                {pendingApps.length > 0 && <>
+                    <SectionHeader isOngoing={false} count={pendingApps.length} />
+                    {pendingApps.map((item) => <>
+                        {console.log(item)}
+                        <View key={item.id} style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
+                            <DayItem month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
+                            <AppointmentCard timeSlot={item.appointment_time}
+                                dentalService={item.service}
+                                clinic={item.clinic}
+                                dentist={item.dentist}
+                            />
 
-            </View>
+                        </View>
 
-            <SectionHeader isOngoing={false} count={pendingApps.length} />
+                    </>)}
 
-            {pendingApps.length > 0 && <>
-                {pendingApps.map((item) => <>
-                {console.log(item)}
-                    <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
-                        <DayItem month="Mar" day="16" />
-                        <AppointmentCard timeSlot="10:00 - 10.30 AM "
-                            dentalService="Tooth Scaling"
-                            clinic="Heavenly Smiles"
-                            dentist="Liung Young"
-                        />
+                </>}
 
-                    </View>
-
-                </>)}
-
-            </>}
-
+            </ScrollView>
 
         </SafeAreaContainer>
 

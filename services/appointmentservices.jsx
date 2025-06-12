@@ -9,8 +9,9 @@ export const bookAppointment = async (patient_id, clinic_id, appointment_date, c
             appointment_date,
             clinic_branch_id,
             time_slot,
+           
+            clinic_dentist_id,
             service_id,
-            clinic_dentist_id
         });
         return response;
     } catch (error) {

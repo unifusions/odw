@@ -20,7 +20,7 @@ export default function ClinicBookingScreen() {
     const { theme } = useContext(ThemeContext);
     const gStyles = getGlobalStyles(theme);
     const navigation = useNavigation();
-p
+ 
     const route = useRoute();
 
     const [isConfirmVisible, setConfirmVisible] = useState(false);
