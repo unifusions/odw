@@ -4,6 +4,9 @@ import HomeScreen from "../screens/HomeScreen";
 import ServiceItemScreen from "../screens/Services/ServiceItemScreen";
 import SecondOpinion from "../screens/SecondOpinion/SecondOpinion";
 import Estimate from "../screens/Estimate/Estimate";
+import AppointmentScreen from "../screens/Appointment/AppointmentScreen";
+import BookingStackNavigator from "./BookingStackNavigator";
+import ClinicBookingScreen from "../screens/Appointment/ClinicBookingScreen";
 const HomeStack = createStackNavigator();
 
 
@@ -22,6 +25,8 @@ export default function HomeStackNavigator() {
 
             {/* ESITMATE */}
             <HomeStack.Screen name="Estimate" component={Estimate} />
+            <HomeStack.Screen name="ClinicBooking" component={ClinicBookingScreen} />
+           
         </HomeStack.Navigator>
     )
 }

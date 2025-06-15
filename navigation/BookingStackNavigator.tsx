@@ -10,7 +10,7 @@ export default function BookingStackNavigator(){
     return(
         
         <BookingStack.Navigator screenOptions={{ headerShown:false }}>
-            <BookingStack.Screen name="AppointmentScreen" component={AppointmentScreen}/>
+            {/* <BookingStack.Screen name="AppointmentScreen" component={AppointmentScreen}/> */}
             <BookingStack.Screen name="BookingScreen" component={BookingScreen} />
             <BookingStack.Screen name="ClinicBooking" component={ClinicBookingScreen}/>
          

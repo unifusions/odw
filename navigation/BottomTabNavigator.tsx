@@ -48,8 +48,8 @@ export default function BottomTabNavigator() {
                 tabBarInactiveTintColor: "#475F73", // Grayish blue
             })}>
             <Tab.Screen name="Home" component={HomeStackNavigator}></Tab.Screen>
-            <Tab.Screen name="Appointments" component={BookingStackNavigator} ></Tab.Screen>
-
+            <Tab.Screen name="Appointments" component={AppointmentScreen} ></Tab.Screen>
+            {/* <HomeStack.Screen name="AppointmentScreen" component={}/> */}
             <Tab.Screen name="Compare" component={CompareScreen} />
             <Tab.Screen name="Profile" component={ProfileStackNavigator}></Tab.Screen>
 
