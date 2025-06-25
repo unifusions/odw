@@ -1,24 +1,18 @@
 // .devcontainer/devcontainer.json
 {
-  "name": "React Native Codespace",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:20", // Or a specific Node.js version
-  "features": {
-    // You might want to add other features here based on your needs
-    // For example, if you're using Expo CLI globally:
-    // "ghcr.io/devcontainers/features/node:1": {}
+  "name": "React Native CLI Codespace",
+  "build": {
+    "dockerfile": "Dockerfile"
   },
   "customizations": {
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "msjsdiag.vscode-react-native", // Recommended React Native extension
-        "formulahendry.auto-rename-tag",
-        "editorconfig.editorconfig"
-        // Add any other VS Code extensions you frequently use for React Native development
+        "msjsdiag.vscode-react-native"
       ]
     }
   },
-  "forwardPorts": [8081, 19000, 19001], // Common React Native and Expo ports
-  "postCreateCommand": "npm install" // Or "yarn install" if you use Yarn
+  "forwardPorts": [8081],
+  "postCreateCommand": "npm install"
 }
