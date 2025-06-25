@@ -41,15 +41,16 @@ const styles = StyleSheet.create({
         // borderBottomWidth: 1,
         // borderBottomColor: "#E5E5E5",
     },
-    iconContainer: {
-        padding: 8,
-    },
+   
     title: {
         fontSize: 18,
         fontWeight: "bold",
         color: "#4A4A4A",
         textAlign: "center",
         flex: 1,
+    },
+    iconContainer: {
+        padding: 8,
     },
     iconPlaceholder: {
         width: 38, // Same width as the icon to keep spacing even

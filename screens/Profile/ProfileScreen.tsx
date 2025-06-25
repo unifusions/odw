@@ -1,14 +1,14 @@
 import { View, Text, Button, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
 import getGlobalStyles from "../../theme/globalStyles";
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import { ArrowRightOnRectangleIcon, BellIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, ChevronRightIcon, Cog6ToothIcon, CurrencyDollarIcon, HeartIcon, LifebuoyIcon, QuestionMarkCircleIcon, ShieldCheckIcon, UserIcon } from "react-native-heroicons/outline";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
-import ScreenHeader from "../../components/ScreenHeader";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { AuthContext } from "../../context/AuthContext";
+import SafeAreaContainer from "../../components/SafeAreaContainer";
 
 
 export default function ProfileScreen() {
@@ -30,65 +30,61 @@ export default function ProfileScreen() {
     ]
     const [isLogoutVisible, setLogoutVisible] = useState(false);
     const navigation = useNavigation();
-    const handleLogout = async () => {
+    const handleLogout = () => {
 
 
-        await logout();
-        // logout();
+        logout();
+
         setLogoutVisible(false);
 
     };
 
     return (
-        <SafeAreaProvider>
-            <SafeAreaView style={styles.safeAreaContainer}>
+        <SafeAreaContainer
+            screenTitle="Profile" allowedBack={true}
+        >
 
-                <ScreenHeader
-                    title="Profile"
-                    onBackPress={() => navigation.goBack()}
-                // RightIcon={CalendarIcon} // Optional Right Icon
-                // onRightPress={() => console.log("Calendar Pressed")                    }
-                />
-                <ScrollView >
-                    <View style={styles.container}>
 
-                        {
-                            user && (
-                                <>
-                                    {user.avatar ?
-                                        <Image source={{}} style={styles.profileAvatar} />
-                                        : (
-                                            <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
-                                                <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
-                                                    <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
-                                                </View>
-                                            </View>
-                                        )}
+            <ScrollView showsVerticalScrollIndicator={false} >
 
-                                    <View style={{ marginBottom: 16 }}>
-                                        <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
-                                        <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
+
+                {
+                    user && (
+                        <>
+                            {user.avatar ?
+                                <Image source={{}} style={styles.profileAvatar} />
+                                : (
+                                    <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                                        <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
+                                            <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
+                                        </View>
                                     </View>
-                                </>
-                            )
-                        }
+                                )}
+
+                            <View style={{ marginBottom: 16 }}>
+                                <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
+                                <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
+                            </View>
+                        </>
+                    )
+                }
+
+                {menuItems.map((item) =>
+                    <>
+                        <TouchableOpacity key={item.id} style={[styles.menuItem, item.logout && styles.logoutItem]} onPress={item.logout ? () => setLogoutVisible(true) : item.onPress}>
+                            <item.icon size={22} color={item.logout ? "#E63946" : "#4A4A4A"} />
+                            <Text style={[styles.menuText, item.logout && styles.logoutText]}>{item.title}</Text>
+                            <ChevronRightIcon size={18} color="#B0B0B0" />
+                        </TouchableOpacity>
+                    </>
+                )}
 
 
-                        <FlatList
-                            data={menuItems} keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <TouchableOpacity style={[styles.menuItem, item.logout && styles.logoutItem]} onPress={item.logout ? () => setLogoutVisible(true) : item.onPress}>
-                                    <item.icon size={22} color={item.logout ? "#E63946" : "#4A4A4A"} />
-                                    <Text style={[styles.menuText, item.logout && styles.logoutText]}>{item.title}</Text>
-                                    <ChevronRightIcon size={18} color="#B0B0B0" />
-                                </TouchableOpacity>
-                            )} />
 
-                    </View>
-                </ScrollView>
+            </ScrollView>
 
 
-            </SafeAreaView>
+
 
             <BottomSheetDialog
                 visible={isLogoutVisible}
@@ -97,7 +93,7 @@ export default function ProfileScreen() {
                 onConfirm={handleLogout}
                 onCancel={() => setLogoutVisible(false)}
             />
-        </SafeAreaProvider >
+        </SafeAreaContainer >
 
     );
 }

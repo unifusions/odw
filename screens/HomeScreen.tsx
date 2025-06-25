@@ -56,9 +56,10 @@ export default function HomeScreen() {
 
                             </View>
                         </View>
-                        <View>
+                        <TouchableOpacity onPress={()=>navigation.navigate('Emergency')}>
                             <Text>Emergency</Text>
-                        </View>
+                        </TouchableOpacity>
+
                     </View>
 
                     <View style={{
@@ -88,19 +89,19 @@ export default function HomeScreen() {
                         />
                     </View>
                     <DealsCarousel />
-                    <View style={styles.dFlexRow}>  
+                    <View style={styles.dFlexRow}>
 
-                        <TouchableOpacity style={[styles.appointmentCard]} onPress={() => navigation.navigate('Home', {screen: "SecondOpinion"})}>
-                            <Text style={[localStyles.title, styles.font500]}>Get a {"\n"} 
-                            Second Opinion </Text>
+                        <TouchableOpacity style={[styles.appointmentCard]} onPress={() => navigation.navigate('Home', { screen: "SecondOpinion" })}>
+                            <Text style={[localStyles.title, styles.font500]}>Get a {"\n"}
+                                Second Opinion </Text>
                             <View style={localStyles.iconContainer}>
                                 <ArrowUpRightIcon size={20} color="#5A5A5A" />
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.compareCard} onPress={() => navigation.navigate('Home', {screen: "Estimate"})}>
-                            <Text style={[localStyles.title, styles.font500]}>Get an {"\n"} 
-                            Estimate</Text>
+                        <TouchableOpacity style={styles.compareCard} onPress={() => navigation.navigate('Home', { screen: "Estimate" })}>
+                            <Text style={[localStyles.title, styles.font500]}>Get an {"\n"}
+                                Estimate</Text>
                             <View style={localStyles.iconContainer}>
                                 <ArrowUpRightIcon size={20} color="#5A5A5A" />
                             </View>

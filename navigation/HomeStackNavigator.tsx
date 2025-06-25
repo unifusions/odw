@@ -7,6 +7,7 @@ import Estimate from "../screens/Estimate/Estimate";
 import AppointmentScreen from "../screens/Appointment/AppointmentScreen";
 import BookingStackNavigator from "./BookingStackNavigator";
 import ClinicBookingScreen from "../screens/Appointment/ClinicBookingScreen";
+import BookEmergency from "../screens/Emergency/BookEmergency";
 const HomeStack = createStackNavigator();
 
 
@@ -26,7 +27,9 @@ export default function HomeStackNavigator() {
             {/* ESITMATE */}
             <HomeStack.Screen name="Estimate" component={Estimate} />
             <HomeStack.Screen name="ClinicBooking" component={ClinicBookingScreen} />
-           
+
+            {/* ESTIMATE */}
+            <HomeStack.Screen name="Emergency" component={BookEmergency} />
         </HomeStack.Navigator>
     )
 }

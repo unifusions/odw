@@ -18,7 +18,7 @@ export default function App() {
   const Stack = createStackNavigator();
 
   const { token } = useContext(AuthContext);
-  console.log("Token inside AppNavigator:", token); // Debugging: Check if token updates
+ 
 
 
   const AppNavigator = () => {
@@ -30,7 +30,6 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
 
-          {/* <Stack.Screen name="BottomTabs" component={BottomTabNavigator} /> */}
 
           {token ? (
             <Stack.Screen name="BottomTabs" component={BottomTabNavigator} />

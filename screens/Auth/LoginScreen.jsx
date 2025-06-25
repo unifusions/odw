@@ -95,16 +95,17 @@ const LoginScreen = () => {
             borderColor: '#475F73',
         },
         buttonText: {
-            fontFamily: theme.font700
+            fontFamily: theme.font700,
+            // padding: 5
         },
         button: {
             flex: 1,
             // paddingVertical: 5,
-            paddingHorizontal: 20,
+            // paddingHorizontal: 20,
             alignItems: "center",
             justifyContent: "center",
             height: 49,
-            marginHorizontal: 5,
+            marginHorizontal: 3,
 
         },
 
@@ -145,11 +146,16 @@ const LoginScreen = () => {
                         }
                         <View style={[styles.buttonRow]} >
                             <TouchableOpacity style={[styles.button, styles.buttonRegister]} onPress={() => navigation.navigate('Register')}>
+
                                 <Text style={[styles.buttonText]} >Register</Text>
+
                             </TouchableOpacity>
 
                             <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
+
                                 <Text style={[styles.buttonText, { color: '#FFF' }]}>Log In</Text>
+
+
                             </TouchableOpacity>
                         </View>
 

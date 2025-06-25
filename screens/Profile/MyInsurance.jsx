@@ -1,30 +1,39 @@
 import { useContext, useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
 import getGlobalStyles from "../../theme/globalStyles";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
 import { getInsurance } from "../../services/insurance";
 import { AuthContext } from "../../context/AuthContext";
-import { LinearGradient } from 'expo-linear-gradient';
 
-const MyInsurance = () => {
+import { useNavigation } from "@react-navigation/native";
+
+export default function MyInsurance() {
     const { user } = useContext(AuthContext);
     const { theme, toggleTheme, resetTheme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
-
-
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(false);
     const [insurances, setInsurances] = useState([]);
     useEffect(() => {
-        console.log('using effect');
-        const fetchInsurance = async () => {
-            const data = await getInsurance(user.patient.id);
-            console.log("Data received from getInsurance:", data); // Inspect this data
-            setInsurances(data);
 
-        }
-        fetchInsurance();
-        console.log('effect completed');
+
+        // getInsurance({ patient_id: user.patient.id }).then(
+        //     response => {
+        //         setInsurances(response.data);
+        //         // console.log(response);
+        //     }
+        // )
+
+        //     // const fetchInsurance = async () => {
+        //     //     const data = await getInsurance(user.patient.id);
+        //     //     console.log("Data received from getInsurance:", data); // Inspect this data
+        //     //     setInsurances(data);
+
+        //     // }
+        //     // fetchInsurance();
+
 
     }, []);
 
@@ -40,40 +49,29 @@ const MyInsurance = () => {
         }
         return (
             <TouchableOpacity>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={['#0B4251', '#0D2833']} // An array of color strings
-                    start={{ x: 0, y: 0 }} // The start point of the gradient (top-left)
-                    end={{ x: 1, y: 1 }}   // The end point of the gradient (bottom-right)
-                    style={{ paddingHorizontal: 10, paddingVertical: 20, borderRadius: 16, }}
-                >
-
-
-                    <View>
-                        <Text style={{ alignSelf: "flex-end", paddingVertical: 20, color:theme.white }}>Insurance Company</Text>
-                    </View>
-                    <Text style={{ color: theme.white, fontFamily: theme.font600, fontSize: 18, marginBottom: 16 }}>User Name</Text>
-
-                    <DetailedLine label="Member ID" value="2178388216" />
-                    <DetailedLine label="Group ID" value="2178388216" />
 
 
 
-                </LinearGradient>
+                <View>
+                    <Text style={{ alignSelf: "flex-end", paddingVertical: 20, color: theme.white }}>Insurance Company</Text>
+                </View>
+                <Text style={{ color: theme.white, fontFamily: theme.font600, fontSize: 18, marginBottom: 16 }}>User Name</Text>
+
+                <DetailedLine label="Member ID" value="2178388216" />
+                <DetailedLine label="Group ID" value="2178388216" />
+
+
+
+
             </TouchableOpacity>
         )
     }
     return (
         <SafeAreaContainer
-            screenTitle="My Insurance"
+            screenTitle="My Insurance" allowedBack={true}
         >
 
             <ScrollView>
-                <TouchableOpacity >
-                    <View style={{ borderRadius:16, borderColor:'0D2833', borderWidth:1, paddingVertical : 50 }}>
-
-                    </View>
-                </TouchableOpacity>
 
 
                 <InsuranceCard />
@@ -81,9 +79,16 @@ const MyInsurance = () => {
             </ScrollView>
 
 
+            <View style={[styles.fixedBottomContainer]}>
+                <TouchableOpacity style={styles.cta} onPress={() => navigation.navigate("AddInsurance")}>
+                    <Text style={styles.buttonText}>Add Insurance</Text>
+                </TouchableOpacity>
+            </View>
+
+
+
         </SafeAreaContainer>
 
     )
 }
 
-export default MyInsurance;

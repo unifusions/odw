@@ -139,7 +139,7 @@ const MyAppointments = () => {
     }
     return (
         <SafeAreaContainer
-            screenTitle="Appointments"
+            screenTitle="Appointments"    allowedBack={true}
         >
             <ScrollView showsVerticalScrollIndicator={false}>
                 

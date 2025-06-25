@@ -101,7 +101,7 @@ export default function EditProfileScreen() {
 
                         {/* Gender Dropdown */}
                         <TouchableOpacity style={localStyles.inputIconContainer}>
-                           
+
                             <Text style={localStyles.dateText}>{profile.gender || "Gender"}</Text>
                             <ChevronDownIcon size={18} color="#9E9E9E" />
                         </TouchableOpacity>
@@ -144,6 +144,7 @@ const localStyles = StyleSheet.create({
         padding: 6,
         borderRadius: 20,
     },
+   
     input: {
         width: "100%",
         padding: 14,

@@ -48,7 +48,7 @@ const getGlobalStyles = (theme) =>
             marginBottom: 12
 
         },
-        flexRow : {
+        flexRow: {
             display: 'flex',
             flexDirection: 'row',
         },
@@ -114,7 +114,12 @@ const getGlobalStyles = (theme) =>
             fontSize: 16,
             fontFamily: theme.font700,
         },
-
+        inputLabel: {
+            fontFamily: theme.font500,
+            // fontSize: 12,
+            // color: '#bbb', // subtle gray like the image
+            marginBottom: 4,
+        },
         textInput: {
             width: "100%",
             height: 50,
@@ -125,11 +130,43 @@ const getGlobalStyles = (theme) =>
             marginBottom: 20,
             fontFamily: theme.font500
         },
+
+        textInputContainer: {
+            marginBottom: 10,
+        },
+        modernTextInput: {
+            height: 44,
+            borderWidth: 1,
+            borderColor: '#ddd',
+            // borderRadius: 8,
+            paddingHorizontal: 12,
+            fontSize: 16,
+            color: '#222',
+            backgroundColor: '#fff',
+            fontFamily: theme.font500
+        },
+
+        input: {
+            width: "100%",
+            padding: 14,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: "#E5E5E5",
+            marginBottom: 10,
+            backgroundColor: "#F7F7F7",
+        },
         buttonText: {
 
             color: "#FFF",
             fontSize: 16,
             fontFamily: "Manrope_600SemiBold"
+        },
+
+        iconContainer: {
+            paddingRight: 8,
+        },
+        iconPlaceholder: {
+            width: 38, // Same width as the icon to keep spacing even
         },
 
         screenTitle: {
@@ -330,7 +367,8 @@ const getGlobalStyles = (theme) =>
         // APPOINTMENT SCREENS
 
         stepFormScreenTitle: {
-            fontFamily: theme.font700, fontSize: 24, marginBottom: 16,
+            fontFamily: theme.font700, fontSize: 24,
+            color: theme.primary,
         }
 
 

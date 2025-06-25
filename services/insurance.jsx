@@ -2,7 +2,7 @@ import api from "./api";
 import { Alert } from "react-native";
 
 
-export const getInsurance = async () => {
+export const getInsurance = async ({patient_id}) => {
 
     try {
 

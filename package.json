@@ -11,7 +11,6 @@
   "dependencies": {
     "@expo-google-fonts/manrope": "^0.2.3",
     "@react-native-async-storage/async-storage": "2.1.2",
-    "@react-native-community/datetimepicker": "8.3.0",
     "@react-navigation/bottom-tabs": "^7.2.1",
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/stack": "^7.1.2",
@@ -20,12 +19,14 @@
     "eas-cli": "^16.2.1",
     "expo": "^53.0.6",
     "expo-font": "~13.3.1",
+    "expo-linear-gradient": "~14.1.4",
     "expo-location": "~18.1.4",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-bootstrap-icons": "^1.11.6",
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-calendars": "^1.1312.1",
     "react-native-date-picker": "^5.0.10",
     "react-native-gesture-handler": "^2.25.0",
     "react-native-heroicons": "^4.0.0",
@@ -37,8 +38,7 @@
     "react-native-swiper": "^1.6.0",
     "react-native-web": "^0.20.0",
     "react-navigation": "^5.0.0",
-    "styled-components": "^6.1.15",
-    "expo-linear-gradient": "~14.1.4"
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
