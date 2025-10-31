@@ -9,6 +9,8 @@ import CancelButton from "./CancelButton";
 import ButtonWrapper from "./ButtonWrapper";
 import NextPrevButtonWrapper from "./NextPrevButtonWrapper";
 import PreviousButton from "./PreviousButton";
+import Badge from "../../components/Badge";
+import LoadingDots from "../../components/LoadingDots";
 
 const ServiceSelect = ({ theme, onNext, handleCancel }) => {
 
@@ -36,7 +38,7 @@ const ServiceSelect = ({ theme, onNext, handleCancel }) => {
     };
 
     const handleNext = () => {
-        console.log(selectedItems);
+
         if (selectedItems) {
             onNext({ selectedItems });
         } else {
@@ -47,27 +49,41 @@ const ServiceSelect = ({ theme, onNext, handleCancel }) => {
 
     const RenderItem = ({ item }) => {
 
-        
-            const isItemSelected = selectedItems ? (selectedItems.id  === item.id) : false;
+
+        const isItemSelected = selectedItems ? (selectedItems.id === item.id) : false;
 
         // const isItemSelected = selectedItems.includes(item.id);
 
         return (
             <TouchableOpacity style={{
-                borderStyle: 'solid', borderRadius: 5,
-                borderColor: isItemSelected ? theme.blue : theme.border, borderWidth: 1, padding: 8, marginBottom: 12
+
+                // borderColor: isItemSelected ? theme.blue : theme.border, 
+                padding: 8, marginBottom: 8,
+                // borderBottomWidth: 1
             }} onPress={() => setSelectedItems(item)} >
-                <View style={[gStyles.flexRow, { justifyContent: 'space-between' }]}>
-                    <View style={gStyles.flexRow}>
+                <View style={[gStyles.flexRow, { justifyContent: 'space-between', width: "100%" }]}>
+                    <View style={{ marginEnd: 8 }}>
 
-                        {isItemSelected ? <CheckCircleIcon color={theme.blue} style={{ marginEnd: 12 }} /> : <CheckCircleIconOutline color={theme.gray} style={{ marginEnd: 12 }} />}
+                        {isItemSelected ? <CheckCircleIcon color={theme.blue} size={36} /> : <CheckCircleIconOutline color={theme.gray} size={36} />}
+                    </View>
+                    <View style={{ flex: 3 }}>
 
 
-                        <Text style={{ fontFamily: theme.font600 }}>{item.name}</Text>
+                        <View style={{ marginBottom: 8 }}>
+                            <Text style={{ fontFamily: theme.font700, fontSize: 16, color: theme.text, marginEnd: 8 }}>{item.name}</Text>
 
+                            <Text style={{ fontFamily: theme.font500, fontSize: 14, color: theme.text }}>
+                                {item.medical_name}
+                            </Text>
+                        </View>
+
+                        {/* <Text style={{ fontFamily: theme.font700, fontSize: 14, marginBottom: 8 }}>Estimation : ${item.cost}</Text> */}
+                        <Text style={{ textAlign: 'justify', color: theme.mutedText, fontFamily: theme.font400, fontSize: 13, }} numberOfLines={2}
+                            ellipsizeMode="tail">{item.desc}</Text>
                     </View>
 
-                    <Text style={{ fontFamily: theme.font400 }}>$ {item.cost}</Text>
+
+
                 </View>
             </TouchableOpacity>
         )
@@ -79,12 +95,16 @@ const ServiceSelect = ({ theme, onNext, handleCancel }) => {
                     <Text style={gStyles.stepFormScreenTitle} >Choose Your Sparkling Service</Text>
 
                     {loading ?
-                        <>
-                            <ActivityIndicator size={"large"} />
-                        </>
+
+                        <LoadingDots />
+
                         : <>
                             <View style={{ height: "100%" }}>
                                 <FlatList
+
+                                    ItemSeparatorComponent={() => (
+                                        <View style={{ backgroundColor: theme.border, height: 2 }} />
+                                    )}
                                     data={services}
                                     keyExtractor={(item) => item.id.toString()}
                                     showsVerticalScrollIndicator={false}
@@ -92,7 +112,7 @@ const ServiceSelect = ({ theme, onNext, handleCancel }) => {
                                     renderItem={({ item }) => (
                                         <RenderItem item={item} />
                                     )}
-                                    style={{ marginBottom: 64 }}
+                                    style={{ marginBottom: 80, backgroundColor: theme.cardBackground, padding: 8, borderRadius: 8 }}
                                 />
                             </View>
                         </>

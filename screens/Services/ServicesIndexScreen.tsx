@@ -1,34 +1,40 @@
 import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { getDentalServices } from "../../services/dentalServices";
 import ScreenHeader from "../../components/ScreenHeader";
 import { APP_URL } from "../../config";
+import SafeAreaContainer from "../../components/SafeAreaContainer";
+import LoadingDots from "../../components/LoadingDots";
+import api from "../../services/api";
+import useDentalServices from "../../hooks/useDentalServices";
+import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 
 export default function ServicesIndexScreen() {
 
     const navigation = useNavigation();
-    const { theme } = useContext(ThemeContext);
-    const gStyles = getGlobalStyles(theme);
-    const [loading, setLoading] = useState(false);
-    const [services, setServices] = useState([]);
+    const { theme } = useTheme();
 
+
+    const { services, loading, errors } = useDentalServices({ featured: false });
     const styles = StyleSheet.create({
-        list: {
-            paddingHorizontal: 20,
-            backgroundColor: theme.white
-        },
+        // list: {
+        //     paddingHorizontal: 20,
+        //     backgroundColor: theme.white
+        // },
 
         itemContainer: {
+            backgroundColor: theme.white,
             borderWidth: 1.5,
             borderStyle: 'solid',
             borderColor: theme.border,
             borderRadius: 3,
             marginBottom: 8,
-            padding: 16
+            padding: 16,
+            elevation: 1,
         },
 
         title: {
@@ -39,49 +45,20 @@ export default function ServicesIndexScreen() {
         },
 
         image: {
-            // width: 25,
-            // height: 25,
-            // // borderRadius: 10,
-            // marginBottom: 5,
+
             flex: 1,
             flexGrow: 1
-            // resizeMode: 'contain'
+
         }
     });
 
-    useEffect(() => {
 
-        const fetchDentalServices = async () => {
-            try {
-
-                const data = await getDentalServices();
-                setServices(data);
-
-            } catch (error) {
-                console.error(error);
-            }
-        }
-
-        getDentalServices().then(setServices).catch(console.error);
-
-    }, []);
-
-    if (loading) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color={theme.primary} />
-            </View>
-        );
-    }
 
     return (
-        <SafeAreaProvider>
-            <SafeAreaView style={[gStyles.safeAreaContainer]}>
-                <ScreenHeader title="All Dental Services"
-                    onBackPress={() => navigation.goBack()} />
+        <SafeAreaContainer allowedBack={true} screenTitle='All Dental Services'>
 
-
-                <FlatList
+            {loading ? <LoadingDotsWithOverlay />
+                : <FlatList
                     data={services}
                     keyExtractor={(item) => item.id.toString()}
 
@@ -91,22 +68,22 @@ export default function ServicesIndexScreen() {
                         <TouchableOpacity style={styles.itemContainer} onPress={() => navigation.navigate('Home', { screen: 'ServiceItem', params: { serviceItem: item } })}>
 
                             <View>
-                                <View style={{ display: "flex", flexDirection: "row", alignItems:"center", marginBottom:12 }} >
-                                    <View style={{ width: 24, height: 24, marginEnd: 8 }}>
-                                        <Image source={{ uri: APP_URL + '/public/storage/' + item.image_path }} style={styles.image} />
+                                <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
+                                    <View style={{ width: 36, height: 36, marginEnd: 8 }}>
+                                        <Image source={{ uri: item.image_path_url }} style={styles.image} />
                                     </View>
-                                    <Text style={[styles.title]}>{item.name}</Text>
+                                    <Text style={[styles.title]}>{item.name} </Text>
                                 </View>
 
-                               
-                                <Text style={{ color: theme.gray, fontSize: 12, lineHeight: 18, textAlign: "justify", marginBottom:12 }}>{item.desc} </Text>
-                                <View>
-                                    <Text style={{ color: theme.gray }}>
-                                        STARTS FROM
-                                        <Text style={{ marginLeft: 6, color: theme.black, textDecorationLine: 'line-through' }}>$ {item.avg_cost}</Text>
-                                        <Text style={{ color: theme.black, fontFamily: theme.font700, fontSize: 18 }}> $ {item.cost}</Text>
-                                    </Text>
-                                </View>
+
+                                {/* <Text style={{ color: theme.gray, fontSize: 12, lineHeight: 18, textAlign: "justify", marginBottom: 12 }}>{item.desc} </Text> */}
+                                {/* <View>
+                            <Text style={{ color: theme.gray }}>
+                                STARTS FROM
+                                <Text style={{ marginLeft: 6, color: theme.black, textDecorationLine: 'line-through' }}>$ {item.avg_cost}</Text>
+                                <Text style={{ color: theme.black, fontFamily: theme.font700, fontSize: 18 }}> $ {item.cost}</Text>
+                            </Text>
+                        </View> */}
                             </View>
 
 
@@ -114,8 +91,10 @@ export default function ServicesIndexScreen() {
                         </TouchableOpacity>
                     )}
                 />
-            </SafeAreaView>
-        </SafeAreaProvider>
+            }
+
+        </SafeAreaContainer>
+
     )
 }
 

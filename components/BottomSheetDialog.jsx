@@ -4,7 +4,9 @@ import Modal from "react-native-modal";
 import getGlobalStyles from "../theme/globalStyles";
 import { ThemeContext } from "../theme/ThemeProvider";
 
-export default function BottomSheetDialog({ visible, title, message, onConfirm, onCancel }) {
+export default function BottomSheetDialog({ visible, title, message, onConfirm, onCancel, 
+confirmText = ''
+}) {
 
     const {theme} = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
@@ -27,7 +29,7 @@ export default function BottomSheetDialog({ visible, title, message, onConfirm, 
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
-                        <Text style={styles.confirmText}>Yes, Logout</Text>
+                        <Text style={styles.confirmText}>{confirmText ?? 'Yes, Logout'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

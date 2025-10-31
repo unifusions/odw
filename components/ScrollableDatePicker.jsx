@@ -9,10 +9,47 @@ import {
 import { ThemeContext } from "../theme/ThemeProvider";
 import getGlobalStyles from "../theme/globalStyles";
 
-const ScrollableDatePicker = ({dates, handleSelect, selectedDate}) => {
-  const {theme} = useContext(ThemeContext);
+const ScrollableDatePicker = ({ dates, handleSelect, selectedDate }) => {
+  const { theme } = useContext(ThemeContext);
   const gStyles = getGlobalStyles(theme);
 
+
+
+  const styles = StyleSheet.create({
+    container: {
+      // marginVertical: 10,
+    },
+    list: {
+      // paddingHorizontal: 10,
+    },
+    dateItem: {
+      backgroundColor: theme.white,
+      width: 60,
+      alignItems: "center",
+      paddingVertical: 10,
+      marginHorizontal: 5,
+      borderRadius: 6
+
+    },
+    selectedDate: {
+      backgroundColor: "#3B4F66",
+    },
+    dateText: {
+      fontSize: 24,
+      fontFamily: theme.font700,
+      color: "#333",
+    },
+    dayText: {
+      fontSize: 14,
+      color: "#666",
+    },
+    selectedDateText: {
+      color: "#50E0D4",
+    },
+    selectedDayText: {
+      color: "#FFFFFF"
+    }
+  });
   return (
     <View style={styles.container}>
 
@@ -27,12 +64,15 @@ const ScrollableDatePicker = ({dates, handleSelect, selectedDate}) => {
           return (
             <TouchableOpacity
               style={[styles.dateItem, isSelected && styles.selectedDate]}
-              onPress={()=>handleSelect(item)}
+              onPress={() => handleSelect(item)}
             >
-              <Text style={[styles.dateText, isSelected && styles.selectedDateText, {fontFamily: theme.font600}]}>
+               <Text style={[styles.dayText, isSelected && styles.selectedDayText, { fontFamily: theme.font500, textTransform:"uppercase" }]}>
+                {item.month} 
+              </Text>
+              <Text style={[styles.dateText, isSelected && styles.selectedDateText, { fontFamily: theme.font600 }]}>
                 {item.dateNum}
               </Text>
-              <Text style={[styles.dayText, isSelected && styles.selectedDayText, {fontFamily: theme.font500}]}>
+              <Text style={[styles.dayText, isSelected && styles.selectedDayText, { fontFamily: theme.font500 }]}>
                 {item.day}
               </Text>
             </TouchableOpacity>
@@ -42,39 +82,5 @@ const ScrollableDatePicker = ({dates, handleSelect, selectedDate}) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginVertical: 10,
-  },
-  list: {
-    // paddingHorizontal: 10,
-  },
-  dateItem: {
-    width: 50,
-    alignItems: "center",
-    paddingVertical: 10,
-    // marginHorizontal: 5,
-   
-  },
-  selectedDate: {
-    backgroundColor: "#3B4F66",
-  },
-  dateText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  dayText: {
-    fontSize: 14,
-    color: "#666",
-  },
-  selectedDateText: {
-    color: "#50E0D4",
-  },
-  selectedDayText:{
-    color:"#FFFFFF"
-  }
-});
 
 export default ScrollableDatePicker;

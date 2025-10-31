@@ -8,6 +8,7 @@ const getGlobalStyles = (theme) =>
             flex: 1,
             justifyContent: 'flex-start',
             backgroundColor: theme.background,
+            // alignContent:"flex-start",
         },
 
         container: {
@@ -53,6 +54,18 @@ const getGlobalStyles = (theme) =>
             flexDirection: 'row',
         },
 
+        // SCREEN TITLE
+
+        screenTitle: {
+            fontFamily: theme.font700,
+            fontSize: 26
+        },
+
+        // SCREEN SUBTITLE
+
+        screenSubTitle: {
+            fontFamily: theme.font500, color: theme.gray, fontSize: 26
+        },
         adContainer: {
             height: 130,
             backgroundColor: "#474747",
@@ -101,12 +114,13 @@ const getGlobalStyles = (theme) =>
         },
         cta: {
             backgroundColor: theme.primary,
-            paddingVertical: 15,
+            paddingVertical: 10,
             paddingHorizontal: 20,
             alignItems: "center",
             marginTop: 10,
             height: 50,
-            width: '100%'
+            width: '100%',
+
         },
 
         ctaText: {
@@ -182,6 +196,7 @@ const getGlobalStyles = (theme) =>
         profileAvatar: {
             height: 100,
             width: 100,
+            borderRadius: 12
         },
         profileAvatorAltImg: {
             borderRadius: 75,
@@ -209,6 +224,7 @@ const getGlobalStyles = (theme) =>
             borderBottomColor: "#E5E5E5",
         },
         menuText: {
+            fontFamily: theme.font500,
             flex: 1,
             fontSize: 16,
             marginLeft: 10,
@@ -216,9 +232,12 @@ const getGlobalStyles = (theme) =>
         },
         logoutItem: {
             marginTop: 10,
+            borderBottomWidth: 0,
+
         },
         logoutText: {
             color: "#E63946",
+            fontFamily: theme.font700
         },
 
         dialogModalContainer: {
@@ -240,7 +259,7 @@ const getGlobalStyles = (theme) =>
 
             fontSize: 18,
             fontWeight: "bold",
-            marginBottom: 10,
+            // marginBottom: 10,
             fontFamily: "Manrope_700Bold"
 
         },
@@ -260,33 +279,40 @@ const getGlobalStyles = (theme) =>
             padding: 20
         },
         buttonContainer: {
-            flexDirection: "row",
             width: "100%",
+            flexDirection: "row",
+            flexGrow: 1,
             justifyContent: "space-between",
-        },
-        cancelButton: {
-            flex: 1,
-            paddingVertical: 12,
-            borderRadius: 8,
-            backgroundColor: "#E5E7EB",
             alignItems: "center",
-            marginRight: 5,
+            gap: 10
+
+        },
+
+        cancelButton: {
+
+            padding: 12,
+            borderRadius: 8,
+            borderColor: "#E5E7EB",
+            borderWidth: 1,
+            alignItems: "center",
+
         },
         confirmButton: {
-            flex: 1,
-            paddingVertical: 12,
+
+            padding: 12,
             borderRadius: 8,
             backgroundColor: "#1E293B",
             alignItems: "center",
-            marginLeft: 5,
+
         },
         cancelText: {
             color: "#1E293B",
             fontWeight: "bold",
+            fontFamily: theme.font700,
         },
         confirmText: {
+            fontFamily: theme.font700,
             color: "white",
-            fontWeight: "bold",
         },
 
 
@@ -332,8 +358,8 @@ const getGlobalStyles = (theme) =>
 
         calenderContainer: {
             marginTop: 12,
-            borderTopWidth: 2,
-            borderTopColor: theme.primary,
+            // borderTopWidth: 2,
+            // borderTopColor: theme.primary,
             flexDirection: "row"
         },
 
@@ -348,10 +374,11 @@ const getGlobalStyles = (theme) =>
             bottom: 0,
             left: 0,
             right: 0,
-            padding: 15,
+            // padding: 15,
             backgroundColor: "#fff", // Ensure it's visible
             borderTopWidth: 1,
             borderColor: "#E5E7EB",
+
         },
         //UTILITES
 
@@ -367,10 +394,24 @@ const getGlobalStyles = (theme) =>
         // APPOINTMENT SCREENS
 
         stepFormScreenTitle: {
-            fontFamily: theme.font700, fontSize: 24,
+            fontFamily: theme.font700, 
+            fontSize: 24,
             color: theme.primary,
-        }
+            marginBottom: 12
+        },
 
+        // INFO CARD
+
+        infoCard: {
+            paddingVertical: 15, borderBottomColor: theme.border, borderBottomWidth: 1
+        },
+
+
+        cardTitle: {
+            fontFamily: theme.font700,
+            fontSize: 14,
+            marginBottom: 6,
+        },
 
 
     })

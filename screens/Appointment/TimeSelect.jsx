@@ -1,22 +1,24 @@
 import { Text, View } from "react-native";
 import ScrollableDatePicker from "../../components/ScrollableDatePicker";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import TimeSlotPicker from "../../components/TimeSlotPicker";
 import ButtonWrapper from "./ButtonWrapper";
 import CancelButton from "./CancelButton";
 import NextPrevButtonWrapper from "./NextPrevButtonWrapper";
 import PreviousButton from "./PreviousButton";
 import NextButton from "./NextButton";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 
-const TimeSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
+const TimeSelect = ({  gStyles, onNext, handleCancel, prevStep }) => {
 
+    const { theme } = useTheme();
     const [selectedDate, setSelectedDate] = useState([]);
     const [selectedSlot, setSelectedSlot] = useState([]);
     // Generate 30 days dynamically from today
     const generateDates = () => {
-        return Array.from({ length: 15 }, (_, i) => {
+        return Array.from({ length: 60 }, (_, i) => {
             const date = new Date();
-            date.setDate(date.getDate() + i);
+            date.setDate(date.getDate() + i+1);
             return {
                 fullDate: date.toDateString(),
                 day: date.toLocaleDateString("en-US", { weekday: "short" }), // "Mon", "Tue"
@@ -36,7 +38,7 @@ const TimeSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
         } else {
             alert('Please select a nearby clinic.');
         }
-    };1
+    }; 1
 
 
     return (
@@ -44,9 +46,11 @@ const TimeSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
 
             <View style={{ flex: 1, marginTop: 16 }} >
                 <Text style={gStyles.stepFormScreenTitle}>Book Your Smile Time</Text>
-
                 <ScrollableDatePicker dates={dates} selectedDate={selectedDate} handleSelect={(item) => setSelectedDate(item.fullDate)} />
-                <TimeSlotPicker start="10:00" end="16:00" selectedTimeSlot={selectedSlot} handleSelect={(item) => setSelectedSlot(item)} />
+                <TimeSlotPicker start="08:00" end="20:00" selectedTimeSlot={selectedSlot} handleSelect={(item) => setSelectedSlot(item)} />
+
+           {/* <Text>{selectedDate}</Text>  */}
+          
             </View>
 
             <ButtonWrapper theme={theme} >

@@ -1,118 +1,302 @@
 import { useContext, useEffect, useState } from "react";
 
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { ThemeContext } from "../../theme/ThemeProvider";
+
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import { useNavigation } from "@react-navigation/native";
 import getGlobalStyles from "../../theme/globalStyles";
-import ScreenHeader from "../../components/ScreenHeader";
-import { CalendarIcon, ChevronDownIcon, PencilIcon } from "react-native-heroicons/outline";
-import { View, TextInput, TouchableOpacity, Image, StyleSheet, Text } from "react-native";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AuthContext } from "../../context/AuthContext";
-import { GenderAmbiguous } from "react-bootstrap-icons";
+
+import { PencilIcon } from "react-native-heroicons/outline";
+import { View, TouchableOpacity, Image, StyleSheet, Text, ScrollView, Alert } from "react-native";
+
+import { AuthContext, useAuth } from "../../context/AuthContext";
+
+import Card from "../../components/Card";
+import FloatingLabelInput from "../../components/FloatingLabelInput";
+import SafeAreaContainerKeyboardAvoiding from "../../components/SafeAreaContainerKeyboardAvoiding";
+import RadioInput from "../../components/RadioInput";
+import FloatingDatePicker from "../../components/FloatingDatePicker";
+import BottomButton from "../../components/BottomButton";
+import * as ImagePicker from 'expo-image-picker';
+import api from "../../services/api";
+import { format, parse, set } from "date-fns";
+import { Platform } from 'react-native';
+import { APP_URL } from "../../config";
+import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
+
 
 export default function EditProfileScreen() {
-    const { user } = useContext(AuthContext);
-    const { theme } = useContext(ThemeContext);
-    const styles = getGlobalStyles(theme);
-    const navigation = useNavigation();
-    const [openDatePicker, setOpenDatePicker] = useState(false);
-    const [date, setDate] = useState(new Date());
+    const { user, patient, setPatient } = useAuth();
+    
+    const { theme } = useTheme();
 
-    const [profile, setProfile] = useState({
-        name: user.patient.first_name || '',
-        nickname: user.patient.last_name || "",
+    const [imageData, setImageData] = useState(null); // holds new image object
+
+    const changeDateFormat = ({ dateString }) => {
+        const dateObject = new Date(dateString);
+        return format(dateObject, 'm/d/yyyy')
+    }
+
+    const [loading, setLoading] = useState(false);
+
+    const [formData, setFormData] = useState({
+
+        first_name: patient.first_name || "",
+        middle_name: patient.middle_name || "",
+        last_name: patient.last_name || "",
+        phone: patient.phone_number || "",
         email: user.email || "",
-        dob: user.patient.dob || "",
-        gender: user.patient.gender || "",
-        profileImage: "https://placehold.co/160x160",
+        dob: patient.dob || null,
+        gender: '',
+        avatar: patient.avatar || null,
+        avatarImage: null,
     });
+
+    const handleChooseImage = () => {
+        ImagePicker.launchImageLibrary(
+            { mediaType: 'photo', quality: 0.8 },
+            (response) => {
+                if (response.didCancel || response.errorCode) return;
+
+                const asset = response.assets[0];
+                setImageData({
+                    uri: asset.uri,
+                    type: asset.type,
+                    name: asset.fileName || 'profile.jpg',
+                });
+            }
+        );
+    };
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 4],
+            quality: 1
+        });
+        if (!result.canceled) {
+            // setFormData({ ...formData, avatarImage: result.assets[0] });
+            const asset = result.assets[0];
+            setImageData({
+                uri: asset.uri,
+                type: asset.type,
+                name: asset.fileName || 'profile.jpg',
+            });
+        }
+    }
 
     const handleDateConfirm = (selectedDate) => {
         setDate(selectedDate);
-        setProfile({ ...profile, dob: selectedDate.toISOString().split("T")[0] });
+        setFormData({ ...formData, dob: selectedDate.toISOString().split("T")[0] });
         setOpenDatePicker(false);
     };
 
     useEffect(() => {
 
-        // const _retrieveData = async () => {
-        //     try {
-        //         const value = await AsyncStorage.getItem('TASKS');
-        //         if (value !== null) {
-        //             // We have data!!
-        //             console.log(value);
-        //         }
-        //     } catch (error) {
-        //         // Error retrieving data
-        //     }
-        // };
     }, [])
+
+    const getMimeType = (filename) => {
+        const extension = filename.split('.').pop().toLowerCase();
+        switch (extension) {
+            case 'jpg':
+            case 'jpeg':
+                return 'image/jpeg';
+            case 'png':
+                return 'image/png';
+            case 'gif':
+                return 'image/gif';
+            default:
+                return 'image/jpeg'; // Fallback
+        }
+    };
+
+    
+
+    const submitForm = async () => {
+
+
+        let form;
+        let headers;
+
+        setLoading(true)
+        if (imageData) {
+
+            const newImageUri = Platform.OS === 'ios' ? imageData.uri.replace('file://', '') : imageData.uri;
+            form = new FormData();
+            form.append('patient_id', user.patient.id);
+            form.append('first_name', formData.first_name);
+            form.append('middle_name', formData.middle_name);
+            form.append('last_name', formData.last_name);
+            form.append('phone', formData.phone);
+            form.append('email', formData.email);
+            form.append('dob', formData.dob);
+            form.append('gender', formData.gender);
+            form.append('gender', formData.gender);
+            form.append('avatar', formData.avatar);
+            form.append('image', {
+                uri: newImageUri,
+                name: imageData.name,
+                type: getMimeType(imageData.name),
+            });
+
+            
+            headers = {
+                'Content-Type': 'multipart/form-data',
+            };
+          
+
+        }
+        else {
+            form = new FormData();
+            form.append('patient_id', user.patient.id);
+            form.append('first_name', formData.first_name);
+            form.append('middle_name', formData.middle_name);
+            form.append('last_name', formData.last_name);
+            form.append('phone', formData.phone);
+            form.append('email', formData.email);
+            form.append('dob', formData.dob);
+            form.append('gender', formData.gender);
+            form.append('gender', formData.gender);
+            form.append('avatar', formData.avatar);
+
+            headers = {
+                'Content-Type': 'application/json',
+            };
+
+        }
+
+        
+    
+        try {
+            const response = await api.post('/update-profile', form, {headers} );
+
+
+            const data = await response.data;
+             
+            if (response.data) {
+                setPatient(data.patient);
+                Alert.alert('Profile Updated Successfully!');
+            } else {
+                console.error(data);
+                Alert.alert('Upload failed', data.message || 'Error occurred');
+            }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error uploading');
+        }
+        finally{
+            setLoading(false)
+        }
+
+
+    }
 
     return (
         <>
-            <SafeAreaProvider>
-                <SafeAreaView style={styles.safeAreaContainer}>
+            <SafeAreaContainerKeyboardAvoiding
+                screenTitle='Edit Profile'
+                allowedBack={true}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 72 }}>
 
-                    <ScreenHeader
-                        title="Edit Profile"
-                        onBackPress={() => navigation.goBack()}
-                        RightIcon={CalendarIcon} // Optional Right Icon
 
-                    />
-                    <View style={styles.container}>
-                        <View style={localStyles.imageContainer}>
-                            <Image source={{ uri: profile.profileImage }} style={localStyles.profileImage} />
-                            <TouchableOpacity style={localStyles.editButton}>
+                    <View style={localStyles.imageContainer}>
+                        <TouchableOpacity style={localStyles.profileImage} onPress={pickImage}>
+                        <Image source={imageData ? { uri: imageData.uri } : { uri: APP_URL + '/storage/' + user.patient.avatar }} style={localStyles.profileImage} />
+                            
+                            <View style={localStyles.editButton}>
                                 <PencilIcon size={18} color="white" />
-                            </TouchableOpacity>
-                        </View>
-                        <TextInput style={localStyles.input} value={profile.name} onChangeText={(text) => setProfile({ ...profile, name: text })} placeholder="Full Name" />
-                        <TextInput style={localStyles.input} value={profile.nickname} onChangeText={(text) => setProfile({ ...profile, nickname: text })} placeholder="Nickname" />
-                        <TextInput style={localStyles.input} value={profile.email} onChangeText={(text) => setProfile({ ...profile, email: text })} placeholder="Email" keyboardType="email-address" />
+                            </View>
 
-                        {/* Date of Birth Field - Opens Date Picker */}
-                        <TouchableOpacity style={localStyles.inputIconContainer} onPress={() => setOpenDatePicker(true)}>
-                            <CalendarIcon size={18} color="#9E9E9E" />
-                            <Text style={localStyles.dateText}>{profile.dob || "Date of Birth"}</Text>
                         </TouchableOpacity>
-                        {/* 
-                        <TouchableOpacity onPress={() => setDatePickerVisibility(true)}>
-                            <Text>Select Date: {date.toDateString()}</Text>
-                        </TouchableOpacity> */}
+                     
+  
 
-                        {/* <DatePicker
-                            modal
-                            open={openDatePicker}
-                            date={date}
-                            mode="date"
-                            onConfirm={handleDateConfirm}
-                            onCancel={() => setOpenDatePicker(false)}
-                        /> */}
 
-                        <DateTimePickerModal
-                            isVisible={openDatePicker}
-                            mode="date"
-                            // display="calendar"
-                            onConfirm={handleDateConfirm}
-                            onCancel={() => setOpenDatePicker(false)}
-                        />
 
-                        {/* Gender Dropdown */}
-                        <TouchableOpacity style={localStyles.inputIconContainer}>
-
-                            <Text style={localStyles.dateText}>{profile.gender || "Gender"}</Text>
-                            <ChevronDownIcon size={18} color="#9E9E9E" />
-                        </TouchableOpacity>
                     </View>
 
+                    <Card title="Personal Information">
+
+                        <FloatingLabelInput
+                            label="First Name"
+                            textChange={(text) => setFormData({ ...formData, first_name: text })}
+                            value={formData.first_name}
+                            
+                        />
+
+                        <FloatingLabelInput
+                            label="Last Name"
+                            textChange={(text) => setFormData({ ...formData, last_name: text })}
+                            value={formData.last_name}
+
+                        />
+
+
+
+                        <FloatingDatePicker
+                            label="Date of Birth"
+                            textChange={(text) => setFormData({ ...formData, dob: text })}
+                            value={formData.dob}
+                        />
+
+                        <RadioInput
+                            label="Gender"
+                            options={[
+                                { id: '1', name: 'Male' },
+                                { id: '2', name: 'Female' },
+                                { id: '3', name: 'Others' }
+                            ]}
+                            handleSelect={(item) => setFormData({ ...formData, gender: item })}
+                            // handleSelect={(item) => console.log(item)}
+                            selectedOption={formData.gender}
+                        />
 
 
 
 
-                </SafeAreaView>
-            </SafeAreaProvider>
+
+
+                    </Card>
+
+                    <Card title="Contact Information">
+
+
+
+                        <FloatingLabelInput
+                            label="Phone"
+                            textChange={(text) => setFormData({ ...formData, phone: text })}
+                            value={formData.phone}
+                            keyboardType="number-pad"
+
+                        />
+
+                        <FloatingLabelInput
+                            label="E-Mail"
+                            textChange={(text) => setFormData({ ...formData, email: text })}
+                            value={formData.email}
+                            keyboardType="email-address"
+
+                        />
+
+
+
+                    </Card>
+
+
+
+
+
+
+                </ScrollView>
+
+
+{loading && <LoadingDotsWithOverlay />}
+
+                <BottomButton handlepress={submitForm} value="Save"
+                    buttonTheme="primary"
+                />
+
+            </SafeAreaContainerKeyboardAvoiding>
         </>
     )
 }
@@ -144,7 +328,7 @@ const localStyles = StyleSheet.create({
         padding: 6,
         borderRadius: 20,
     },
-   
+
     input: {
         width: "100%",
         padding: 14,

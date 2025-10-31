@@ -1,38 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, Image, StyleSheet } from 'react-native';
-// import Carousel from 'react-native-reanimated-carousel';
+ 
+import { View,  Dimensions, Image, StyleSheet } from 'react-native';
+ 
 import Swiper from 'react-native-swiper';
-import { getDeals } from '../services/dealservices';
+ 
 import { APP_URL } from '../config';
+import useDeals from '../hooks/useDeals';
+import Skeleton from './home/skeleton/Skeleton';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height } = Dimensions.get('window');
 
 const DealsCarousel = () => {
-    const [deals, setDeals] = useState([]);
-
-    useEffect(() => {
-        const fetchDeals = async () => {
-            try {
-                const data = await getDeals(); // Make sure getDeals is defined
-                setDeals(data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchDeals();
-    }, []);
+    const { deals, loading, errors } = useDeals();
+ 
 
     return (
         <>
-            <Swiper autoplay={true} showsPagination={true} style={{ height: 165 }}>
-                {deals.map((deal, index) => (
-                    <View key={index} style={styles.slide}>
+            {loading ? <Skeleton height={(height / 4.75)} width="100%" style={{ borderRadius: 10, }} /> :
+                <Swiper autoplay={true} showsPagination={true} style={{ height: height / 4.75 }}>
+                    {deals.map((deal, index) => (
+                        <View key={index} style={styles.slide}>
 
-                        <Image source={{ uri: APP_URL + '/public/storage/' + deal.image }} style={styles.image} />
+                            <Image source={{ uri: APP_URL + '/public/storage/' + deal.image }} style={[styles.image, {height:(height / 4.75)}]} />
 
-                    </View>
-                ))}
-            </Swiper>
+                        </View>
+                    ))}
+                </Swiper>
+            }
+
         </>
     );
 };
@@ -45,7 +39,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: 145,
+        // height: 145,
         borderRadius: 10,
     },
     title: {

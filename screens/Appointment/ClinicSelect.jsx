@@ -1,20 +1,38 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View } from "react-native";
 import { ClinicLocationServices } from "../../services/ClinicLocationServices";
 import ButtonWrapper from "./ButtonWrapper";
 import CancelButton from "./CancelButton";
 import NextPrevButtonWrapper from "./NextPrevButtonWrapper";
 import PreviousButton from "./PreviousButton";
 import NextButton from "./NextButton";
+import LoadingDots from "../../components/LoadingDots";
 
 const ClinicSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
 
     const [clinics, setClinics] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [selectedClinic, setSelectedClinic] = useState( );
+    const [loading, setLoading] = useState(true);
+    const [selectedClinic, setSelectedClinic] = useState();
 
     useEffect(() => {
-        ClinicLocationServices().then(setClinics).catch(console.error);
+
+        const fetchClinics = async () => {
+            try {
+                const res = await ClinicLocationServices();
+                if (Array.isArray(res)) {
+                    setClinics(res);
+                } else {
+
+                    setClinics([]);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchClinics();
+
 
     }, [])
 
@@ -26,18 +44,25 @@ const ClinicSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
         }
     };
 
-   
+
 
     const RenderItem = ({ item }) => {
-        const isSelected = selectedClinic ?( selectedClinic.id === item.id) : false;
+        const isSelected = selectedClinic ? (selectedClinic.id === item.id) : false;
         return (
             <TouchableOpacity style={{
+                backgroundColor: theme.white,
                 borderStyle: 'solid', borderRadius: 5, borderWidth: 1, padding: 8, marginBottom: 12,
                 borderColor: isSelected ? theme.blue : theme.border
             }} onPress={() => setSelectedClinic(item)}>
+
+                <View>
+                    <Image source={{ uri: item.logo_url }} />
+                </View>
+                {console.log(item.logo_url)}
                 <Text style={{ fontFamily: theme.font600, color: theme.dark, marginBottom: 4 }}>{item.name}</Text>
                 <Text style={{ fontSize: 12, fontFamily: theme.font400, color: theme.gray }}>
-                    {item.branches[0].address_line_1}{"\n"}{item.branches[0].address_line_2}</Text>
+                    {item.address_line_1}{"\n"}{item.address_line_2}</Text>
+
             </TouchableOpacity>
         )
     }
@@ -47,14 +72,14 @@ const ClinicSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
                 <View style={{ flex: 1, marginTop: 16 }}>
                     <Text style={gStyles.stepFormScreenTitle} >Pick Your Smile Spot</Text>
 
-                    {loading ? <ActivityIndicator size="large" /> :
-                        <FlatList
+                    {loading ? <LoadingDots /> :
+                        <>   <FlatList
                             data={clinics}
                             keyExtractor={(item) => item.id.toString()}
                             showsVerticalScrollIndicator={false}
                             renderItem={({ item }) => <RenderItem item={item} />
                             }
-                        />
+                        /></>
                     }
                 </View>
             </View>
@@ -63,8 +88,8 @@ const ClinicSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
 
 
                 <NextPrevButtonWrapper theme={theme}>
-                <PreviousButton theme={theme} handlePress={prevStep} />
-                    {/* <PreviousButton theme={theme} handlePress={prevStep} /> */}
+                    <PreviousButton theme={theme} handlePress={prevStep} />
+
                     <NextButton theme={theme} handlePress={handleNext} />
                 </NextPrevButtonWrapper>
 

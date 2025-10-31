@@ -5,6 +5,8 @@ const ButtonWrapper = ({theme, children}) => {
         <View style={{
             backgroundColor: theme.white,
             borderTopColor: theme.border,
+            marginHorizontal: -20,
+            paddingHorizontal: 20,
             borderTopWidth: 1, paddingVertical: 8,
             display: 'flex', flexDirection: "row", justifyContent: "space-between", alignItems: "center"
         }}>

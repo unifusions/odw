@@ -34,3 +34,10 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Android
+
+android/
+
+*.apk
+*.aab

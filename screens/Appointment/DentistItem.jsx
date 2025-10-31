@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemeContext } from "../../theme/ThemeProvider";
+import { practiseYearCalculator } from "../../helpers/practiseyears";
 
 export default function DentistItem({ dentist, handleSelect, isSelected }) {
     const { theme } = useContext(ThemeContext);
@@ -9,14 +10,15 @@ export default function DentistItem({ dentist, handleSelect, isSelected }) {
 
             flexDirection: "row",
             // justifyContent: "space-between",
-            marginVertical: 12,
+            marginVertical: 6,
             padding: 8,
             alignContent: "flex-start",
             borderColor: theme.border,
             borderWidth: 1,
             borderStyle: "solid",
             borderRadius: 5,
-
+            alignItems: "center",
+            backgroundColor: theme.white,
             borderColor: isSelected ? theme.blue : theme.border
         },
 
@@ -24,8 +26,15 @@ export default function DentistItem({ dentist, handleSelect, isSelected }) {
             fontFamily: theme.font600,
             fontSize: 16,
             textAlign: "left"
+        },
+        practise_from: {
+            fontFamily: theme.font400,
         }
     });
+
+
+
+
     return (
         <>
             <TouchableOpacity
@@ -34,19 +43,25 @@ export default function DentistItem({ dentist, handleSelect, isSelected }) {
                 onPress={handleSelect}
             >
 
-                <Image source={{ uri: 'https://placehold.co/120x120.png' }}
+                <Image source={{ uri: dentist.photo_url ?? 'https://placehold.co/120x120.png' }}
 
                     style={{
-                        width: 100, height: 100, marginEnd: 8,
-                        resizeMode: 'contain',
+                        width: 90, height: 90, marginEnd: 8,
+                        resizeMode: 'cover',
                         borderRadius: 6,
                     }}
                 />
 
 
+
                 <View>
-                    <Text style={styles.dentistName}>{dentist.name}</Text>
-                    <Text>{dentist.practise_from}</Text>
+
+                    <Text style={styles.dentistName}>{dentist?.name}
+
+                    </Text>
+                    <Text style={styles.practise_from}>{practiseYearCalculator(dentist?.practise_from)} years of Practise</Text>
+
+                   
                 </View>
 
 

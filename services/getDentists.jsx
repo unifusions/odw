@@ -16,11 +16,29 @@ export const getDentistsByBranch = async ({ branchId }) => {
         const response = await api.get('/dentists-by-branch',
             {
                 params: {
-                   
+
                     clinic_branch_id: branchId
                 }
             })
-         
+
+        return response.data;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+
+
+export const getDentistsByClinic = async ({ clinicId }) => {
+    try {
+        const response = await api.get('/dentists-by-clinic',
+            {
+                params: {
+
+                    clinic_id: clinicId
+                }
+            })
+
         return response.data;
     }
     catch (error) {

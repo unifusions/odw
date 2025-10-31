@@ -15,42 +15,77 @@ import {
     ActivityIndicator,
     Alert,
 } from "react-native";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
-import { loginUser, registerUser } from "../../services/authservices";
 import ErrorDialog from "../../components/ErrorDialog";
+import LoadingDots from "../../components/LoadingDots";
+import api from "../../services/api";
 
-const LoginScreen = () => {
+export default function LoginScreen() {
     // const token =  AsyncStorage.getItem('authToken');
-    const { theme } = useContext(ThemeContext);
+    const { theme } = useTheme();
     const gStyles = getGlobalStyles(theme);
     const navigation = useNavigation();
     const [processing, setProcessing] = useState(false);
     const [email, setEmail] = useState('');
-    const [isConfirmVisible, setConfirmVisible] = useState(false);
+    // const [isConfirmVisible, setConfirmVisible] = useState(false);
     const [message, setMessage] = useState('');
+    const [errorDialogVisible, setErrorDialogVisible] = useState(false)
     const handleConfirm = () => {
-        setConfirmVisible(false);
+        setErrorDialogVisible(false);
         setMessage(null);
     }
     const handleLogin = async () => {
         setProcessing(true);
 
-        const response = await loginUser(email);
+        try {
 
-        if (response.status === 200) {
 
-            otpDigits = response.data.otp;
-            // console.log(response.data);
-            navigation.navigate('AuthOtp', { email, otpDigits: otpDigits });
-        } else {
+            const response = await api.post('/login', { email });
 
-            setConfirmVisible(true);
-            setMessage(response.data.error);
-            // Alert.alert("Error", response.data.error || "Something went wrong!");
+
+            if (response.status === 200) {
+
+
+                let otpDigits = response.data.otp;
+
+
+                navigation.navigate('AuthOtp', { email, otpDigits: otpDigits });
+
+                setProcessing(false);
+
+
+            }
+
+            else if (response.status === 400) {
+                Alert.alert("400 Error User Not Found");
+            }
+
+
+            else {
+
+                setErrorDialogVisible(true);
+                setMessage(response.data?.error);
+
+                setProcessing(false);
+            }
+            setProcessing(false);
+
 
         }
-        setProcessing(false);
+        catch (error) {
+
+            if (error.status === 404) {
+                setErrorDialogVisible(true);
+                setMessage("User Not Found or Invalid Email ID/Phone");
+
+            }
+            else { Alert.alert("Something went wrong. Try again later"); }
+            setProcessing(false);
+
+        }
+
+
 
     }
 
@@ -75,13 +110,15 @@ const LoginScreen = () => {
         },
         welcomeText: {
             fontSize: 24,
-            fontWeight: "bold",
-            color: "#2d3748",
+            fontFamily: theme.font700, color: "#2d3748",
+            marginBottom: 12
         },
         subText: {
+            fontFamily: theme.font400,
             fontSize: 14,
             color: "#4a5568",
             marginBottom: 20,
+            fontFamily: theme.font500
         },
 
 
@@ -100,8 +137,7 @@ const LoginScreen = () => {
         },
         button: {
             flex: 1,
-            // paddingVertical: 5,
-            // paddingHorizontal: 20,
+
             alignItems: "center",
             justifyContent: "center",
             height: 49,
@@ -133,6 +169,8 @@ const LoginScreen = () => {
                             <Image source={require("../../assets/images/odw-logo-icon.png")} style={styles.logo} />
                             <Text style={styles.welcomeText}>Welcome Back!</Text>
                             <Text style={styles.subText}>Use Credentials to access your account</Text>
+
+
                             <TextInput
                                 value={email}
                                 onChangeText={setEmail}
@@ -142,28 +180,30 @@ const LoginScreen = () => {
                             />
 
                         </View>
-                        {processing && <ActivityIndicator size="large" />
+                        {processing ? <LoadingDots /> :
+                            <View style={[styles.buttonRow]} >
+                                <TouchableOpacity style={[styles.button, styles.buttonRegister]} onPress={() => navigation.navigate('Register')}>
+
+                                    <Text style={[styles.buttonText]} >Register</Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
+
+                                    <Text style={[styles.buttonText, { color: '#FFF' }]}>Log In</Text>
+
+
+                                </TouchableOpacity>
+                            </View>
+
+
                         }
-                        <View style={[styles.buttonRow]} >
-                            <TouchableOpacity style={[styles.button, styles.buttonRegister]} onPress={() => navigation.navigate('Register')}>
 
-                                <Text style={[styles.buttonText]} >Register</Text>
-
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={[styles.button, styles.buttonLogin]} onPress={handleLogin}>
-
-                                <Text style={[styles.buttonText, { color: '#FFF' }]}>Log In</Text>
-
-
-                            </TouchableOpacity>
-                        </View>
-
-
-                        <ErrorDialog visible={isConfirmVisible}
-                            title="Error"
-                            message={message}
-                            onConfirm={handleConfirm} />
+                        {errorDialogVisible &&
+                            <ErrorDialog visible={errorDialogVisible}
+                                title="Error"
+                                message={message}
+                                onConfirm={handleConfirm} />}
                     </ScrollView>
 
                 </TouchableWithoutFeedback>
@@ -173,4 +213,3 @@ const LoginScreen = () => {
 };
 
 
-export default LoginScreen;

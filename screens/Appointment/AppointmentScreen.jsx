@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeContext } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
-import { ChevronLeftIcon } from "react-native-heroicons/outline";
+import { CheckCircleIcon, ChevronLeftIcon } from "react-native-heroicons/outline";
 import ServiceSelect from "./ServiceSelect";
 import ClinicSelect from "./ClinicSelect";
 import DentistSelect from "./DentistSelect";
@@ -34,38 +34,55 @@ const AppointmentScreen = () => {
         setFormData({ ...formData, ...data });
         setCurrentStep(currentStep + 1);
 
-        console.log(formData);
     };
     const prevStep = () => {
         setCurrentStep(currentStep - 1);
     };
     const handleSubmit = async () => {
 
+
+
+
         let patient_id = user.patient.id;
+
         let clinic_id = formData.selectedClinic.id;
-        let clinic_branch_id = formData.selectedClinic.branches[0].id;
+
+
         let clinic_dentist_id = formData.selectedDentist.id;
         let time_slot = formData.selectedSlot.split(' ')[0];
         // let appointment_date = formData.selectedDate;
 
         let selectedService = formData.selectedItems.name;
-        let  service_id = formData.selectedItems.id;
+        let dental_service_id = formData.selectedItems.id;
+
         const inputFormat = "E MMM dd yyyy";
 
         const parsedDate = parse(formData.selectedDate, inputFormat, new Date());
         const outputFormat = "yyyy-MM-dd";
         const appointment_date = format(parsedDate, outputFormat);
 
+console.log(patient_id, clinic_id, appointment_date, time_slot,
+    clinic_dentist_id, dental_service_id);
 
-       
-        const response = await bookAppointment(patient_id, clinic_id, appointment_date, clinic_branch_id, time_slot, clinic_dentist_id, service_id)
-
-
-        if (response.status === 200) {
-            setModalMessage(`Your Appointment for ${selectedService} at ${formData.selectedClinic.name} on ${formData.selectedDate}, ${formData.selectedSlot} will be confirmed shortly`);
-            setConfirmVisible(true);
+        try{
+            const response = await bookAppointment(
+                patient_id, clinic_id, appointment_date, time_slot,
+                clinic_dentist_id, dental_service_id)
+            // console.log(response);
+    
+            if (response.status === 200) {
+                setModalMessage(`Your Appointment for ${selectedService} at ${formData.selectedClinic.name} on ${formData.selectedDate}, ${formData.selectedSlot} will be confirmed shortly`);
+                setConfirmVisible(true);
+            }
+    
         }
 
+        catch (error){
+            console.log("error")
+            console.log(error.response)
+        }
+
+    
 
         // setModalMessage(message);
         // 
@@ -130,10 +147,10 @@ const AppointmentScreen = () => {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={[{ flex: 1 }, styles.container, styles.safeAreaContainer]}>
-                {console.log(user.patient)}
+
                 <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
                     <View>
-                        <TouchableOpacity onPress={prevStep}>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
                             <ChevronLeftIcon size={20} />
                         </TouchableOpacity>
 
@@ -171,10 +188,12 @@ const AppointmentScreen = () => {
 
             {/* Modal Dialog */}
             <ModalDialog
+                icon={<CheckCircleIcon height={100} size={80} color={"#0F172A"} />}
                 visible={isConfirmVisible}
                 title="Congratulations"
                 message={modalMessage}
                 onConfirm={handleModalConfirm}
+
             />
 
 

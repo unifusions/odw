@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
-import { getDentistsByBranch } from "../../services/getDentists";
+import { getDentistsByBranch, getDentistsByClinic } from "../../services/getDentists";
 import DentistItem from "./DentistItem";
 import ButtonWrapper from "./ButtonWrapper";
 import CancelButton from "./CancelButton";
@@ -17,7 +17,7 @@ const DentistSelect = ({ theme, clinic, gStyles, onNext, handleCancel, prevStep 
     const [selectedDentist, setSelectedDentist] = useState();
     useEffect(() => {
 
-        getDentistsByBranch({ branchId: clinic.branches[0].id }).then(
+        getDentistsByClinic({ clinicId: clinic.id }).then(
             setDentists).catch(console.error);
     }, [])
 
@@ -30,16 +30,15 @@ const DentistSelect = ({ theme, clinic, gStyles, onNext, handleCancel, prevStep 
         }
     };
 
-
     return (
         <>
             <View style={{ flex: 1, marginTop: 16 }}>
                 <Text style={gStyles.stepFormScreenTitle}>Meet Your Tooth Hero</Text>
-                {console.log(dentists)}
+
                 <ScrollView>
                     {
                         dentists.length > 0 &&
-                        dentists.map((item) => <DentistItem key={item.id} dentist={item} handleSelect={() => setSelectedDentist(item)} isSelected = {selectedDentist ? (selectedDentist.id === item.id) : false}/>)
+                        dentists.map((item) => <DentistItem key={item.id} dentist={item} handleSelect={() => setSelectedDentist(item)} isSelected={selectedDentist ? (selectedDentist.id === item.id) : false} />)
                     }
 
                 </ScrollView>

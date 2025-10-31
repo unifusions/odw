@@ -1,85 +1,80 @@
 import { useContext, useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import getGlobalStyles from "../../theme/globalStyles";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { useTheme } from "../../theme/ThemeProvider";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { getInsurance } from "../../services/insurance";
-import { AuthContext } from "../../context/AuthContext";
 
-import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../context/AuthContext";
+
+import { useNavigation, } from "@react-navigation/native";
+import Card from "../../components/Card";
+import api from "../../services/api";
+import useInsurance from "../../hooks/useInsurance";
+import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 
 export default function MyInsurance() {
-    const { user } = useContext(AuthContext);
-    const { theme, toggleTheme, resetTheme } = useContext(ThemeContext);
+    const { user } = useAuth();
+    const { theme, toggleTheme, resetTheme, processing, setProcessing } = useTheme();
     const styles = getGlobalStyles(theme);
     const navigation = useNavigation();
-    const [loading, setLoading] = useState(false);
-    const [insurances, setInsurances] = useState([]);
-    useEffect(() => {
 
 
-        // getInsurance({ patient_id: user.patient.id }).then(
-        //     response => {
-        //         setInsurances(response.data);
-        //         // console.log(response);
-        //     }
-        // )
 
-        //     // const fetchInsurance = async () => {
-        //     //     const data = await getInsurance(user.patient.id);
-        //     //     console.log("Data received from getInsurance:", data); // Inspect this data
-        //     //     setInsurances(data);
+    const { insurances, loading, errors } = useInsurance({ patientId: user?.patient?.id });
 
-        //     // }
-        //     // fetchInsurance();
-
-
-    }, []);
-
-    const InsuranceCard = () => {
+    const InsuranceCard = ({ insurance }) => {
         const DetailedLine = ({ label, value }) => {
             return (
                 <View style={{ justifyContent: "space-between", flexDirection: "row", marginVertical: 2 }}>
-                    <Text style={{ color: theme.white, fontFamily: theme.font500, letterSpacing: 0.5 }}>{label}</Text>
-                    <Text style={{ color: theme.white, fontFamily: theme.font500, letterSpacing: 0.5 }}>{value}</Text>
+                    <Text style={{ fontFamily: theme.font500, letterSpacing: 0.5 }}>{label}</Text>
+                    <Text style={{ fontFamily: theme.font600, letterSpacing: 0.5 }}>{value}</Text>
 
                 </View>
             )
         }
         return (
-            <TouchableOpacity>
+
+            <Card title={insurance.insurance_provider}>
+                <TouchableOpacity style={{ paddingVertical: 20 }} onPress={() => navigation.navigate("InsuranceDetail", { insuranceItem: insurance })}>
 
 
 
-                <View>
-                    <Text style={{ alignSelf: "flex-end", paddingVertical: 20, color: theme.white }}>Insurance Company</Text>
-                </View>
-                <Text style={{ color: theme.white, fontFamily: theme.font600, fontSize: 18, marginBottom: 16 }}>User Name</Text>
+                    <View>
+                        <Text style={{ fontFamily: theme.font600, fontSize: 18, marginBottom: 16 }}>{insurance.insurance_provider}</Text>
 
-                <DetailedLine label="Member ID" value="2178388216" />
-                <DetailedLine label="Group ID" value="2178388216" />
+                    </View>
 
 
+                    <DetailedLine label="Member ID" value={insurance.member_id} />
+                    <DetailedLine label="Relation" value={insurance.mode} />
 
 
-            </TouchableOpacity>
+
+
+                </TouchableOpacity>
+            </Card>
         )
     }
     return (
-        <SafeAreaContainer
+        <SafeAreaContainer loading={loading}
             screenTitle="My Insurance" allowedBack={true}
         >
 
-            <ScrollView>
 
 
-                <InsuranceCard />
+            <ScrollView showsVerticalScrollIndicator={false}>
+
+                {insurances.length > 0 && insurances.map((item) => <InsuranceCard key={item.id} insurance={item} />)}
+
 
             </ScrollView>
 
 
-            <View style={[styles.fixedBottomContainer]}>
+
+
+
+            <View style={[styles.fixedBottomContainer, { paddingHorizontal: 20, paddingBottom: 10 }]}>
                 <TouchableOpacity style={styles.cta} onPress={() => navigation.navigate("AddInsurance")}>
                     <Text style={styles.buttonText}>Add Insurance</Text>
                 </TouchableOpacity>

@@ -1,7 +1,7 @@
 
 
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 
@@ -12,6 +12,10 @@ import { getDentalCare } from "../../services/getDentalCare";
 import ModalDialog from "../../components/ModalDialog";
 import { CheckBadgeIcon } from "react-native-heroicons/outline";
 import SearchBox from "../../components/SearchBox";
+import SafeAreaContainer from "../../components/SafeAreaContainer";
+import CompassIcon from "./CompassIcon";
+import RocketIcon from "./RocketIcon";
+import { useNavigation } from "@react-navigation/native";
 const Estimate = () => {
     const { theme, toggleTheme, resetTheme } = useContext(ThemeContext);
     const styles = getGlobalStyles(theme);
@@ -19,6 +23,7 @@ const Estimate = () => {
     const [dcares, setDcares] = useState({});
     const [isConfirmVisible, setConfirmVisible] = useState(false);
 
+    const navigation = useNavigation();
     const handleSearch = (text) => {
         setSearchText(text);
         const filtered = dentalCares.filter(item =>
@@ -51,62 +56,80 @@ const Estimate = () => {
             </TouchableOpacity>
         )
     }
+
+    const localStyles = StyleSheet.create({
+        optionContainer: {
+            flexDirection: "row",
+            marginVertical: 6,
+            borderColor: theme.border,
+            borderWidth: 1,
+            borderRadius: 5,
+            backgroundColor: theme.white,
+            padding: 12,
+            alignItems: "center"
+
+        },
+
+        title: {
+            fontFamily: theme.font600,
+            fontSize: 20
+        },
+        subtitle: {
+            flexShrink: 1,
+            flexWrap: 'wrap',
+            fontFamily: theme.font400,
+            fontSize: 16,
+
+        }
+    });
     return (
-        <SafeAreaProvider>
-            <SafeAreaView style={[styles.safeAreaContainer]}>
-                <ScreenHeader title="Get an estimate"
-                />
+        <SafeAreaContainer>
+            <View>
+                <Text style={{ fontFamily: theme.font700, fontSize: 32, paddingEnd: 80, marginBottom: 16 }}>
+                    How would you like to get an Estimate?
 
-                <SearchBox />
+                </Text>
+            </View>
+
+            <View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 12 }}>
 
 
-                <FlatList
-                    data={dentalCares}
-                    keyExtractor={(item) => item.id.toString()}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item }) => <ServiceCardView item={item} />}
-                />
-                <ScrollView showsVerticalScrollIndicator={false}>
-                </ScrollView>
-            </SafeAreaView>
-
-            <View style={{ padding: 20, borderTopColor: theme.border, borderTopWidth: 1, backgroundColor: theme.white }}>
-                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
-                    <View>
-                        <Text style={{ fontFamily: theme.font600 }}>{dcares.name}</Text>
+                <TouchableOpacity
+                    style={localStyles.optionContainer}
+                    onPress={() => navigation.navigate('GuidedEstimate')}
+                >
+                    <View style={{ marginEnd: 12 }}>
+                        <CompassIcon size={64} />
                     </View>
-                    <View>
-                        <Text style={{ fontFamily: theme.font600 }}>$ {dcares.odw_cost}</Text>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                        <Text style={localStyles.title}>
+                            Help Me Decide
+                        </Text>
+                        <Text style={localStyles.subtitle}>
+                            We’ll guide you to right estimate
+                        </Text>
                     </View>
-                </View>
-                "
-                <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 8, alignItems: "center" }}>
-                    <View>
-                        <Text style={{ fontFamily: theme.font600 }}>Insurance</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={localStyles.optionContainer}
+                    onPress={() => navigation.navigate('QuickEstimate')}
+
+                >
+                    <View style={{ marginEnd: 12 }}>
+                        <RocketIcon size={64} />
                     </View>
-                    <View>
-                        <CheckBadgeIcon color={theme.success} />
-
+                    <View style={{ flex: 1 }} >
+                        <Text style={localStyles.title}>
+                            Tell Us What’s going on
+                        </Text>
+                        <Text style={localStyles.subtitle}>
+                            Skip the steps - Just explain your dental concern
+                        </Text>
                     </View>
-                </View>
-
-                <View>
-                    <TouchableOpacity style={styles.cta} onPress={() => setConfirmVisible(true)}>
-                        <Text style={styles.buttonText}>Get an Estimate</Text>
-                    </TouchableOpacity>
-                </View>
-
+                </TouchableOpacity>
 
             </View>
-            <ModalDialog
-                visible={isConfirmVisible}
-                title="Congratulations"
-                message={`: Our team will work on the closest estimate for you and will revert back in 24
-                hours. Meanwhile, average cost of this service is will be $ ${dcares.national_cost} ODW Cash discounts and deals can get you a price from ${dcares.odw_cost
-                    }`}
-                onConfirm={() => setConfirmVisible(false)}
-            />
-        </SafeAreaProvider>
+        </SafeAreaContainer>
     );
 };
 

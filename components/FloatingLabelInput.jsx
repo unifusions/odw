@@ -2,17 +2,22 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Animated } from 'react-native';
 import { ThemeContext } from '../theme/ThemeProvider';
 
-const FloatingLabelInput = ({ label, textChange, value }) => {
+const FloatingLabelInput = ({ label, textChange, value,
+  placeholder = "", keyboardType = "default", required = false,
+  multiline = false, showMax = false, maxLength = 100 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const { theme } = useContext(ThemeContext);
 
 
   const styles = StyleSheet.create({
     container: {
+      flex: 1,
+      width: "100%",
       paddingTop: 18,
       marginVertical: 10,
     },
     label: {
+      // width:"100%",
       position: 'absolute',
       left: 0,
       top: 30,
@@ -37,24 +42,42 @@ const FloatingLabelInput = ({ label, textChange, value }) => {
       backgroundColor: '#fff',
     },
 
+    multilineinput: {
+      height: 144,
+
+    },
+
+
+
     inputFocused: {
       borderBottomWidth: 1,
       borderColor: theme.primary
+    },
+    required: {
+      color: (isFocused || value) ? theme.danger : '#999'
     }
   });
 
   return (
     <View style={styles.container}>
+
       <Text style={[styles.label, (isFocused || value) && styles.labelFocused]}>
-        {label}
+        {label} {required && <Text style={styles.required}>*</Text>}      {showMax && <Text style={{ alignSelf: "flex-end" }}> {value?.length}/{maxLength} </Text>}
       </Text>
+
+
+
+
+
       <TextInput
-        style={[styles.input, isFocused && styles.inputFocused]}
+        style={[styles.input, isFocused && styles.inputFocused, (value?.length > 24) && multiline && styles.multilineinput]}
         value={value}
         onChangeText={textChange}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        keyboardType="email-address"
+        keyboardType={keyboardType}
+        multiline={multiline}
+
       />
     </View>
   );

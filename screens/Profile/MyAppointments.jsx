@@ -1,30 +1,31 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
 import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import { BuildingOfficeIcon, UserCircleIcon } from "react-native-heroicons/outline";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext, useAuth } from "../../context/AuthContext";
 import { myAppointments } from "../../services/appointmentservices";
 import { format } from "date-fns";
+import Card from "../../components/Card";
+import { EyeIcon } from "react-native-heroicons/solid";
+import LoadingDots from "../../components/LoadingDots";
+import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
+import { useNavigation } from "@react-navigation/native";
+import useAppointments from "../../hooks/useAppointments";
 
 const MyAppointments = () => {
-    const { theme } = useContext(ThemeContext);
-    const { user } = useContext(AuthContext);
-    const [openApps, setOpenApps] = useState([]);
-    const [pendingApps, setPendingApps] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [pendingCount, setPendingCount] = useState();
-    useEffect(() => {
-        setLoading(true);
-        myAppointments({ patient_id: user.patient.id }).then(
-            response => {
-                setOpenApps(response.open);
-                setPendingApps(response.pending);
-            }
-        ).catch(console.error);
+    const { theme } = useTheme();
+    const { user } = useAuth();
+  
 
-        setLoading(false);
-    }, [])
+
+    const { openBookings, pendingBookings,loading, errors } = useAppointments({ patientId: user.patient.id });
+    const navigation = useNavigation();
+    const styles = StyleSheet.create({
+        timeslot: { fontFamily: theme.font600, marginBottom: 6 },
+        dentalService: { fontFamily: theme.font700, marginBottom: 6 }
+    })
+
 
     const DayItem = ({ month, day }) => {
         return (
@@ -53,7 +54,7 @@ const MyAppointments = () => {
             </View>)
     }
 
-    const SectionHeader = ({ isOngoing, count = 0 }) => {
+    const SectionHeader = ({ sectionTitle, isOngoing, count = 0 }) => {
         return (
             <View style={{
                 display: "flex", flexDirection: "row",
@@ -66,7 +67,7 @@ const MyAppointments = () => {
                     backgroundColor: isOngoing ? theme.blue : theme.success
 
                 }}></View>
-                <Text style={{ marginStart: 8, fontFamily: theme.font600 }} >{isOngoing ? 'Upcoming' : ` Awaiting Confirmation (${count}) `}</Text>
+                <Text style={{ marginStart: 8, fontFamily: theme.font600 }} >{sectionTitle}  ({count})  </Text>
                 <View style={{
                     marginTop: 6,
                     marginStart: 8,
@@ -78,14 +79,16 @@ const MyAppointments = () => {
 
         )
     }
-    const AppointmentInfo = ({ timeSlot, dentalService, clinic, dentist }) => {
+    const AppointmentInfo = ({ timeSlot, dentalService, clinic, dentist, provider }) => {
+
+        const isDentist = provider?.type === 'Dentist' ? true : false;
         return (<>
-            <Text
-                style={{ fontFamily: theme.font600, marginBottom: 6 }}
+
+
+            <Text style={styles.timeslot}
             >{timeSlot}</Text>
-            <Text
-                style={{ fontFamily: theme.font700, marginBottom: 6 }}
-            >{dentalService}</Text>
+            {isDentist && <Text style={styles.dentalService}
+            >{dentalService}</Text>}
             <View style={{
                 flexDirection: "row", justifyContent: "flex-start",
                 alignItems: "center"
@@ -95,7 +98,6 @@ const MyAppointments = () => {
                 <Text
                     style={{
                         fontFamily: theme.font500,
-
                         marginBottom: 6, color: theme.gray
                     }}
                 >{clinic}</Text >
@@ -111,80 +113,138 @@ const MyAppointments = () => {
                 <Text
                     style={{
                         fontFamily: theme.font500,
-
                         marginBottom: 6, color: theme.gray
                     }}
-                >{dentist}</Text >
+                > {provider?.name}
+
+                </Text >
 
             </View>
+
+
+
+
 
 
 
         </>)
     }
-    const AppointmentCard = ({ timeSlot, dentalService, clinic, dentist }) => {
+    const AppointmentCard = ({ timeSlot, dentalService, clinic, provider, dentist, handlePress }) => {
+
+
         return (
+
             <View style={{
                 flexGrow: 1, borderWidth: 1, borderRadius: 6,
                 borderStyle: "solid", borderColor: theme.border, padding: 8
             }}>
+
                 <AppointmentInfo
                     timeSlot={timeSlot}
                     dentalService={dentalService}
                     clinic={clinic}
                     dentist={dentist}
+                    provider={provider}
                 />
             </View>
+
+
         )
     }
+
+    const StatusDot = ({ color }) => {
+        function switchColor(themeColor) {
+
+            switch (themeColor) {
+                case 'primary':
+                    return theme.primary;
+                    break;
+                case 'blue':
+                    return theme.blue;
+                    break;
+                case 'danger':
+                    return theme.danger;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return (
+            <View style={{
+                height: 8,
+                width: 8,
+                marginEnd: 16,
+                borderRadius: 100,
+                backgroundColor: switchColor(color)
+
+            }}></View>
+        )
+
+    }
     return (
-        <SafeAreaContainer
-            screenTitle="Appointments"    allowedBack={true}
-        >
-            <ScrollView showsVerticalScrollIndicator={false}>
-                
 
-             
+        <ScrollView showsVerticalScrollIndicator={false}>
 
-                {openApps.length >0 && <>
-                    <SectionHeader isOngoing={true} />
-                    {openApps.map((item) => <>
-                      
+
+
+
+            <Card title={<><StatusDot color="blue" /> Upcoming ({openBookings?.length})</>}>
+
+
+
+
+                {openBookings && openBookings?.length > 0 && <>
+
+                    {openBookings.map((item, index) =>
+
                         <View key={item.id} style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
-                            <DayItem month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
-                            <AppointmentCard timeSlot={item.appointment_time}
+                            <DayItem key={item.id} month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
+                            <AppointmentCard key={item.id} timeSlot={item.appointment_time}
                                 dentalService={item.service}
                                 clinic={item.clinic}
                                 dentist={item.dentist}
+                                handlePress={() => console.log(item)}
                             />
 
                         </View>
 
-                    </>)}
+                    )}
                 </>}
+            </Card>
 
 
-                {pendingApps.length > 0 && <>
-                    <SectionHeader isOngoing={false} count={pendingApps.length} />
-                    {pendingApps.map((item) => <>
-                        {console.log(item)}
-                        <View key={item.id} style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
-                            <DayItem month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
-                            <AppointmentCard timeSlot={item.appointment_time}
-                                dentalService={item.service}
+            <Card title={<><StatusDot color="danger" /> Pending ({pendingBookings?.length})</>}>
+                {pendingBookings && pendingBookings?.length > 0 && <>
+
+                    {pendingBookings.map((item, index) =>
+
+                        <TouchableOpacity key={item.id}
+                            onPress={() => navigation.navigate("Appointment", { appointment: item })}
+                            style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
+                            <DayItem key={item.id} month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
+                            <AppointmentCard key={item.id} timeSlot={item.appointment_time}
+                                dentalService={item?.service?.name ?? ''}
                                 clinic={item.clinic}
-                                dentist={item.dentist}
+                                dentist={item.dentist?.name}
+                                provider={item?.provider}
+
                             />
 
-                        </View>
+                        </TouchableOpacity>
 
-                    </>)}
+                    )}
 
                 </>}
 
-            </ScrollView>
+            </Card>
 
-        </SafeAreaContainer>
+
+            {loading && <LoadingDotsWithOverlay />}
+
+
+        </ScrollView>
+
+
 
     )
 }

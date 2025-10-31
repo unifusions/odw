@@ -4,7 +4,7 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Text } from 'react-nativ
 import { MagnifyingGlassIcon, XMarkIcon } from 'react-native-heroicons/outline';
 import { ThemeContext } from '../theme/ThemeProvider';
 
-const SearchBox = ({ onSearch}) => {
+const SearchBox = ({ onSearch, placeholder = "Search" }) => {
 
     const { theme } = useContext(ThemeContext);
     const [searchText, setSearchText] = useState('');
@@ -50,7 +50,7 @@ const SearchBox = ({ onSearch}) => {
             flexDirection: 'row',
             alignItems: 'center',
             // padding: 10,
-            // backgroundColor: '#f0f0f0',
+            backgroundColor: theme.white,
             borderRadius: 5, // Added a default border radius for a common look
             borderWidth: 1,
             height: 50,
@@ -62,7 +62,7 @@ const SearchBox = ({ onSearch}) => {
             flex: 1,
 
             fontFamily: theme.font500,
-            fontSize: 16,
+            fontSize: 14,
             paddingHorizontal: 10,
             backgroundColor: 'white',
         },
@@ -85,7 +85,7 @@ const SearchBox = ({ onSearch}) => {
             <MagnifyingGlassIcon color='gray' style={{ marginStart: 8 }} />
             <TextInput
                 style={[styles.input]}
-                placeholder="Search"
+                placeholder={placeholder}
                 value={searchText}
                 onChangeText={handleChangeText}
             />

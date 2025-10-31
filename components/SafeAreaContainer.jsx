@@ -5,28 +5,37 @@ import { ThemeContext } from "../theme/ThemeProvider";
 import { Text, TouchableOpacity, View } from "react-native";
 import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
+import LoadingDotsWithOverlay from "./LoadingDotsWithOverlay";
 
-const SafeAreaContainer = ({ children, screenTitle, allowedBack = false }) => {
+const SafeAreaContainer = ({ children, screenTitle, allowedBack = false, 
+    loading=false }) => {
     const { theme } = useContext(ThemeContext)
     const styles = getGlobalStyles(theme);
     const navigation = useNavigation();
     return (
         <SafeAreaProvider>
             <SafeAreaView style={[{ flex: 1 }, styles.container, styles.safeAreaContainer]}>
-                <View style={[styles.flexRow, { alignItems: "center", paddingBottom: 12, }]}>
+
+                {screenTitle && <View style={[styles.flexRow, { alignItems: "center", marginBottom: 20, }]}>
                     {allowedBack && <>
                         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconContainer}>
-                            <ChevronLeftIcon size={22} color="#4A4A4A" />
+                            <ChevronLeftIcon size={16} color="#4A4A4A" />
                         </TouchableOpacity>
 
                     </>}
-                    <Text style={styles.stepFormScreenTitle}>{screenTitle}</Text>
+                    <Text style={{
+                        fontFamily: theme.font700,
+                        fontSize: 14
+                    }}>{screenTitle}</Text>
 
                 </View>
+                }
+
 
                 {children}
-            
-            
+
+
+                {loading && <LoadingDotsWithOverlay />}
             </SafeAreaView>
         </SafeAreaProvider>
     )

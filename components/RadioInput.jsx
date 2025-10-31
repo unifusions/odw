@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ThemeContext } from "../theme/ThemeProvider";
 
-export default function RadioInput({ label, options, selectedOption, handleSelect }) {
+export default function RadioInput({ label, options, selectedOption,
+    required = false, handleSelect }) {
 
     const { theme } = useContext(ThemeContext);
     const styles = StyleSheet.create({
@@ -32,10 +33,10 @@ export default function RadioInput({ label, options, selectedOption, handleSelec
             justifyContent: 'center',
             minHeight: 40, // Ensure a minimum height for chips
             width: "46%",
-           
+
         },
 
-        chipText:{
+        chipText: {
             fontFamily: theme.font500
         },
 
@@ -45,27 +46,33 @@ export default function RadioInput({ label, options, selectedOption, handleSelec
             color: theme.white
         },
 
-        chipSelectedText : {
-            color:theme.white,
+        chipSelectedText: {
+            color: theme.white,
             fontFamily: theme.font700
+        },
+        required: {
+            color: theme.danger 
         }
     });
     return (
         <>
             <View>
-                <Text style={styles.label}>{label}</Text>
+                <Text style={styles.label}>{label} {required && <Text style={styles.required}>*</Text>}</Text>
 
                 <View style={styles.row} >
                     {options.map((item) => {
-                        const isSelected = selectedOption ? (item.id === selectedOption.id) : false;
+                        const isSelected = selectedOption && typeof selectedOption === 'object'
+                            ? (item.id === selectedOption.id)
+                            : false;
+
                         return (
-                            <>
-                                <TouchableOpacity key={item.id} onPress={() => handleSelect(item)} style={[styles.chip, isSelected && styles.chipSelected]}>
-                                    
-                                        <Text style={[styles.chipText, isSelected && styles.chipSelectedText]}> {item.name}</Text>
-                                     
-                                </TouchableOpacity >
-                            </>
+
+                            <TouchableOpacity key={item.id} onPress={() => handleSelect(item)} style={[styles.chip, isSelected && styles.chipSelected]}>
+
+                                <Text style={[styles.chipText, isSelected && styles.chipSelectedText]}> {item.name}</Text>
+
+                            </TouchableOpacity >
+
                         )
                     })}
                 </View>

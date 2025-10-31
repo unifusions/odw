@@ -17,8 +17,8 @@ const getCityName = async (lat, lon) => {
         const data = await response.json();
         return data.address.city || data.address.town || data.address.village || "Unknown";
     } catch (error) {
-        console.error("Error fetching city:", error);
-        return "Could not fetch city";
+        
+        return "Error";
     }
 };
 

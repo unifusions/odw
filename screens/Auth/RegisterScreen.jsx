@@ -1,27 +1,37 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 import { useNavigation } from "@react-navigation/native";
 import { useContext, useState } from "react";
 import { registerUser } from "../../services/authservices";
+import BottomSheetDialog from "../../components/BottomSheetDialog";
+import ModalDialog from "../../components/ModalDialog";
+import BottomButton from "../../components/BottomButton";
+import Card from "../../components/Card";
+import FloatingLabelInput from "../../components/FloatingLabelInput";
+import LoadingDots from "../../components/LoadingDots";
+import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 
 const RegisterScreen = () => {
-    const { theme } = useContext(ThemeContext);
+    const { theme } = useTheme();
     const gStyles = getGlobalStyles(theme);
     const navigation = useNavigation();
-    
+
     const [email, setEmail] = useState('');
     const [fullname, setFullname] = useState('');
     const [phone, setPhone] = useState('');
 
     const [otpDigits, setOtpDigits] = useState();
     const [processing, setProcessing] = useState(false);
-    
+
+    const [confirmVisible, setConfirmVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState("Oops");
+    const [modalMessage, setModalMessage] = useState("Something went wrong. Please try again later");
     const styles = StyleSheet.create({
         container: {
             flex: 1,
             justifyContent: 'flex-start',
-            backgroundColor: "#fff",
+            // backgroundColor: "#fff",
         },
         inputLabel: {
             fontFamily: theme.font700,
@@ -43,11 +53,11 @@ const RegisterScreen = () => {
         },
         welcomeText: {
             fontSize: 24,
-            fontWeight: "bold",
-            color: "#2d3748",
+            fontFamily: theme.font700, color: "#2d3748",
             marginBottom: 12
         },
         subText: {
+            fontFamily: theme.font400,
             fontSize: 14,
             color: "#4a5568",
             marginBottom: 20,
@@ -60,9 +70,9 @@ const RegisterScreen = () => {
             justifyContent: "center",
             height: 49,
             marginHorizontal: 5,
-            // fontFamily: theme.font700,
+
             backgroundColor: theme.primary,
-            // borderColor: '#475F73',
+
             width: '100%'
         },
         buttonText: {
@@ -75,21 +85,36 @@ const RegisterScreen = () => {
     const handleRegister = async () => {
 
 
-     
+
         setProcessing(true);
 
-        const response = await registerUser(email, phone, fullname);
-
-        if (response && response.status === 200) {
+        try {
+            const response = await registerUser(email, phone, fullname);
             console.log(response.data);
-            navigation.navigate('AuthOtp', { email, phone,fullname, otpDigits: response.data.otp });
-        } else {
+            if (response.status === 200) {
 
-            setConfirmVisible(true);
-            setMessage(response.data.error?.toString() || "Something went wrong!");
+                navigation.navigate('AuthOtp', { email, phone, fullname, otpDigits: response.data.otp });
 
+            }
+            else if (response.status === 400) {
+                console.log(response.data)
+            }
+            else {
+                if (response.status === 409) {
+                    setModalTitle("User Already Registered");
+                    setModalMessage("User already registered. Login to continue")
+                }
 
+                setConfirmVisible(true);
+                setModalMessage(response.data.error?.toString() || "Something went wrong!");
+
+            }
         }
+
+        catch (error) {
+            console.log(error)
+        }
+
         setProcessing(false);
 
     }
@@ -107,53 +132,64 @@ const RegisterScreen = () => {
                         <Text style={styles.subText}>Enter Your Information Below</Text>
                     </View>
 
-                    <View>
-                        <Text style={styles.inputLabel}>Full Name</Text>
-                        <TextInput
-                            value={fullname}
-                            onChangeText={setFullname}
-                            style={gStyles.textInput}
-                            placeholder="Enter Username/Registered Phone Number"
-                            placeholderTextColor="#999"
-                        />
+                    <Card>
+                        <View style={{ marginVertical: 8 }}>
 
-                    </View>
+                            <FloatingLabelInput
+                                label="Full Name"
+                                textChange={(text) => setFullname(text)}
+                                value={fullname}
+
+                            />
+
+                            <FloatingLabelInput
+                                label="Email"
+                                textChange={(text) => setEmail(text)}
+                                value={email}
+                                keyboardType="email-address"
+                            />
+
+                            <FloatingLabelInput
+                                label="Phone"
+                                textChange={(text) => setPhone(text)}
+                                value={phone}
+                                keyboardType="number-pad"
+                            />
+
+                        </View>
 
 
-
-                    <View>
-                        <Text style={styles.inputLabel}>Email</Text>
-                        <TextInput
-                            value={email}
-                            onChangeText={setEmail}
-                            style={gStyles.textInput}
-                            placeholder="Email"
-                            placeholderTextColor="#999"
-                        />
-                    </View>
+                    </Card>
 
 
-
-                    <View>
-                        <Text style={styles.inputLabel}>Phone Number</Text>
-                        <TextInput
-                            value={phone}
-                            onChangeText={setPhone}
-                            style={gStyles.textInput}
-                            placeholder="Phone Number"
-                            placeholderTextColor="#999"
-                            keyboardType="numeric"
-                        />
-                    </View>
-
+                    <TouchableOpacity style={[styles.button]} onPress={handleRegister}>
+                        <Text style={[styles.buttonText]} >Register</Text>
+                    </TouchableOpacity>
 
 
 
                 </View>
-                <TouchableOpacity style={[styles.button]} onPress={handleRegister}>
+
+                {processing && <LoadingDotsWithOverlay />
+
+
+                }
+
+
+
+                {/* <TouchableOpacity style={[styles.button]} onPress={handleRegister}>
                     <Text style={[styles.buttonText]} >Register</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </ScrollView>
+
+
+            <ModalDialog
+                visible={confirmVisible}
+                title={modalTitle}
+                message={modalMessage}
+                onConfirm={() => navigation.navigate('Login')}
+                onCancel={() => setConfirmVisible(false)}
+            />
 
         </KeyboardAvoidingView>
 

@@ -1,5 +1,4 @@
- 
-import { BASE_URL } from "../config";
+
 import { Alert } from "react-native";
 import api from './api';
 
@@ -15,39 +14,45 @@ import api from './api';
 
 export const verifyOtp = async (email, phone, otp) => {
     try {
-        const response = await api.post(`${BASE_URL}/verify-otp`, { email, phone, otp });
+        const response = await api.post('verify-otp', { email, phone, otp });
 
         return response.data.token;
     } catch (error) {
+
         return error.response.data;
     }
 };
 
-export const loginUser = async (email, phone) => {
+export const loginUser = async (email) => {
     try {
-        const response = await api.post(`${BASE_URL}/login`, { email, phone });
 
+        const response = await api.post('/login', { params: { email: email } });
         return response;
     } catch (error) {
-        console.log(error)
+
         Alert.alert("Error", data.error);
     }
 }
 export const registerUser = async (email, phone, fullname) => {
     try {
-        const response = await api.post(`${BASE_URL}/register`, { email, phone, fullname });
+
+
+        const response = await api.post('/register', {
+
+            email: email,
+            phone: phone,
+            fullname: fullname
+
+        });
+
+
         return response;
-        
+
     } catch (error) {
+
+        console.log(error);
         return error.response
-        // if (error.response) {
-        //     // Handle server errors
-        //     Alert.alert("Error", error.response.data.error || "Something went wrong!");
-        // } else {
-        //     // Handle network errors
-        //     Alert.alert("Error", "Network error. Please try again.");
-        // }
-        // return null;
+
     }
 };
 

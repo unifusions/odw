@@ -1,38 +1,73 @@
 {
   "expo": {
-    "name": "odw",
-    "slug": "odw",
+    "name": "OneDentalWorld",
+    "slug": "odw-rn-papp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.onedentalworld",
+    
+      "infoPlist": {
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
+        "FirebaseAppDelegateProxyEnabled": false,
+        "NSUserTrackingUsageDescription": "This app uses notifications to keep you updated about appointments.",
+        "UIUserNotificationSettings": {
+          "types": [
+            "alert",
+            "sound",
+            "badge"
+          ]
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "package": "com.odw.dentis"
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.dentis.odw"
+      "package": "com.onedentalworld",
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "INTERNET",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
+        "WAKE_LOCK",
+        "com.google.android.c2dm.permission.RECEIVE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-notifications",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow One Dental World to use your location."
+        }
+      ],
+      "expo-secure-store"
+  
+    
     ],
     "extra": {
       "eas": {
-        "projectId": "419c24b7-1581-41a9-bfd1-9ac566de1c67"
+        "projectId": "f363a638-19b6-4f3e-ac93-e536893dcbc4"
       }
-    }
+    },
+    "owner": "codejax"
   }
 }

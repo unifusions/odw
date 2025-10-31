@@ -1,16 +1,33 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import { lightTheme, darkTheme } from "./theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorScheme } from "react-native";
+import getLocation from "../services/getLocation";
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
     const systemTheme = useColorScheme();
-    const [theme, setTheme] = useState(systemTheme === "dark" ? darkTheme : lightTheme);
+    // const [theme, setTheme] = useState(systemTheme === "dark" ? darkTheme : lightTheme);
+    const [theme, setTheme] = useState(lightTheme);
+    const [processing, setProcessing] = useState(false);
+
+    const [deviceLocation, setDeviceLocation] = useState(null);
+
+    const fetchLocation = async () => {
+        try {
+            const loc = await getLocation.getLocation();
+            setDeviceLocation(loc);
+
+            
+        } catch (error) {
+            Alert.alert("Error", error.message);
+        }
+    };
 
     useEffect(() => {
-        loadTheme();
+        // loadTheme();
+        fetchLocation();
     }, [systemTheme]);
 
     const loadTheme = async () => {
@@ -29,8 +46,10 @@ export const ThemeProvider = ({ children }) => {
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ThemeContext.Provider value={{ theme, toggleTheme, processing, setProcessing, deviceLocation }}>
             {children}
         </ThemeContext.Provider>
     );
 };
+
+export const useTheme = () => useContext(ThemeContext);

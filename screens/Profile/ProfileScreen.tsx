@@ -1,35 +1,35 @@
-import { View, Text, Button, Image, FlatList, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 
 import getGlobalStyles from "../../theme/globalStyles";
-import { useContext, useState } from "react";
-import { ThemeContext } from "../../theme/ThemeProvider";
-import { ArrowRightOnRectangleIcon, BellIcon, CalendarDaysIcon, ChatBubbleLeftRightIcon, ChevronRightIcon, Cog6ToothIcon, CurrencyDollarIcon, HeartIcon, LifebuoyIcon, QuestionMarkCircleIcon, ShieldCheckIcon, UserIcon } from "react-native-heroicons/outline";
+import { useState } from "react";
+import { useTheme } from "../../theme/ThemeProvider";
+import { ArrowRightOnRectangleIcon, ChevronRightIcon, LifebuoyIcon, ShieldCheckIcon, UserIcon, UsersIcon } from "react-native-heroicons/outline";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
 
-import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { AuthContext } from "../../context/AuthContext";
+import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../context/AuthContext";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
+import Card from "../../components/Card";
+
 
 
 export default function ProfileScreen() {
 
-    const { theme } = useContext(ThemeContext);
+    const { theme } = useTheme();
     const styles = getGlobalStyles(theme);
-    const { user, logout } = useContext(AuthContext);
+    const navigation = useNavigation();
+
+    const { user, patient, logout } = useAuth();
     const menuItems = [
         { id: "0", title: "Edit Profile", icon: UserIcon, onPress: () => navigation.navigate("EditProfile") },
-        { id: "1", title: "My Appointments", icon: CalendarDaysIcon, onPress: () => navigation.navigate("MyAppointments") },
-        { id: "2", title: "My Estimates", icon: CurrencyDollarIcon, onPress: () => navigation.navigate("MyEstimates") },
-        { id: "3", title: "My Second Opinions", icon: ChatBubbleLeftRightIcon, onPress: () => navigation.navigate("MySecondOpinions") },
-        { id: "4", title: "My Insurance", icon: HeartIcon, onPress: () => navigation.navigate("MyInsurance") },
 
-        { id: "6", title: "Help and Support", icon: LifebuoyIcon, onPress: () => navigation.navigate("HelpSupport") },
-        { id: "7", title: "Terms and Conditions", icon: ShieldCheckIcon, onPress: () => console.log("Terms") },
-        { id: "5", title: "Settings", icon: Cog6ToothIcon, onPress: () => navigation.navigate("Settings") },
-        { id: "8", title: "Log Out", icon: ArrowRightOnRectangleIcon, onPress: () => console.log("Logout"), logout: true }
+        { id: "6", title: "Help & Support", icon: LifebuoyIcon, onPress: () => navigation.navigate("HelpSupport") },
+        { id: "7", title: "Terms & Conditions", icon: ShieldCheckIcon, onPress: () => navigation.navigate("Terms") },
+
+        { id: "8", title: "Log Out", icon: ArrowRightOnRectangleIcon, logout: true }
     ]
     const [isLogoutVisible, setLogoutVisible] = useState(false);
-    const navigation = useNavigation();
+
     const handleLogout = () => {
 
 
@@ -48,36 +48,37 @@ export default function ProfileScreen() {
             <ScrollView showsVerticalScrollIndicator={false} >
 
 
-                {
-                    user && (
-                        <>
-                            {user.avatar ?
-                                <Image source={{}} style={styles.profileAvatar} />
-                                : (
-                                    <View style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
-                                        <View style={[styles.profileAvatar, styles.profileAvatorAltImg]}>
-                                            <Text style={styles.profileAvatarText}>{user.name && Array.from(user.name)[0]}</Text>
-                                        </View>
-                                    </View>
-                                )}
 
-                            <View style={{ marginBottom: 16 }}>
-                                <Text style={[styles.textCenter, styles.profileUserName]}>{user.name}</Text>
-                                <Text style={[styles.textCenter, styles.textGrey]}>{user.phone}</Text>
+
+                <Card>
+                    <View style={{ marginVertical: 12, flexDirection: "row", alignItems: "center" }}>
+                        {patient.avatar_url ?
+                            <Image source={{ uri: patient?.avatar_url }} style={[styles.profileAvatar, { marginEnd: 12 }]} />
+                            : <View style={[styles.profileAvatar, { marginEnd: 12, justifyContent: "center", alignItems: "center", backgroundColor: theme.border, borderRadius: 12 }]}>
+                                <UsersIcon size={40} color={theme.gray} />
                             </View>
-                        </>
-                    )
-                }
+                        }
+                        <View>
+                            <Text style={{ fontFamily: theme.font700, fontSize: 16, marginBottom: 12 }}>{patient?.first_name} {patient?.last_name}</Text>
+                            <Text style={{ fontFamily: theme.font400, marginBottom: 6 }}>{patient?.email} </Text>
+                            <Text style={{ fontFamily: theme.font400 }}>{patient?.phone_number} </Text>
+                        </View>
+                    </View>
+                </Card>
 
-                {menuItems.map((item) =>
-                    <>
+                <Card>
+
+                    {menuItems.map((item) =>
+
                         <TouchableOpacity key={item.id} style={[styles.menuItem, item.logout && styles.logoutItem]} onPress={item.logout ? () => setLogoutVisible(true) : item.onPress}>
                             <item.icon size={22} color={item.logout ? "#E63946" : "#4A4A4A"} />
                             <Text style={[styles.menuText, item.logout && styles.logoutText]}>{item.title}</Text>
-                            <ChevronRightIcon size={18} color="#B0B0B0" />
+                            {!item.logout && <ChevronRightIcon size={18} color="#B0B0B0" />}
                         </TouchableOpacity>
-                    </>
-                )}
+
+                    )}
+
+                </Card>
 
 
 
@@ -92,6 +93,7 @@ export default function ProfileScreen() {
                 message="Are you sure you want to log out?"
                 onConfirm={handleLogout}
                 onCancel={() => setLogoutVisible(false)}
+                confirmText="Yes, Logout"
             />
         </SafeAreaContainer >
 
