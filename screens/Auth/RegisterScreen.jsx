@@ -11,6 +11,7 @@ import Card from "../../components/Card";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
 import LoadingDots from "../../components/LoadingDots";
 import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
+import PhoneInput from "../../components/PhoneInput";
 
 const RegisterScreen = () => {
     const { theme } = useTheme();
@@ -19,7 +20,7 @@ const RegisterScreen = () => {
 
     const [email, setEmail] = useState('');
     const [fullname, setFullname] = useState('');
-    const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState({ value: '', isValid: false });
 
     const [otpDigits, setOtpDigits] = useState();
     const [processing, setProcessing] = useState(false);
@@ -27,6 +28,11 @@ const RegisterScreen = () => {
     const [confirmVisible, setConfirmVisible] = useState(false);
     const [modalTitle, setModalTitle] = useState("Oops");
     const [modalMessage, setModalMessage] = useState("Something went wrong. Please try again later");
+
+    const [errors, setErrors] = useState({
+        fullname : {},
+        email : {}
+    })
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -84,13 +90,12 @@ const RegisterScreen = () => {
 
     const handleRegister = async () => {
 
-
-
+     
         setProcessing(true);
 
         try {
             const response = await registerUser(email, phone, fullname);
-            console.log(response.data);
+
             if (response.status === 200) {
 
                 navigation.navigate('AuthOtp', { email, phone, fullname, otpDigits: response.data.otp });
@@ -139,6 +144,7 @@ const RegisterScreen = () => {
                                 label="Full Name"
                                 textChange={(text) => setFullname(text)}
                                 value={fullname}
+                                required={true}
 
                             />
 
@@ -147,14 +153,20 @@ const RegisterScreen = () => {
                                 textChange={(text) => setEmail(text)}
                                 value={email}
                                 keyboardType="email-address"
+                                required={true}
                             />
 
-                            <FloatingLabelInput
-                                label="Phone"
-                                textChange={(text) => setPhone(text)}
-                                value={phone}
-                                keyboardType="number-pad"
+
+
+                            <PhoneInput
+                                label="Valid Phone"
+                                value={phone.value}
+                                onChange={(data) => setPhone(data)}
+                                required={true}
+
                             />
+
+
 
                         </View>
 

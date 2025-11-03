@@ -12,19 +12,20 @@ import {
     TouchableWithoutFeedback,
     Keyboard,
     Platform,
-    ActivityIndicator,
+
     Alert,
 } from "react-native";
-import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
-import getGlobalStyles from "../../theme/globalStyles";
+import { useTheme } from "../../theme/ThemeProvider";
+ 
 import ErrorDialog from "../../components/ErrorDialog";
 import LoadingDots from "../../components/LoadingDots";
 import api from "../../services/api";
+import EmailOrPhoneInput from "../../components/EmailOrPhoneInput";
 
 export default function LoginScreen() {
     // const token =  AsyncStorage.getItem('authToken');
     const { theme } = useTheme();
-    const gStyles = getGlobalStyles(theme);
+     
     const navigation = useNavigation();
     const [processing, setProcessing] = useState(false);
     const [email, setEmail] = useState('');
@@ -35,56 +36,72 @@ export default function LoginScreen() {
         setErrorDialogVisible(false);
         setMessage(null);
     }
+
+    const [loginInput, setLoginInput] = useState('');
+
+    const [contact, setContact] = useState({ value: '', isValid: false });
     const handleLogin = async () => {
-        setProcessing(true);
 
-        try {
-
-
-            const response = await api.post('/login', { email });
-
-
-            if (response.status === 200) {
+        console.log(contact)
+        if (contact.isValid) {
+            setProcessing(true);
+            let loginInput = contact.value;
+            try {
 
 
-                let otpDigits = response.data.otp;
+                console.log("trying");
+                const response = await api.post('/login', { loginInput: contact.value });
+                console.log(response.data.otp);
+                if (response.status === 200) {
+
+                    let otpDigits = response?.data?.otp;
+
+                    navigation.navigate('AuthOtp', { email, otpDigits: otpDigits,
+                        loginInput : response?.data?.loginInput,
+                        isEmail : response?.data.isEmail,
+                        user : response?.data.user,
 
 
-                navigation.navigate('AuthOtp', { email, otpDigits: otpDigits });
+                    });
+                    setProcessing(false);
 
+                }
+
+                else if (response.status === 400) {
+                    setErrorDialogVisible(true);
+                    setMessage("User Not Found or Invalid Email ID/Phone");
+
+                }
+
+
+                else {
+
+                    setErrorDialogVisible(true);
+                    setMessage(response.data?.error);
+
+                    setProcessing(false);
+                }
                 setProcessing(false);
 
 
             }
+            catch (error) {
 
-            else if (response.status === 400) {
-                Alert.alert("400 Error User Not Found");
-            }
+                if (error.status === 404) {
+                    setErrorDialogVisible(true);
+                    setMessage("User Not Found or Invalid Email ID/Phone");
 
+                }
 
-            else {
-
-                setErrorDialogVisible(true);
-                setMessage(response.data?.error);
-
+                else { Alert.alert("Something went wrong. Try again later"); }
                 setProcessing(false);
+                console.log(error);
             }
-            setProcessing(false);
 
 
+        } else {
+            Alert.alert('Error', 'Please enter a valid email or US phone number');
         }
-        catch (error) {
-
-            if (error.status === 404) {
-                setErrorDialogVisible(true);
-                setMessage("User Not Found or Invalid Email ID/Phone");
-
-            }
-            else { Alert.alert("Something went wrong. Try again later"); }
-            setProcessing(false);
-
-        }
-
 
 
     }
@@ -171,13 +188,22 @@ export default function LoginScreen() {
                             <Text style={styles.subText}>Use Credentials to access your account</Text>
 
 
-                            <TextInput
+                            <EmailOrPhoneInput
+                                // label="Valid Email or Phone"
+                                value={contact.value}
+                                onChange={(data) => setContact(data)}
+
+                            />
+
+
+
+                            {/* <TextInput
                                 value={email}
                                 onChangeText={setEmail}
                                 style={gStyles.textInput}
                                 placeholder="Enter Username/Registered Phone Number"
                                 placeholderTextColor="#999"
-                            />
+                            /> */}
 
                         </View>
                         {processing ? <LoadingDots /> :

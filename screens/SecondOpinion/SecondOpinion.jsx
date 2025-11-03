@@ -1,8 +1,8 @@
 
 
-import React, { useContext, useEffect, useState } from "react";
+ 
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
+import {  useTheme } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 
 
@@ -69,19 +69,18 @@ const SecondOpinion = () => {
           <View style={{ marginEnd: 12 }}>
             <NewIcon size={64} />
           </View>
-          <View style={{ flexDirection: "column" }}  >
-            <View style={{ flexDirection: "row" }}>
-              <Text style={[localStyles.title]}>
-                Help Me Understand My Options
-              </Text>
-            </View>
+          <View >
+
+            <Text style={[localStyles.title]}>
+              Help Me Understand My Options </Text>
+
             <View style={{ flexDirection: "row" }}>
               <Text style={localStyles.subtitle}>
                 This is my first dental quote.
 
               </Text>
             </View>
-          </View>
+          </View >
         </TouchableOpacity>
 
         <TouchableOpacity style={localStyles.optionContainer}

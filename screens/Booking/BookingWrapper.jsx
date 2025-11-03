@@ -134,7 +134,7 @@ export default function BookingWrapper({ children, screenTitle, heading }) {
                     </ButtonWrapper>
                 </View>
             )}
-            {/* <LoadingDotsWithOverlay /> */}
+        
             {loading && <LoadingDotsWithOverlay />}
         </SafeAreaContainerStepForm>
     )

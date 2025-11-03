@@ -13,7 +13,7 @@ export default function useDentalServices({ featured = false }) {
             url = "/dental-services"
         }
         api.get(url)
-            .then((res) => setServices(res.data))
+            .then((res) => setServices(res?.data))
             .catch((err) => setErrors(err))
             .finally(() => setLoading(false));
     }, []);

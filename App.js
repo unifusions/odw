@@ -11,7 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import { AuthContext, AuthProvider } from "./context/AuthContext";
+import { AuthContext, AuthProvider, useAuth } from "./context/AuthContext";
 
 import { ThemeProvider } from "./theme/ThemeProvider";
 import AuthStackNavigation from "./navigation/AuthStackNavigation";
@@ -31,7 +31,7 @@ export default function App() {
   const currentVersion = "1.0";
   const AppNavigator = () => {
 
-    const { token } = useContext(AuthContext);
+    const { token } = useAuth();
     const Stack = createStackNavigator();
 
     return (
@@ -58,11 +58,11 @@ export default function App() {
     );
   }
 
-  if (!(appVersion?.value === currentVersion)) {
-    return (
-      <UpdateApp />
-    )
-  }
+  // if (!(appVersion?.value === currentVersion)) {
+  //   return (
+  //     <UpdateApp />
+  //   )
+  // }
   return (
     <>
       < ThemeProvider >

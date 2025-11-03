@@ -15,7 +15,6 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.onedentalworld",
-    
       "infoPlist": {
         "UIBackgroundModes": [
           "remote-notification"
@@ -59,9 +58,14 @@
           "locationWhenInUsePermission": "Allow One Dental World to use your location."
         }
       ],
-      "expo-secure-store"
-  
-    
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "googleServicesFile": "./google-services.json"
+          }
+        }
+      ]
     ],
     "extra": {
       "eas": {

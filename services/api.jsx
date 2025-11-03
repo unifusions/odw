@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const APP_URL = "https://odwapp.ai";
+// const APP_URL = "https://odw-demo.unifusions.com";
 // const APP_URL = "http://192.168.20.1:8000";
 // const APP_URL = "http://127.0.0.1:8000";
 const API_URL = APP_URL + "/api";

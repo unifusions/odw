@@ -89,7 +89,7 @@ export default function SecondOpinionWrapper({ children, screenTitle, heading, l
                                         try {
 
                                             const secondOpinionRequest = await confirmSecondOpinion();
-                                                                          // 
+                                            // 
                                             navigation.replace("Confirmation", { soRequest: secondOpinionRequest });
 
                                         } catch (err) {
@@ -110,7 +110,7 @@ export default function SecondOpinionWrapper({ children, screenTitle, heading, l
                                         handlePress={() => goToNextStep(navigation)}
                                     />
                                 )
-                            )} 
+                            )}
                         </NextPrevButtonWrapper>
                     </ButtonWrapper>
                 </View>

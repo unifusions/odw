@@ -26,17 +26,17 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     };
 
-    const login = async (email, phone, otp) => {
+    const login = async ( otp, isEmail, loginInput) => {
         try {
 
 
-            const response = await api.post('/verify-otp', { email, phone, otp });
+            const response = await api.post('/verify-otp', { otp, isEmail, loginInput });
 
             if (response.data.token) {
 
 
                 await AsyncStorage.setItem('auth_token', response.data.token);
-                await AsyncStorage.setItem('user', response.data.user);
+               
                 api.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
                 setToken(response.data.token); // Update state
                 setUser(response.data.user);
@@ -98,7 +98,7 @@ export const AuthProvider = ({ children }) => {
     //   }, [expoPushToken, user]);
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, patient, setPatient, otpValidationError, checkUser }}>
+        <AuthContext.Provider value={{ user, token, login, logout, patient, setPatient, otpValidationError }}>
             {children}
         </AuthContext.Provider>
     );

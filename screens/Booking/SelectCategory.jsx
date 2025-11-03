@@ -1,7 +1,7 @@
 import { useBooking } from "../../context/BookingContext";
-import { FlatList,  StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import getGlobalStyles from "../../theme/globalStyles";
-import {  useTheme } from "../../theme/ThemeProvider";
+import { useTheme } from "../../theme/ThemeProvider";
 import { CheckCircleIcon } from "react-native-heroicons/solid";
 import { CheckCircleIcon as CheckCircleIconOutline } from "react-native-heroicons/outline";
 import BookingWrapper from "./BookingWrapper";
@@ -11,7 +11,7 @@ import useDentalServices from "../../hooks/useDentalServices";
 export default function SelectCategory() {
 
     const { booking, updateBooking } = useBooking();
-    const { services, loading, errors } = useDentalServices();
+    const { services, loading, errors } = useDentalServices({ featured: false });
     const { theme } = useTheme();
     const gStyles = getGlobalStyles(theme);
     const styles = StyleSheet.create({

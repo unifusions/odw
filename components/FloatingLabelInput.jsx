@@ -1,13 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Animated } from 'react-native';
-import { ThemeContext } from '../theme/ThemeProvider';
+import { useTheme } from '../theme/ThemeProvider';
 
 const FloatingLabelInput = ({ label, textChange, value,
   placeholder = "", keyboardType = "default", required = false,
-  multiline = false, showMax = false, maxLength = 100 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const { theme } = useContext(ThemeContext);
+  multiline = false, showMax = false, maxLength = 100,
 
+  validate, // ✅ new prop: function or regex for validation
+  errorMessage, // ✅ new prop: optional custom error text
+
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const { theme } = useTheme();
+
+  const [error, setError] = useState('');
 
   const styles = StyleSheet.create({
     container: {
@@ -55,8 +61,31 @@ const FloatingLabelInput = ({ label, textChange, value,
     },
     required: {
       color: (isFocused || value) ? theme.danger : '#999'
-    }
+    },
+
+    errorText: {
+      color: theme.danger,
+      fontSize: 13,
+      marginTop: 4,
+      fontFamily: theme.font400,
+    },
+
   });
+  useEffect(() => {
+    // Run validation when value changes
+    if (validate) {
+      if (typeof validate === 'function') {
+        const valid = validate(value);
+        setError(valid ? '' : errorMessage || `${label} is invalid`);
+      } else if (validate instanceof RegExp) {
+        setError(validate.test(value) ? '' : errorMessage || `${label} is invalid`);
+      }
+    } else if (required && !value) {
+      setError(`${label} is required`);
+    } else {
+      setError('');
+    }
+  }, [value, validate]);
 
   return (
     <View style={styles.container}>
@@ -79,6 +108,8 @@ const FloatingLabelInput = ({ label, textChange, value,
         multiline={multiline}
 
       />
+
+      {!!error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );
 };

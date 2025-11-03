@@ -25,7 +25,7 @@ export default function OtpScreen({ route }) {
 
   const [loading, setLoading] = useState(false);
 
-  const { email, phone, otpDigits, fullname } = route.params;
+  const { email, phone, otpDigits, user, isEmail, loginInput } = route.params;
   const otpLength = 6;
   const [otp, setOtp] = useState(new Array(otpLength).fill(""));
   const inputRefs = useRef([]);
@@ -54,7 +54,7 @@ export default function OtpScreen({ route }) {
 
     setLoading(true);
     // console.log(phone);
-    login(email, phone, otp);
+    login(otp, isEmail, loginInput);
     if (otpValidationError) {
       setErrorDialogVisible(true);
     }
@@ -145,7 +145,11 @@ export default function OtpScreen({ route }) {
             setErrorDialogVisible(false)
             setOtp(new Array(otpLength).fill(""))
           }} />}
+
+
       </View>
+
+      {loading && <LoadingDotsWithOverlay />}
     </KeyboardAvoidingView>
   )
 }
