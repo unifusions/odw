@@ -31,8 +31,7 @@ export default function SelectServices() {
                 loading={loading}>
 
 
-                {/* <Text>{JSON.stringify(cares)}</Text> */}
-                <ServicesList
+               {!loading &&  <ServicesList
                     services={cares}
                     selectedIds={secondOpinion?.services}
                     onSelect={(newSelection) => {
@@ -40,7 +39,8 @@ export default function SelectServices() {
 
                     }}
                 />
-
+}
+               
             </SecondOpinionWrapper>
             <Snackbar
                 visible={snackbarVisible}

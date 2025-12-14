@@ -8,7 +8,7 @@ import getGlobalStyles from "../../theme/globalStyles";
 import { PencilIcon } from "react-native-heroicons/outline";
 import { View, TouchableOpacity, Image, StyleSheet, Text, ScrollView, Alert } from "react-native";
 
-import { AuthContext, useAuth } from "../../context/AuthContext";
+import {   useAuth } from "../../context/AuthContext";
 
 import Card from "../../components/Card";
 import FloatingLabelInput from "../../components/FloatingLabelInput";
@@ -25,7 +25,7 @@ import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 
 
 export default function EditProfileScreen() {
-    const { user, patient, setPatient } = useAuth();
+    const {user, patient, setPatient } = useAuth();
     
     const { theme } = useTheme();
 
@@ -40,14 +40,14 @@ export default function EditProfileScreen() {
 
     const [formData, setFormData] = useState({
 
-        first_name: patient.first_name || "",
-        middle_name: patient.middle_name || "",
-        last_name: patient.last_name || "",
-        phone: patient.phone_number || "",
-        email: user.email || "",
-        dob: patient.dob || null,
+        first_name: patient?.first_name || "",
+        middle_name: patient?.middle_name || "",
+        last_name: patient?.last_name || "",
+        phone: patient?.phone_number || "",
+        email: user?.email || "",
+        dob: patient?.dob || null,
         gender: '',
-        avatar: patient.avatar || null,
+        avatar: patient?.avatar || null,
         avatarImage: null,
     });
 
@@ -196,12 +196,13 @@ export default function EditProfileScreen() {
             <SafeAreaContainerKeyboardAvoiding
                 screenTitle='Edit Profile'
                 allowedBack={true}>
+                     
                 <ScrollView showsVerticalScrollIndicator={false} style={{ marginBottom: 72 }}>
 
 
                     <View style={localStyles.imageContainer}>
                         <TouchableOpacity style={localStyles.profileImage} onPress={pickImage}>
-                        <Image source={imageData ? { uri: imageData.uri } : { uri: APP_URL + '/storage/' + user.patient.avatar }} style={localStyles.profileImage} />
+                        <Image source={imageData ? { uri: imageData.uri } : { uri: APP_URL + '/storage/' + user?.patient?.avatar }} style={localStyles.profileImage} />
                             
                             <View style={localStyles.editButton}>
                                 <PencilIcon size={18} color="white" />

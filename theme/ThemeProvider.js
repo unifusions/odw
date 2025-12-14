@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { lightTheme, darkTheme } from "./theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useColorScheme } from "react-native";
+import { Alert, useColorScheme } from "react-native";
 import getLocation from "../services/getLocation";
 
 export const ThemeContext = createContext();
@@ -44,6 +44,8 @@ export const ThemeProvider = ({ children }) => {
         setTheme(newTheme);
         await AsyncStorage.setItem("theme", newTheme === darkTheme ? "dark" : "light");
     };
+
+    
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme, processing, setProcessing, deviceLocation }}>

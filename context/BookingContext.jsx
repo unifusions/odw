@@ -275,6 +275,23 @@ export const BookingProvider = ({ children }) => {
     setCurrentStepIndex(0);
   };
 
+  const convertTo24Hour = (time12h) => {
+
+    const clean = time12h.replace(/\s+/g, ' ').replace(/\u202F/g, ' ');
+    const [time, modifier] = clean.split(" ");
+    let [hours, minutes] = time.split(":");
+
+    if (hours === '12') {
+      hours = '00';
+    }
+
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+
+    return `${hours}:${minutes}`;
+  };
+
   const confirmBooking = async () => {
 
     const patient_id = user.patient.id;
@@ -283,12 +300,12 @@ export const BookingProvider = ({ children }) => {
     const appointable_id = booking?.dentist?.id || booking?.specialist?.id;
     const appointable_type = booking?.provider_type;
     const dental_service_id = booking?.category?.id;
-    const time_slot = booking?.time?.selectedSlot?.split(' ')[0];
+    // const time_slot = booking?.time?.selectedSlot?.split(' ')[0];
 
+    const time_slot = convertTo24Hour(booking?.time?.selectedSlot);
     const inputFormat = "E MMM dd yyyy";
     const parsedDate = parse(booking?.time?.selectedDate.fullDate, inputFormat, new Date());
     const appointment_date = format(parsedDate, "yyyy-MM-dd");
-
 
     try {
       const response = await bookAppointment(
@@ -302,11 +319,12 @@ export const BookingProvider = ({ children }) => {
       );
 
       if (response.status === 200) {
-         
-        return response.data; // bookingRequest to pass to Confirmation
+
+        return response.data;
       }
     } catch (error) {
-      console.log(error.data)
+      console.log("catch error");
+      console.log(error)
       setError(error)
 
     }

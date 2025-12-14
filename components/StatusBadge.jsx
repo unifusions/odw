@@ -103,9 +103,13 @@ export default function StatusBadge({ status }) {
         case 'pending':
             return (<Pending text="Pending" />)
             break;
+        case null:
+            return (<Inprogress text="In Review" />)
+            break;
+
         default:
             return (<Info />)
             break;
     }
- 
+
 }   

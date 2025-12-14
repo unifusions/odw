@@ -106,7 +106,7 @@ export default function AppointmentScreen() {
                     }}
                 > Booking ID # {appointment?.appointment_id} </Text>
 
-
+ 
                 <Card>
 
                     <View style={{
@@ -115,7 +115,7 @@ export default function AppointmentScreen() {
                         alignItems: "center"
                     }} >
 
-                        <Image source={{ uri: appointment?.provider?.data.photo_url }}
+                        <Image source={{ uri: appointment?.provider?.data?.photo_url }}
                             style={{
                                 height: 100, width: 100,
                                 borderRadius: 100,
@@ -136,7 +136,7 @@ export default function AppointmentScreen() {
                                 </Text>
                             </View>
                             <Text style={styles.providerName}>
-                                {appointment?.provider?.data.name}
+                                {appointment?.provider?.data?.name}
                             </Text>
 
 

@@ -16,16 +16,18 @@ import {
     Alert,
 } from "react-native";
 import { useTheme } from "../../theme/ThemeProvider";
- 
+
 import ErrorDialog from "../../components/ErrorDialog";
 import LoadingDots from "../../components/LoadingDots";
 import api from "../../services/api";
 import EmailOrPhoneInput from "../../components/EmailOrPhoneInput";
+import { useAuth } from "../../context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function LoginScreen() {
     // const token =  AsyncStorage.getItem('authToken');
     const { theme } = useTheme();
-     
+    const {setToken, setUser} = useAuth();
     const navigation = useNavigation();
     const [processing, setProcessing] = useState(false);
     const [email, setEmail] = useState('');
@@ -40,7 +42,8 @@ export default function LoginScreen() {
     const [loginInput, setLoginInput] = useState('');
 
     const [contact, setContact] = useState({ value: '', isValid: false });
-    const handleLogin = async () => {
+    
+    const  handleLogin = async () => {
 
         console.log(contact)
         if (contact.isValid) {
@@ -51,18 +54,29 @@ export default function LoginScreen() {
 
                 console.log("trying");
                 const response = await api.post('/login', { loginInput: contact.value });
-                console.log(response.data.otp);
+
                 if (response.status === 200) {
 
                     let otpDigits = response?.data?.otp;
+                    let user = response?.data.user;
+                    
 
-                    navigation.navigate('AuthOtp', { email, otpDigits: otpDigits,
-                        loginInput : response?.data?.loginInput,
-                        isEmail : response?.data.isEmail,
-                        user : response?.data.user,
+                    if (user?.role === '') {
+                        setToken(response.data.token);
+                        setUser(response?.data.user);
+                        await AsyncStorage.setItem('auth_token', response.data.token);
+                    }
+                    else {
+                        navigation.navigate('AuthOtp', {
+                            email, otpDigits: otpDigits,
+                            loginInput: response?.data?.loginInput,
+                            isEmail: response?.data.isEmail,
+                            user: response?.data.user,
 
 
-                    });
+                        });
+
+                    }
                     setProcessing(false);
 
                 }

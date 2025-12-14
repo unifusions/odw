@@ -27,9 +27,9 @@ export default function OpinionSummary({ formData, currentStep, handlePress }) {
             </InfoCard>
 
             <InfoCard title="Services" >
-                <Text style={{ fontFamily: theme.font400, fontSize: 16 }}> {formData?.selectedItems?.map((item) => <>
+                <Text style={{ fontFamily: theme.font400, fontSize: 16 }}> {formData?.selectedItems?.map((item) =>
                     {item?.name}
-                </>)}</Text>
+                )}</Text>
             </InfoCard>
 
             <InfoCard title="Additional Information" >

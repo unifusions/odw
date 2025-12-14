@@ -47,12 +47,14 @@ export default function ProfileScreen() {
 
             <ScrollView showsVerticalScrollIndicator={false} >
 
-
+           
 
 
                 <Card>
+                
                     <View style={{ marginVertical: 12, flexDirection: "row", alignItems: "center" }}>
-                        {patient.avatar_url ?
+                         
+                        {patient?.avatar_url ?
                             <Image source={{ uri: patient?.avatar_url }} style={[styles.profileAvatar, { marginEnd: 12 }]} />
                             : <View style={[styles.profileAvatar, { marginEnd: 12, justifyContent: "center", alignItems: "center", backgroundColor: theme.border, borderRadius: 12 }]}>
                                 <UsersIcon size={40} color={theme.gray} />

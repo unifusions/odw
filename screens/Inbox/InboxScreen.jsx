@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity,   useWindowDimensions, StyleSheet } from "react-native";
  
 import { useContext, useState } from "react";
-import { ThemeContext } from "../../theme/ThemeProvider";
+import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
  
  
 import SafeAreaContainer from "../../components/SafeAreaContainer";
@@ -17,7 +17,7 @@ import MySecondOpinions from "../Profile/MySecondOpinions";
  
 export default function InboxScreen() {
 
-    const { theme ={} } = useContext(ThemeContext);
+    const { theme } = useTheme();
  
 
 

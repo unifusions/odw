@@ -111,7 +111,7 @@ export const SecondOpinionProvider = ({ children }) => {
         try {
             const response = await api.post('/second-opinions/store', finalFormData, { headers })
             if (response.status == 200) {
-                console.log(response)
+                
                 return response.data;
             }
 

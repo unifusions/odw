@@ -45,7 +45,7 @@ export default function AppRoot() {
     return (
 
         <>
-            {console.log("AppRoot")}
+           
             {fontsLoaded ?
                 <AuthProvider>
                     <ThemeProvider>

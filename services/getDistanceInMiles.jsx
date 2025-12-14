@@ -41,12 +41,12 @@ export const getClinicDistance = (lat, lon) => {
 
     const { deviceLocation } = useContext(ThemeContext);
      const R = 3958.8; // Radius of the Earth in miles
-    const dLat = deg2rad(lat - deviceLocation.coords.latitude);
-    const dLon = deg2rad(lon - deviceLocation.coords.longitude);
+    const dLat = deg2rad(lat - deviceLocation?.coords?.latitude);
+    const dLon = deg2rad(lon - deviceLocation?.coords?.longitude);
     const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(deg2rad(lat)) *
-        Math.cos(deg2rad(deviceLocation.coords.latitude)) *
+        Math.cos(deg2rad(deviceLocation?.coords?.latitude)) *
         Math.sin(dLon / 2) *
         Math.sin(dLon / 2);
 

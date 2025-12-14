@@ -37,8 +37,8 @@ yarn-error.*
 
 # Android
 
-android/
+# android/
 
 *.apk
 *.aab
-google-services.json
+# google-services.json

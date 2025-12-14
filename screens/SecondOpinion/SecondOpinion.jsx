@@ -44,7 +44,7 @@ const SecondOpinion = () => {
     },
     subtitle: {
       fontFamily: theme.font400,
-      fontSize: 16,
+      fontSize: 14,
       flex: 1,
 
       flexWrap: 1,

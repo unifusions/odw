@@ -12,6 +12,7 @@ import FloatingLabelInput from "../../components/FloatingLabelInput";
 import LoadingDots from "../../components/LoadingDots";
 import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 import PhoneInput from "../../components/PhoneInput";
+import api from "../../services/api";
 
 const RegisterScreen = () => {
     const { theme } = useTheme();
@@ -30,8 +31,8 @@ const RegisterScreen = () => {
     const [modalMessage, setModalMessage] = useState("Something went wrong. Please try again later");
 
     const [errors, setErrors] = useState({
-        fullname : {},
-        email : {}
+        fullname: {},
+        email: {}
     })
     const styles = StyleSheet.create({
         container: {
@@ -87,37 +88,62 @@ const RegisterScreen = () => {
         },
     })
 
+    // const handleRegister = () => {
+    //     console.log(phone.value)
+    //     // navigation.navigate('AuthOtp', { email,loginInput: phone.value, isEmail:false, isRegister:true,  fullname  });
 
-    const handleRegister = async () => {
+    // }
 
-     
+    const  handleRegister = async () => {
+
+        
+
         setProcessing(true);
 
         try {
-            const response = await registerUser(email, phone, fullname);
+            const response = await api.post('/register', {
+
+                email: email,
+                phone: phone.value,
+                fullname: fullname
+
+            });
+
 
             if (response.status === 200) {
 
-                navigation.navigate('AuthOtp', { email, phone, fullname, otpDigits: response.data.otp });
+                navigation.navigate('AuthOtp', { email, loginInput : phone.value, isEmail:false, isRegister:true,  fullname, otpDigits: response.data.otp });
 
             }
             else if (response.status === 400) {
-                console.log(response.data)
+                console.log(JSON.stringify(response.data))
             }
             else {
                 if (response.status === 409) {
+                    console.log(JSON.stringify(response.data))
                     setModalTitle("User Already Registered");
                     setModalMessage("User already registered. Login to continue")
                 }
 
+                if (response.status === 500) {
+                    setModalTitle("500 Code");
+                    setModalMessage(response.data.error?.toString() || "Something went wrong!");
+                }
+
+
+
                 setConfirmVisible(true);
                 setModalMessage(response.data.error?.toString() || "Something went wrong!");
-
+                console.log(JSON.stringify(response.data));
             }
         }
 
         catch (error) {
-            console.log(error)
+            console.log(JSON.stringify(error.response))
+            setModalTitle("User Already Registered");
+            setModalMessage("User already registered. Login to continue");
+            setConfirmVisible(true);
+           
         }
 
         setProcessing(false);

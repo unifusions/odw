@@ -15,11 +15,13 @@ const RowItem = ({ title, subTitle, icon }) => {
 
         infoContainer: {
             marginStart: 16,
+            flex:1
 
         },
 
         rowTitle: {
             fontFamily: theme.font700,
+            flexWrap: "wrap",
             // marginBottom: 8
         },
 

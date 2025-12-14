@@ -24,7 +24,7 @@ export default function Summary() {
             <Card>
                 <RowItem
                     icon={<ListBulletIcon color={theme.blue} />}
-                    title={booking?.category?.name ?? ''}
+                    title={booking?.category?.name ?? 'Not sure / its complex'}
                 // subTitle={`STARTS FROM $ ${booking.selectedItems.cost ?? ''}`}
                 />
 
@@ -33,11 +33,11 @@ export default function Summary() {
                     title={booking?.clinic?.name}
                 // subTitle={booking.selectedClinic.address_line_1 + ', ' + booking.selectedClinic.address_line_2}
                 />
-
+ 
                 <RowItem
                     icon={<UserIcon color={theme.blue} />}
-                    title={booking?.dentist?.name}
-                    subTitle={`${practiseYearCalculator(booking?.dentist?.practise_from)} years of practise`}
+                    title={booking?.dentist ?booking?.dentist?.name : 'First Available'}
+                    subTitle={booking?.dentist ? `${practiseYearCalculator(booking?.dentist?.practise_from)} years of practise` : ''}
                 />
 
                 <RowItem

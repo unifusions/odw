@@ -104,8 +104,9 @@ const EmailOrPhoneInput = ({ label, onChange, required = false }) => {
                 // keyboardType={isEmail ? 'email-address' : 'phone-pad'}
                 value={inputValue}
                 onChangeText={handleChange}
-                placeholder="Enter email or US phone number"
+                placeholder="Registered email or US phone number"
                 autoCapitalize="none"
+                placeholderTextColor={theme.mutedText}
             />
             {!!error && <Text style={styles.errorText}>{error}</Text>}
         </View>

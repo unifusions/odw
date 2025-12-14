@@ -1,13 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import getGlobalStyles from "../../theme/globalStyles";
-import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
-import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { getSecondOpinions } from "../../services/getSecondOpinions";
-import { AuthContext, useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../theme/ThemeProvider";
+
+import {  useAuth } from "../../context/AuthContext";
 import Card from "../../components/Card";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import useSecondOpinion from "../../hooks/useSecondOpinion";
 import StatusBadge from "../../components/StatusBadge";
 
@@ -16,7 +13,15 @@ const MySecondOpinions = () => {
     const { theme } = useTheme();
 
     const navigation = useNavigation();
-    const { secondopinions } = useSecondOpinion({ patientId: user?.patient?.id });
+    const { secondopinions, loading, errors, refetch } = useSecondOpinion({ patientId: user?.patient?.id });
+
+
+    useFocusEffect(
+        useCallback(() => {
+            refetch();   // ⬅ Refresh API when tab becomes active
+        }, [])
+    );
+
     const RenderSOList = ({ item, handlePress }) => {
         return (
             <TouchableOpacity
@@ -42,7 +47,7 @@ const MySecondOpinions = () => {
 
         <ScrollView>
 
-
+         
             {secondopinions.length > 0 &&
                 secondopinions.map((item) => <RenderSOList key={item.id} item={item}
                     handlePress={() => navigation.navigate("ShowSo", { secondOpinion: item })

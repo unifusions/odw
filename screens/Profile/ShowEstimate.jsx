@@ -72,6 +72,7 @@ export default function ShowEstimate() {
                         Status
                     </Text>
                     <Text  >
+                        
                         <StatusBadge status={estimate?.status} />
                     </Text>
                 </View>

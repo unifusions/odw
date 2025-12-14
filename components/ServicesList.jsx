@@ -84,9 +84,13 @@ export default function ServicesList({ services, selectedIds, onSelect }) {
         <>
             <SearchBox onSearch={setQuery} placeholder='Type to find procedures - name or code' />
             <View style={{ justifyContent: "space-between", flexDirection: 'row', marginBottom: 6 }}>
-                {!showAll ? <Text style={{ fontFamily: theme.font500, fontSize: 14 }}>Showing Featured ({filteredServices?.length})</Text> : <Text style={{ fontFamily: theme.font500, fontSize: 14 }}>Showing All ({filteredServices?.length})</Text>
-                }
-                <TouchableOpacity onPress={() => setShowAll(!showAll)}><Text style={{ fontFamily: theme.font500, fontSize: 14, color: theme.mutedText }}>Show {!showAll ? <Text>All</Text> : <Text>Featured</Text>}</Text></TouchableOpacity>}
+               
+                <Text style={{ fontFamily: theme.font500, fontSize: 14 }}>Showing    {!showAll ? <Text>All</Text> : <Text>Featured</Text>} ({filteredServices?.length})</Text> 
+                
+                
+                <TouchableOpacity onPress={() => setShowAll(!showAll)}>
+                    <Text style={{ fontFamily: theme.font500, fontSize: 14, color: theme.mutedText }}>Show 
+                    {!showAll ? <Text>All</Text> : <Text>Featured</Text>}</Text></TouchableOpacity>
             </View>
 
             <FlatList

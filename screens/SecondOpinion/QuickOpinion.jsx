@@ -1,5 +1,5 @@
 import { Text, View, TextInput, Dimensions, TouchableOpacity, StyleSheet, ScrollView, Alert, Platform } from "react-native";
-import SafeAreaContainer from "../../components/SafeAreaContainer";
+
 import { useContext, useState } from "react";
 import { ThemeContext } from "../../theme/ThemeProvider";
 import { CheckCircleIcon, FolderPlusIcon, PlusIcon, TrashIcon } from "react-native-heroicons/outline";
@@ -164,6 +164,7 @@ export default function QuickOpinion() {
 
         let headers = { 'Content-Type': 'multipart/form-data' };
 
+
         try {
 
 
@@ -183,7 +184,7 @@ export default function QuickOpinion() {
 
 
 
-            Alert.alert("Upload Error", error);
+            Alert.alert("Error", "Check all fields in the form");
 
         }
         finally {
@@ -192,10 +193,10 @@ export default function QuickOpinion() {
 
     }
 
-    
+
     const handleModalConfirm = () => {
 
-    
+
         setFormData({});
         setConfirmVisible(false);
         navigation.navigate('Home', { screen: "HomeScreen" });
@@ -210,6 +211,7 @@ export default function QuickOpinion() {
                         label="Subject"
                         textChange={(text) => setFormData({ ...formData, subject: text })}
                         value={formData.subject}
+                        required={true}
 
 
                     />
@@ -219,7 +221,7 @@ export default function QuickOpinion() {
                         textChange={(text) => setFormData({ ...formData, description: text })}
                         value={formData.description}
                         multiline={true}
-
+                        required={true}
                     />
 
                     <RadioInput
@@ -227,6 +229,7 @@ export default function QuickOpinion() {
                         options={visits}
                         handleSelect={(item) => setFormData({ ...formData, last_visit: item })}
                         selectedOption={formData.last_visit}
+                        required={true}
                     />
 
 

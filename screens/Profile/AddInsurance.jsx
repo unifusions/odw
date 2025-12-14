@@ -182,8 +182,10 @@ const AddInsurance = () => {
         catch (error) {
             const data = error.response.data;
 
-            if (error.response.status === 434)
+            if (error.response.status === 434) {
+                console.log(error.response.data);
                 Alert.alert("Error adding insurance", "Check all fields in the insurance")
+            }
 
             Alert.alert("Error", error);
         }
@@ -302,7 +304,7 @@ const AddInsurance = () => {
 
 
                         <RadioInput
-                        required={true}
+                            required={true}
                             label="How Did you get insurance"
                             options={[
 

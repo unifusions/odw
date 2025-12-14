@@ -5,7 +5,7 @@ import { getFcmToken, listenForMessages, registerForPushNotificationsAsync, requ
 // import usePushNotification from '../hooks/usePushNotifications';
 // import * as SecureStore from 'expo-secure-store';
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -17,26 +17,32 @@ export const AuthProvider = ({ children }) => {
 
     const checkUser = async () => {
         const storedToken = await AsyncStorage.getItem('auth_token');
-        const storedUser = await AsyncStorage.getItem('user');
+        const storedUser = await AsyncStorage.getItem('auth_user');
+        const storedPatient = await AsyncStorage.getItem('auth_patient');
+
+        
         if (storedToken) {
             api.defaults.headers['Authorization'] = `Bearer ${storedToken}`;
             setToken(storedToken);
-            setUser(storedUser);
+            setUser(JSON.parse(storedUser));
+            setPatient(JSON.parse(storedPatient));
+            
         }
-        setLoading(false);
+        // setLoading(false);
     };
 
-    const login = async ( otp, isEmail, loginInput) => {
+    const login = async (otp, isEmail, loginInput) => {
         try {
 
 
             const response = await api.post('/verify-otp', { otp, isEmail, loginInput });
-
+ 
             if (response.data.token) {
 
 
                 await AsyncStorage.setItem('auth_token', response.data.token);
-               
+                await AsyncStorage.setItem('auth_user', JSON.stringify(response.data.user));
+                await AsyncStorage.setItem('auth_patient', JSON.stringify(response.data.user.patient));
                 api.defaults.headers['Authorization'] = `Bearer ${response.data.token}`;
                 setToken(response.data.token); // Update state
                 setUser(response.data.user);
@@ -73,7 +79,7 @@ export const AuthProvider = ({ children }) => {
 
 
         } catch (error) {
-
+            console.log(error.response);
             setOtpValidationError(true);
         }
     };
@@ -98,7 +104,7 @@ export const AuthProvider = ({ children }) => {
     //   }, [expoPushToken, user]);
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout, patient, setPatient, otpValidationError }}>
+        <AuthContext.Provider value={{ user, token, login, logout, patient, setPatient, setToken, setUser, otpValidationError, checkUser }}>
             {children}
         </AuthContext.Provider>
     );

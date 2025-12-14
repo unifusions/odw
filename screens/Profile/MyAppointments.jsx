@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import { BuildingOfficeIcon, UserCircleIcon } from "react-native-heroicons/outline";
 import { AuthContext, useAuth } from "../../context/AuthContext";
@@ -10,17 +10,26 @@ import Card from "../../components/Card";
 import { EyeIcon } from "react-native-heroicons/solid";
 import LoadingDots from "../../components/LoadingDots";
 import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import useAppointments from "../../hooks/useAppointments";
 
 const MyAppointments = () => {
     const { theme } = useTheme();
     const { user } = useAuth();
-  
 
 
-    const { openBookings, pendingBookings,loading, errors } = useAppointments({ patientId: user.patient.id });
+
+    const { openBookings, pendingBookings, loading, errors, refetch } = useAppointments({ patientId: user.patient.id });
     const navigation = useNavigation();
+
+
+
+    useFocusEffect(
+        useCallback(() => {
+            refetch();   // ⬅ Refresh API when tab becomes active
+        }, [])
+    );
+
     const styles = StyleSheet.create({
         timeslot: { fontFamily: theme.font600, marginBottom: 6 },
         dentalService: { fontFamily: theme.font700, marginBottom: 6 }
@@ -79,16 +88,34 @@ const MyAppointments = () => {
 
         )
     }
+
+    const safeText = (v, fallback = "Not sure / its complex") => {
+
+        if (typeof v === "string" && v.trim() !== "") return v;
+        if (typeof v === "number") return String(v);
+
+        return fallback;
+    };
+
     const AppointmentInfo = ({ timeSlot, dentalService, clinic, dentist, provider }) => {
 
         const isDentist = provider?.type === 'Dentist' ? true : false;
+        const isSpecialist = provider?.type === 'Specialist' ? true : false;
         return (<>
 
 
             <Text style={styles.timeslot}
-            >{timeSlot}</Text>
-            {isDentist && <Text style={styles.dentalService}
-            >{dentalService}</Text>}
+            >{timeSlot}
+
+
+            </Text>
+            {
+                !isSpecialist && <Text style={styles.dentalService}>
+                    {safeText(dentalService)}
+                </Text>
+            }
+
+            
             <View style={{
                 flexDirection: "row", justifyContent: "flex-start",
                 alignItems: "center"
@@ -115,7 +142,7 @@ const MyAppointments = () => {
                         fontFamily: theme.font500,
                         marginBottom: 6, color: theme.gray
                     }}
-                > {provider?.name}
+                > {provider?.name ?? 'First Available Dentist'}
 
                 </Text >
 
@@ -203,7 +230,7 @@ const MyAppointments = () => {
                                 dentalService={item.service}
                                 clinic={item.clinic}
                                 dentist={item.dentist}
-                                handlePress={() => console.log(item)}
+
                             />
 
                         </View>
@@ -223,7 +250,7 @@ const MyAppointments = () => {
                             style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
                             <DayItem key={item.id} month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
                             <AppointmentCard key={item.id} timeSlot={item.appointment_time}
-                                dentalService={item?.service?.name ?? ''}
+                                dentalService={item?.service?.name}
                                 clinic={item.clinic}
                                 dentist={item.dentist?.name}
                                 provider={item?.provider}

@@ -1,6 +1,5 @@
 
 
-import { useContext, useEffect, useState } from "react";
 import { View, Text, ActivityIndicator } from "react-native";
 
 
@@ -11,7 +10,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import { AuthContext, AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import { ThemeProvider } from "./theme/ThemeProvider";
 import AuthStackNavigation from "./navigation/AuthStackNavigation";
@@ -20,6 +19,8 @@ import { BookingProvider } from "./context/BookingContext";
 import useSettings from "./hooks/useSettings";
 import UpdateApp from "./screens/UpdateApp";
 import LoadingDotsWithOverlay from "./components/LoadingDotsWithOverlay";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 export default function App() {
@@ -31,8 +32,21 @@ export default function App() {
   const currentVersion = "1.0";
   const AppNavigator = () => {
 
-    const { token } = useAuth();
+    // const { token } = useAuth();
+    const {token, setToken, setUser, checkUser} = useAuth();
     const Stack = createStackNavigator();
+    useEffect(() => {
+      // const checkLogin = async () => {
+      //   const auth_token = await AsyncStorage.getItem('auth_token');
+      //   const auth_user = await AsyncStorage.getItem('auth_user');
+      //   if (token) {
+      //     setUser(auth_user);
+      //     setToken(auth_token)
+      //   }
+      // };
+      // AsyncStorage.clear();
+      checkUser();
+    }, []);
 
     return (
       <>

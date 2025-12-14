@@ -1,12 +1,12 @@
 import { Alert, Text, View } from "react-native";
- 
+
 import SafeAreaContainerStepForm from "../../components/SafeAreaContainerStepForm";
 import { useBooking } from "../../context/BookingContext";
 import ButtonWrapper from "../Appointment/ButtonWrapper";
 import CancelButton from "../Appointment/CancelButton";
 import NextPrevButtonWrapper from "../Appointment/NextPrevButtonWrapper";
 import NextButton from "../Appointment/NextButton";
-import { useCallback, useContext,  useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import { useFocusEffect, useNavigation, CommonActions, useRoute } from "@react-navigation/native";
 import PreviousButton from "../Appointment/PreviousButton";
@@ -127,14 +127,16 @@ export default function BookingWrapper({ children, screenTitle, heading }) {
                                         label="Next"
                                         theme={theme}
                                         handlePress={() => goToNextStep(navigation)}
+                                        isDisabled={booking.time ? ((booking.time?.selectedDate && booking.time?.selectedSlot) ? false : true) : true}
                                     />
+
                                 )
                             )}
                         </NextPrevButtonWrapper>
                     </ButtonWrapper>
                 </View>
             )}
-        
+            
             {loading && <LoadingDotsWithOverlay />}
         </SafeAreaContainerStepForm>
     )

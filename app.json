@@ -2,7 +2,7 @@
   "expo": {
     "name": "OneDentalWorld",
     "slug": "odw-rn-papp",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -31,6 +31,7 @@
       }
     },
     "android": {
+      "deviceFamily": ["mobile"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -57,15 +58,8 @@
         {
           "locationWhenInUsePermission": "Allow One Dental World to use your location."
         }
-      ],
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "googleServicesFile": "./google-services.json"
-          }
-        }
       ]
+     
     ],
     "extra": {
       "eas": {

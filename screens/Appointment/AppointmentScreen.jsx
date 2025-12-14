@@ -61,28 +61,27 @@ const AppointmentScreen = () => {
         const outputFormat = "yyyy-MM-dd";
         const appointment_date = format(parsedDate, outputFormat);
 
-console.log(patient_id, clinic_id, appointment_date, time_slot,
-    clinic_dentist_id, dental_service_id);
+        // console.log(patient_id, clinic_id, appointment_date, time_slot,
+        //     clinic_dentist_id, dental_service_id);
 
-        try{
+        try {
             const response = await bookAppointment(
                 patient_id, clinic_id, appointment_date, time_slot,
                 clinic_dentist_id, dental_service_id)
             // console.log(response);
-    
+
             if (response.status === 200) {
                 setModalMessage(`Your Appointment for ${selectedService} at ${formData.selectedClinic.name} on ${formData.selectedDate}, ${formData.selectedSlot} will be confirmed shortly`);
                 setConfirmVisible(true);
             }
-    
+
         }
 
-        catch (error){
-            console.log("error")
+        catch (error) { 
             console.log(error.response)
         }
 
-    
+
 
         // setModalMessage(message);
         // 

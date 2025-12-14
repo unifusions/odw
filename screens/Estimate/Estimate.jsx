@@ -78,7 +78,7 @@ const Estimate = () => {
             flexShrink: 1,
             flexWrap: 'wrap',
             fontFamily: theme.font400,
-            fontSize: 16,
+            fontSize: 14,
 
         }
     });
