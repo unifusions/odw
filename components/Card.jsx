@@ -1,6 +1,6 @@
-import { useContext } from "react";
+ 
 import { StyleSheet, View, Text } from "react-native";
-import { ThemeContext, useTheme } from "../theme/ThemeProvider";
+import {   useTheme } from "../theme/ThemeProvider";
 
 export default function Card({ preTitle = false ,title = '', subTitle ='', titleSeperator = false, children }) {
 

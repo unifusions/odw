@@ -144,7 +144,7 @@ export default function OtpScreen({ route }) {
           ))}
         </View>
         <TouchableOpacity style={gStyles.cta} onPress={handleVerify}>
-          <Text style={gStyles.ctaText}>Verify</Text>
+          <Text style={gStyles.ctaText}>VERIFY</Text>
         </TouchableOpacity>
         {loading && <LoadingDotsWithOverlay />}
         {errorDialogVisible && 

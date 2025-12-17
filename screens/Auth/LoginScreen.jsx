@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -23,7 +23,7 @@ import api from "../../services/api";
 import EmailOrPhoneInput from "../../components/EmailOrPhoneInput";
 import { useAuth } from "../../context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+ 
 export default function LoginScreen() {
     // const token =  AsyncStorage.getItem('authToken');
     const { theme } = useTheme();
@@ -38,14 +38,15 @@ export default function LoginScreen() {
         setErrorDialogVisible(false);
         setMessage(null);
     }
+ 
 
     const [loginInput, setLoginInput] = useState('');
 
     const [contact, setContact] = useState({ value: '', isValid: false });
-    
+     
     const  handleLogin = async () => {
 
-        console.log(contact)
+         
         if (contact.isValid) {
             setProcessing(true);
             let loginInput = contact.value;

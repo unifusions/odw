@@ -1,14 +1,13 @@
 import { ScrollView, StyleSheet, Text, Touchable, TouchableOpacity, View } from "react-native";
-import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { useCallback, useContext, useEffect, useState } from "react";
+ 
+import { useCallback  } from "react";
 import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
 import { BuildingOfficeIcon, UserCircleIcon } from "react-native-heroicons/outline";
 import { AuthContext, useAuth } from "../../context/AuthContext";
-import { myAppointments } from "../../services/appointmentservices";
+ 
 import { format } from "date-fns";
 import Card from "../../components/Card";
-import { EyeIcon } from "react-native-heroicons/solid";
-import LoadingDots from "../../components/LoadingDots";
+ 
 import LoadingDotsWithOverlay from "../../components/LoadingDotsWithOverlay";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import useAppointments from "../../hooks/useAppointments";
@@ -19,7 +18,7 @@ const MyAppointments = () => {
 
 
 
-    const { openBookings, pendingBookings, loading, errors, refetch } = useAppointments({ patientId: user.patient.id });
+    const { openBookings, pendingBookings, loading, errors, refetch } = useAppointments({ patientId: user?.patient?.id });
     const navigation = useNavigation();
 
 

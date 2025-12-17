@@ -1,8 +1,8 @@
 
 
- 
+
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import {  useTheme } from "../../theme/ThemeProvider";
+import { useTheme } from "../../theme/ThemeProvider";
 import getGlobalStyles from "../../theme/globalStyles";
 
 
@@ -33,21 +33,21 @@ const SecondOpinion = () => {
       padding: 12,
       alignItems: "center",
 
+
     },
 
     title: {
       fontFamily: theme.font600,
       fontSize: 20,
 
-
-      flexWrap: 1,
+      flexShrink: 1,
+      flexWrap: 'wrap',
     },
     subtitle: {
-      fontFamily: theme.font400,
+      fontFamily: theme.font400, 
       fontSize: 14,
       flex: 1,
-
-      flexWrap: 1,
+      flexWrap: 'wrap',
     }
   });
   return (
@@ -59,7 +59,7 @@ const SecondOpinion = () => {
         </Text>
       </View>
 
-      <View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 12 }}>
+      <View style={{ backgroundColor: theme.white, padding: 12, borderRadius: 12, flex:1 }}>
 
 
         <TouchableOpacity
@@ -69,7 +69,7 @@ const SecondOpinion = () => {
           <View style={{ marginEnd: 12 }}>
             <NewIcon size={64} />
           </View>
-          <View >
+          <View style={{ flex: 1 }}>
 
             <Text style={[localStyles.title]}>
               Help Me Understand My Options </Text>
@@ -92,7 +92,7 @@ const SecondOpinion = () => {
           </View>
 
 
-          <View  >
+          <View  style={{ flex: 1 }}>
 
             <Text style={localStyles.title}>Compare Plans</Text>
 

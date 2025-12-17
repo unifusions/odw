@@ -3,7 +3,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import getGlobalStyles from "../theme/globalStyles";
 import { ThemeContext } from "../theme/ThemeProvider";
 import { Text, TouchableOpacity, View } from "react-native";
-import { ArrowLeftIcon, ArrowRightIcon, ChevronLeftIcon } from "react-native-heroicons/outline";
+import {   ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
 import LoadingDotsWithOverlay from "./LoadingDotsWithOverlay";
 

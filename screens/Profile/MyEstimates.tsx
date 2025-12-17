@@ -1,18 +1,13 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback } from "react";
 
-// import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+ 
 import getGlobalStyles from "../../theme/globalStyles";
-import { ThemeContext, useTheme } from "../../theme/ThemeProvider";
-import SafeAreaContainer from "../../components/SafeAreaContainer";
+import {   useTheme } from "../../theme/ThemeProvider";
+ 
 
 
-import { StyleSheet, View, Button, SafeAreaView, ScrollView, Text, TouchableOpacity, Touchable } from 'react-native';
-import Animated, {
-    useAnimatedStyle,
-    useDerivedValue,
-    useSharedValue,
-    withTiming,
-} from 'react-native-reanimated';
+import {   View,   ScrollView, Text, TouchableOpacity } from 'react-native';
+ 
 import Card from "../../components/Card";
 
 import useEstimates from "../../hooks/useEstimates";

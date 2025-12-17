@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import api from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFcmToken, listenForMessages, registerForPushNotificationsAsync, requestPermission, setupFCM } from '../utils/notifications';
+import { getFcmToken, listenForMessages, registerForPushNotifications, registerForPushNotificationsAsync, requestPermission, setupFCM } from '../utils/notifications';
 // import usePushNotification from '../hooks/usePushNotifications';
 // import * as SecureStore from 'expo-secure-store';
 
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         }
         // setLoading(false);
     };
-
+ 
     const login = async (otp, isEmail, loginInput) => {
         try {
 
@@ -49,9 +49,10 @@ export const AuthProvider = ({ children }) => {
                 setPatient(response.data.user.patient)
                 setOtpValidationError(false);
 
-                const fcm_token = await setupFCM();
+                const fcm_token = await registerForPushNotifications();
+                
                 const userId = response.data.user.id;
-
+                console.log(fcm_token);
                 if (fcm_token) {
 
                     try {
@@ -59,12 +60,12 @@ export const AuthProvider = ({ children }) => {
                             userId,
                             fcm_token
                         });
-
+                        console.log("FCM Token ==>" , tokenResponse);
                         await AsyncStorage.setItem('fcm_token', fcm_token)
 
                     }
                     catch (error) {
-
+                        console.log("Error storing FCM token:", error.response);
                     }
 
                 }
@@ -85,10 +86,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        // await api.post('/logout');
+        
         setToken(null);
         setUser(null);
-        // await SecureStore.deleteItemAsync('token');
+        AsyncStorage.clear()
+        
 
 
     };
