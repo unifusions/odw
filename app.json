@@ -16,11 +16,15 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.onedentalworld",
       "infoPlist": {
+        "NSCameraUsageDescription": "We use the camera to allow you to take and upload photos, for example when adding images to a form or uploading documents for a clinic.",
+        "NSPhotoLibraryUsageDescription": "We use photo library access to allow you to select and upload existing photos, for example choosing images from your device to attach to a form or share with a clinic.",
+        "NSLocationWhenInUseUsageDescription": "Your location is used to show nearby One Dental World clinics and available appointment slots in your area, such as displaying ODW clinics closest to your current location.",
+        "NSMicrophoneUsageDescription": "",
         "UIBackgroundModes": [
           "remote-notification"
         ],
+        "ITSAppUsesNonExemptEncryption": false,
         "FirebaseAppDelegateProxyEnabled": false,
-        "NSUserTrackingUsageDescription": "This app uses notifications to keep you updated about appointments.",
         "UIUserNotificationSettings": {
           "types": [
             "alert",
@@ -31,7 +35,9 @@
       }
     },
     "android": {
-      "deviceFamily": ["mobile"],
+      "deviceFamily": [
+        "mobile"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -54,12 +60,19 @@
       "expo-font",
       "expo-notifications",
       [
+        "expo-image-picker",
+        {
+          "cameraPermission": "We use the camera to allow you to take and upload photos, for example when adding images to a form or uploading documents for a clinic.",
+          "photosPermission": "We use photo library access to allow you to select and upload existing photos, for example choosing images from your device to attach to a form or share with a clinic.",
+          "microphonePermission": ""
+        }
+      ],
+      [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Allow One Dental World to use your location."
+          "locationWhenInUsePermission": "Your location is used to show nearby One Dental World clinics and available appointment slots in your area, such as displaying ODW clinics closest to your current location."
         }
       ]
-     
     ],
     "extra": {
       "eas": {

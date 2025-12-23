@@ -1,15 +1,16 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, FlatList, TextInput } from "react-native";
-import { ThemeContext, useTheme } from "../theme/ThemeProvider";
-import getGlobalStyles from "../theme/globalStyles";
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { useTheme } from "../theme/ThemeProvider";
+
 import SafeAreaContainer from "../components/SafeAreaContainer";
-import { getDentalCare } from "../services/getDentalCare";
+
 import SearchBox from "../components/SearchBox";
-import Badge from "../components/Badge";
+
 import LoadingDots from "../components/LoadingDots";
-import api from "../services/api";
+
 import useDentalCares from "../hooks/useDentalCares";
+import { StarIcon } from "react-native-heroicons/outline";
+import { StarIcon as StarIconSolid } from "react-native-heroicons/solid";
 
 
 const RenderCategory = ({ item, handlePress, isSelected }) => {
@@ -26,11 +27,12 @@ const RenderCategory = ({ item, handlePress, isSelected }) => {
         borderRadius: 20,
         marginHorizontal: 4,
         alignItems: "center",
+        maxHeight: 32,
       }}
     >
 
       <Text style={{
-        fontFamily:theme.font400,
+        fontFamily: theme.font400,
         fontSize: 12,
         color: isSelected ? theme.white : theme.mutedText
       }}>{item.name}</Text>
@@ -61,10 +63,12 @@ const ServiceCardView = ({ item }) => {
 
         <Text style={{ fontFamily: theme.font500, fontSize: 14, color: theme.gray }}>
           {item.medical_name}
-          {/* {item.featured && 'F'} */}
+
           {/* {JSON.stringify(item.categories, null, 2)} */}
         </Text>
-
+        {/* <Text>
+  {item.featured && 'F'}
+        </Text> */}
         {/* <FlatList
           data={medicalNames}
           keyExtractor={(item, index) => index.toString()}
@@ -148,9 +152,33 @@ const CompareScreen = () => {
 
   return (
     <SafeAreaContainer screenTitle="Compare Costs" allowedBack={true}>
-      <SearchBox onSearch={setQuery} placeholder='Type to find procedures - name or code' />
+
+      <View style={{
+        flexDirection: "row", justifyContent: 'center' ,
+        alignItems: 'center',
+      }}>
+
+        <View style={{
+          flex: 1, justifyContent: 'center', // Centers content vertically
+          alignItems: 'center', // Centers content horizontally
+          maxHeight: 72
+        }}>
+          <SearchBox onSearch={setQuery} placeholder='Type to find procedures - name or code' />
+        </View>
+
+        <View style={{
+          justifyContent: 'center', // Centers content vertically
+          alignItems: 'center', 
+        }} >
+          <TouchableOpacity onPress={() => setShowAll(!showAll)} style={{alignSelf:"center", alignContent:"center", justifyContent:"center", alignItems:"center"}}>
+            {showAll ?<StarIcon size={32} color={"gray"} /> : <StarIconSolid size={32} color={"gold"} /> }
 
 
+          </TouchableOpacity>
+
+        </View>
+
+      </View>
 
 
 
@@ -183,11 +211,7 @@ const CompareScreen = () => {
 
           />
 
-          <TouchableOpacity onPress={() => setShowAll(!showAll)}>
-            <Text style={{ color: "blue" }}>
-              {showAll ? "Show Featured" : "Show All"}
-            </Text>
-          </TouchableOpacity>
+
         </>
 
 

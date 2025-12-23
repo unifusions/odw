@@ -1,6 +1,6 @@
 
 
-import { View, Text, ActivityIndicator } from "react-native";
+import { View} from "react-native";
 
 
 
@@ -19,8 +19,9 @@ import { BookingProvider } from "./context/BookingContext";
 import useSettings from "./hooks/useSettings";
 import UpdateApp from "./screens/UpdateApp";
 import LoadingDotsWithOverlay from "./components/LoadingDotsWithOverlay";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
+ 
+import UpdateCheck from "./screens/UpdateCheck";
 
 
 export default function App() {
@@ -29,21 +30,13 @@ export default function App() {
   });
   const { settings, loading } = useSettings();
   const appVersion = settings?.settings?.find(item => item.key === "app_version");
-  const currentVersion = "1.0";
+  const currentVersion = "1.1";
   const AppNavigator = () => {
-
-    // const { token } = useAuth();
-    const {token, setToken, setUser, checkUser} = useAuth();
+ 
+    const { token, setToken, setUser, checkUser } = useAuth();
     const Stack = createStackNavigator();
     useEffect(() => {
-      // const checkLogin = async () => {
-      //   const auth_token = await AsyncStorage.getItem('auth_token');
-      //   const auth_user = await AsyncStorage.getItem('auth_user');
-      //   if (token) {
-      //     setUser(auth_user);
-      //     setToken(auth_token)
-      //   }
-      // };
+
       // AsyncStorage.clear();
       checkUser();
     }, []);
@@ -66,35 +59,38 @@ export default function App() {
       </>
 
 
-
-      // 
+ 
 
     );
-  }
+  } 
 
-  // if (!(appVersion?.value === currentVersion)) {
-  //   return (
-  //     <UpdateApp />
-  //   )
-  // }
   return (
     <>
       < ThemeProvider >
         {
+
           fontsLoaded ?
-            <AuthProvider>
+            (!loading ? 
+              (!(appVersion?.value === currentVersion) ? <>
+                <UpdateApp />
+              </> :
+                <AuthProvider>
 
 
-              <BookingProvider>
-                <AppNavigator />
-              </BookingProvider>
+                  <BookingProvider>
+                    <AppNavigator />
+                  </BookingProvider>
 
 
 
-            </AuthProvider > : <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <ActivityIndicator size="large" />
-            </View>
+                </AuthProvider >
+              ) : <UpdateCheck />) :
+
+             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <LoadingDotsWithOverlay />
+        </View>
         }
+
       </ThemeProvider>
     </>
 
