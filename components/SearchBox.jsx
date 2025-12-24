@@ -9,7 +9,7 @@ const SearchBox = ({ onSearch, placeholder = "Search" }) => {
     const { theme } = useContext(ThemeContext);
     const [searchText, setSearchText] = useState('');
     const debounceDelay = 200;
-    // Debounced search function
+   
     const debouncedOnSearch = useCallback(
         (text) => {
             if (onSearch) {

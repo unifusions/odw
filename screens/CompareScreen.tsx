@@ -48,17 +48,30 @@ const ServiceCardView = ({ item }) => {
 
   return (
 
-    <View style={{ backgroundColor: theme.white, borderWidth: 1, borderColor: theme.border, borderRadius: 8, padding: 16, marginBottom: 16 }}>
+    <View style={{ backgroundColor: theme.white, borderWidth: 1, borderColor: theme.border, borderRadius: 8, padding: 16, marginBottom: 16, position: "relative" }}>
 
+      {item.featured && <Text
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          fontSize: 18,
+          color: "#F5A623", // gold
+        }}
+      >
+        ★
+      </Text>
+      }
       <View style={{
         paddingBottom: 12,
+        
         marginBottom: 12, borderBottomColor: theme.border, borderStyle: "solid", borderBottomWidth: 1
       }}>
         <Text style={{
           fontFamily: theme.font600, fontSize: 16,
           letterSpacing: -0.2,
           marginBottom: 6,
-
+          marginEnd: 12,
         }}>{item.name} </Text>
 
         <Text style={{ fontFamily: theme.font500, fontSize: 14, color: theme.gray }}>
@@ -154,13 +167,12 @@ const CompareScreen = () => {
     <SafeAreaContainer screenTitle="Compare Costs" allowedBack={true}>
 
       <View style={{
-        flexDirection: "row", justifyContent: 'center' ,
+        flexDirection: "row", justifyContent: 'center',
         alignItems: 'center',
       }}>
 
         <View style={{
-          flex: 1, justifyContent: 'center', // Centers content vertically
-          alignItems: 'center', // Centers content horizontally
+          flex: 1,  
           maxHeight: 72
         }}>
           <SearchBox onSearch={setQuery} placeholder='Type to find procedures - name or code' />
@@ -168,10 +180,13 @@ const CompareScreen = () => {
 
         <View style={{
           justifyContent: 'center', // Centers content vertically
-          alignItems: 'center', 
+          alignItems: 'center',
         }} >
-          <TouchableOpacity onPress={() => setShowAll(!showAll)} style={{alignSelf:"center", alignContent:"center", justifyContent:"center", alignItems:"center"}}>
-            {showAll ?<StarIcon size={32} color={"gray"} /> : <StarIconSolid size={32} color={"gold"} /> }
+          <TouchableOpacity onPress={() => setShowAll(!showAll)} style={{ 
+             width: 48,               // 👈 fixed tap area
+      height: 48,
+      alignSelf: "center", alignContent: "center", justifyContent: "center", alignItems: "center" }}>
+            {showAll ? <StarIcon size={32} color={"gray"} /> : <StarIconSolid size={32} color={"#F5A623"} />}
 
 
           </TouchableOpacity>

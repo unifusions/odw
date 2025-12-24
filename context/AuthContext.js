@@ -5,6 +5,8 @@ import { getFcmToken, listenForMessages, registerForPushNotifications, registerF
 // import usePushNotification from '../hooks/usePushNotifications';
 // import * as SecureStore from 'expo-secure-store';
 
+import * as Device from 'expo-device';
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -52,15 +54,17 @@ export const AuthProvider = ({ children }) => {
                 const fcm_token = await registerForPushNotifications();
                 
                 const userId = response.data.user.id;
-                console.log(fcm_token);
+                  
                 if (fcm_token) {
 
                     try {
                         const tokenResponse = await api.post('/store-fcm-token', {
                             userId,
-                            fcm_token
+                            fcm_token,
+                            device_manufacturer: Device.manufacturer,
+                            device_model : Device.modelName
                         });
-                        console.log("FCM Token ==>" , tokenResponse);
+                       
                         await AsyncStorage.setItem('fcm_token', fcm_token)
 
                     }

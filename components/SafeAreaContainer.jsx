@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import getGlobalStyles from "../theme/globalStyles";
-import { ThemeContext } from "../theme/ThemeProvider";
+import { ThemeContext, useTheme } from "../theme/ThemeProvider";
 import { Text, TouchableOpacity, View } from "react-native";
 import {   ChevronLeftIcon } from "react-native-heroicons/outline";
 import { useNavigation } from "@react-navigation/native";
@@ -9,7 +9,7 @@ import LoadingDotsWithOverlay from "./LoadingDotsWithOverlay";
 
 const SafeAreaContainer = ({ children, screenTitle, allowedBack = false, 
     loading=false }) => {
-    const { theme } = useContext(ThemeContext)
+    const { theme } = useTheme();
     const styles = getGlobalStyles(theme);
     const navigation = useNavigation();
     return (

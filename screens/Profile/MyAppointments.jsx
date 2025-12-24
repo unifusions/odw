@@ -244,7 +244,7 @@ const MyAppointments = () => {
 
                     {pendingBookings.map((item, index) =>
 
-                        <TouchableOpacity key={item.id}
+                        <TouchableOpacity key={index}
                             onPress={() => navigation.navigate("Appointment", { appointment: item })}
                             style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start", alignItems: "flex-start", marginBottom: 16 }}>
                             <DayItem key={item.id} month={format(item.appointment_date, 'LLL')} day={format(item.appointment_date, 'dd')} />
