@@ -41,5 +41,5 @@ yarn-error.*
 
 *.apk
 *.aab
-# google-services.json
+google-services.json
  
