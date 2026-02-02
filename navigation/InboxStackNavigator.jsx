@@ -14,6 +14,7 @@ import ShowSo from "../screens/Profile/ShowSo";
 import ShowEstimate from "../screens/Profile/ShowEstimate";
 import ShowSoReply from "../screens/Profile/ShowSoReply";
 import ShowSoReplyPdf from "../screens/Profile/ShowSoReplyPdf";
+import PdfScreen from "../screens/PdfScreen";
 
 const InboxStack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function InboxStackNavigator() {
             <InboxStack.Screen name="MyInsurance" component={InsuranceStackNavigator} />
             <InboxStack.Screen name="MySecondOpinions" component={MySecondOpinions} />
             <InboxStack.Screen name="ShowSo" component={ShowSo} />
+            <InboxStack.Screen name="ShowPdf" component={PdfScreen} />
             <InboxStack.Screen name="ShowSoReply" component={ShowSoReply} />
             <InboxStack.Screen name="ShowSoReplyPdf" component={ShowSoReplyPdf} />
             <InboxStack.Screen name="ShowEstimate" component={ShowEstimate} />

@@ -3,13 +3,14 @@ import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import getGlobalStyles from "../../theme/globalStyles";
 import { useState } from "react";
 import { useTheme } from "../../theme/ThemeProvider";
-import { ArrowRightOnRectangleIcon, ChevronRightIcon, LifebuoyIcon, ShieldCheckIcon, UserIcon, UsersIcon } from "react-native-heroicons/outline";
+import { ArrowRightOnRectangleIcon, ChevronRightIcon, LifebuoyIcon, ShieldCheckIcon, UserIcon, Cog8ToothIcon, UsersIcon, } from "react-native-heroicons/outline";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
 
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../context/AuthContext";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
 import Card from "../../components/Card";
+
 
 
 
@@ -25,7 +26,7 @@ export default function ProfileScreen() {
 
         { id: "6", title: "Help & Support", icon: LifebuoyIcon, onPress: () => navigation.navigate("HelpSupport") },
         { id: "7", title: "Terms & Conditions", icon: ShieldCheckIcon, onPress: () => navigation.navigate("Terms") },
-
+        // { id: "9", title: "Settings", icon: Cog8ToothIcon, onPress: () => navigation.navigate("Settings") },
         { id: "8", title: "Log Out", icon: ArrowRightOnRectangleIcon, logout: true }
     ]
     const [isLogoutVisible, setLogoutVisible] = useState(false);
@@ -47,13 +48,13 @@ export default function ProfileScreen() {
 
             <ScrollView showsVerticalScrollIndicator={false} >
 
-           
+
 
 
                 <Card>
-                
+
                     <View style={{ marginVertical: 12, flexDirection: "row", alignItems: "center" }}>
-                         
+
                         {patient?.avatar_url ?
                             <Image source={{ uri: patient?.avatar_url }} style={[styles.profileAvatar, { marginEnd: 12 }]} />
                             : <View style={[styles.profileAvatar, { marginEnd: 12, justifyContent: "center", alignItems: "center", backgroundColor: theme.border, borderRadius: 12 }]}>

@@ -23,11 +23,11 @@ export const lightTheme = {
   indigo: '#6610f2',
   success: '#00c9a7',
   background: '#F3F2F7',
-  danger: '#E5342F',
+  danger: '#E5342F',  
   cardBackground: '#FFFFFF',
   amber: '#D97706',
   amber50: '#FFFBEB',
-
+danger50: '#c3807eff', 
   border: '#E5E5E5',
 
 

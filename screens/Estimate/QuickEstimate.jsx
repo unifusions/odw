@@ -7,12 +7,12 @@ import AddInsuranceOverlay from "./AddInsuranceOverlay";
 import ModalDialog from "../../components/ModalDialog";
 import LoadingDots from "../../components/LoadingDots";
 import api from "../../services/api";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext, useAuth } from "../../context/AuthContext";
 import BottomSheetDialog from "../../components/BottomSheetDialog";
 import { useNavigation } from "@react-navigation/native";
 
 export default function QuickEstimate() {
-    const { user } = useContext(AuthContext);
+    const { user, patient } = useAuth();
     const { theme } = useContext(ThemeContext);
     const { height } = Dimensions.get('window');
     const navigation = useNavigation();
@@ -50,7 +50,7 @@ export default function QuickEstimate() {
 
 
         let finalFormData = new FormData();
-        finalFormData.append('patient_id', user.patient.id);
+        finalFormData.append('patient_id', patient.id);
         finalFormData.append('user_id', user.id);
         finalFormData.append('description', userRequest);
 
@@ -58,9 +58,9 @@ export default function QuickEstimate() {
         finalFormData.append('is_quick', 1);
 
         const headers = { 'Content-Type': 'application/json' };
-        // ;
+         
 
-
+ 
         try {
             const response = await api.post('/estimation', finalFormData, { headers });
             if (response.status == 200) {
@@ -75,7 +75,7 @@ export default function QuickEstimate() {
         }
 
         catch (error) {
-            console.log("error", error.response.data)
+            console.log("error", error)
         }
 
         setProcessing(false);
@@ -102,7 +102,10 @@ export default function QuickEstimate() {
             <View>
                 <Text
                     style={{ fontFamily: theme.font500, fontSize: 16, marginBottom: 16 }}
-                >Tell Us More About Your Concern</Text>
+                >Tell Us More About Your Concern
+                
+            
+                </Text>
                 <TextInput
 
                     multiline={true}

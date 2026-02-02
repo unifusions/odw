@@ -88,7 +88,7 @@ export default function ClinicBookingScreen() {
             setConfirmVisible(true);
         }
         if (response.status === 422)
-            console.log("slot not available");
+            // console.log("slot not available");
     }
     return (
         <SafeAreaProvider>

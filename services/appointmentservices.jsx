@@ -23,7 +23,7 @@ export const bookAppointment = async (patient_id, clinic_id, appointment_date, t
             return { status: 422 };
         }
 
-        console.error("Unknown error in booking:", error);
+        console.log("Unknown error in booking:", error);
 
         // Alert.alert("Unknown Error", error.message || "Something went wrong");
         return error;

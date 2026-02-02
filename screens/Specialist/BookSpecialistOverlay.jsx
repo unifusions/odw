@@ -22,7 +22,7 @@ const BookSpecialistOverlay = ({ visibility, requestClose,
 }) => {
 
 
-    const { booking, confirmBooking, resetBooking } = useBooking();
+    const { booking, confirmBooking, resetBooking, hasError } = useBooking();
     const { theme } = useTheme();
 
     const [confirmed, setConfirmed] = useState(false);
@@ -118,7 +118,7 @@ const BookSpecialistOverlay = ({ visibility, requestClose,
                             <>
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
                                     <Text style={{ fontSize: 18, fontWeight: '700', }}>
-                                        Confirm  Appointment
+                                        Confirm  Appointment  
                                     </Text>
 
                                     <TouchableOpacity onPress={requestClose}>
@@ -128,10 +128,14 @@ const BookSpecialistOverlay = ({ visibility, requestClose,
                                 </View>
 
                                 <ScrollView style={{ flex: 1, backgroundColor: "#f0f0f0" }}>
+                                   
                                     <Card>
                                         <RowItem
                                             icon={<MapPinIcon color={theme.blue} />}
                                             title={booking?.clinic?.name}
+                                            hasError ={!booking?.clinic}
+                                            
+                                            fieldError={'Please select clinic' }
                                         // subTitle={booking.selectedClinic.address_line_1 + ', ' + booking.selectedClinic.address_line_2}
                                         />
 
@@ -144,12 +148,18 @@ const BookSpecialistOverlay = ({ visibility, requestClose,
                                         <RowItem
                                             icon={<CalendarIcon color={theme.blue} />}
                                             title={booking?.time?.selectedDate?.fullDate}
+                                            hasError={!booking?.time?.selectedDate }
+                                              fieldError={  'Please select Date' }
+                                            
 
                                         />
 
+co
                                         <RowItem
                                             icon={<ClockIcon color={theme.blue} />}
                                             title={booking?.time?.selectedSlot}
+                                            hasError= {!booking?.time?.selectedSlot }
+                                             fieldError={'Please select Time' }
                                         // subTitle={booking?.selectedDate}booking?.time?.selectedSlot +
                                         />
 
@@ -162,6 +172,7 @@ const BookSpecialistOverlay = ({ visibility, requestClose,
                                     label="Confirm"
                                     isConfirm={true}
                                     fullWidth={true}
+                                    isDisabled={hasError}
                                     handlePress={async () => {
                                         // setLoading(true);
                                         try {

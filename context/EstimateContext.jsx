@@ -103,7 +103,7 @@ export const EstimateProvider = ({ children }) => {
                 return response.data; // bookingRequest to pass to Confirmation
             }
         } catch (error) {
-            console.log(error.data)
+            // console.log(error.data)
             setError(error)
 
         }

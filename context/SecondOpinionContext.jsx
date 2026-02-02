@@ -117,7 +117,7 @@ export const SecondOpinionProvider = ({ children }) => {
 
         }
         catch (error) {
-            console.log("Upload Error", error.response);
+            // console.log("Upload Error", error.response);
         }
         
     };

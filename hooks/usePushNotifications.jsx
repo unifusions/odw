@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 
 export default function usePushNotification() {
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -10,6 +11,16 @@ export default function usePushNotification() {
   }, []);
 
   async function registerForPushNotificationsAsync() {
+
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+    name: 'default',
+    importance: Notifications.AndroidImportance.MAX,
+    vibrationPattern: [0, 250, 250, 250],
+    lightColor: '#FF231F7C',
+    sound: 'default', // This enables sound for the channel
+  });
+    }
     if (!Device.isDevice) {
       alert('Must use physical device for Push Notifications');
       return;
@@ -28,7 +39,7 @@ export default function usePushNotification() {
     }
 
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log('Expo Push Token:', token);
+    // console.log('Expo Push Token:', token);
     return token;
   }
 

@@ -43,6 +43,7 @@ export default function App() {
 
     return (
       <>
+     
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             {token ? (
@@ -65,7 +66,8 @@ export default function App() {
   } 
 
   return (
-    <>
+    <> 
+   
       < ThemeProvider >
         {
 
@@ -80,9 +82,7 @@ export default function App() {
                   <BookingProvider>
                     <AppNavigator />
                   </BookingProvider>
-
-
-
+ 
                 </AuthProvider >
               ) : <UpdateCheck />) :
 

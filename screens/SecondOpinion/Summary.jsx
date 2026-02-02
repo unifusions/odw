@@ -49,7 +49,7 @@ export default function Summary() {
 
                 <InfoCard title="Uploaded Documents">
                     {secondOpinion.documents ? secondOpinion?.documents.length > 0 &&
-                        secondOpinion?.documents.map((document) => <InfoDescription description= {document.name} />
+                        secondOpinion?.documents.map((document) => <InfoDescription key={document.name} description= {document.name} />
                            
                        )
                         : <InfoDescription description={'No documents attached'} /> 

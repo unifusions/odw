@@ -123,7 +123,7 @@ export default function OtpScreen({ route }) {
     >
       <View style={styles.container}>
 
-
+{console.log(otpDigits)}
         <Text style={styles.title}>Enter Your OTP</Text>
        
           {isRegister && <Text style={styles.info}

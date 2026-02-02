@@ -1,18 +1,20 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { StyleSheet, Text,   View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ShowSoReply from "./ShowSoReply";
 import Card from "../../components/Card";
- 
+
 import { useTheme } from "../../theme/ThemeProvider";
 import StatusBadge from "../../components/StatusBadge";
 import useDateTimeConverter from "../../hooks/useDateTimeConverter";
+import InfoCard from "../../components/InfoCard";
 
 
 
 export default function ShowSo() {
-   
+
     const route = useRoute();
+    const navigation = useNavigation();
     const { secondOpinion } = route.params;
 
     const { theme } = useTheme();
@@ -90,9 +92,23 @@ export default function ShowSo() {
                     </Text>
                 </View>
 
-                {/* <Text>{JSON.stringify(secondOpinion?.last_visit, null, 2)}</Text> */}
+
             </Card>
- 
+          { secondOpinion?.attachments.length>0 && <InfoCard title="Attachments">
+                {secondOpinion?.attachments.map((atx) =>
+                    <TouchableOpacity key={atx.id} onPress={() => navigation.navigate("ShowPdf", {
+                        pdfUrl: secondOpinion?.attachments[0]?.temporary_url,
+                    })}>
+
+
+                        <Text>{atx.file_name}</Text>
+
+                    </TouchableOpacity>)}
+
+            </InfoCard>}
+
+
+
             {(secondOpinion?.replies && (secondOpinion?.status === "closed" || secondOpinion?.status === "answered")) &&
                 <ShowSoReply
                     reply={secondOpinion?.replies}

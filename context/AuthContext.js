@@ -4,8 +4,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFcmToken, listenForMessages, registerForPushNotifications, registerForPushNotificationsAsync, requestPermission, setupFCM } from '../utils/notifications';
 // import usePushNotification from '../hooks/usePushNotifications';
 // import * as SecureStore from 'expo-secure-store';
+import * as Notifications from 'expo-notifications';
 
 import * as Device from 'expo-device';
+import { Platform } from 'react-native';
 
 export const AuthContext = createContext();
 
@@ -22,26 +24,39 @@ export const AuthProvider = ({ children }) => {
         const storedUser = await AsyncStorage.getItem('auth_user');
         const storedPatient = await AsyncStorage.getItem('auth_patient');
 
-        
+
         if (storedToken) {
             api.defaults.headers['Authorization'] = `Bearer ${storedToken}`;
             setToken(storedToken);
             setUser(JSON.parse(storedUser));
             setPatient(JSON.parse(storedPatient));
-            
+
         }
+
+        if (Platform.OS === 'android') {
+            await Notifications.setNotificationHandler({
+                handleNotification: async () => ({
+                    shouldShowAlert: true,
+                    shouldPlaySound: true,
+                    shouldSetBadge: false,
+                }),
+            });
+        }
+
+ 
+         
         // setLoading(false);
     };
- 
+
     const login = async (otp, isEmail, loginInput) => {
         try {
 
 
             const response = await api.post('/verify-otp', { otp, isEmail, loginInput });
- 
+           
             if (response.data.token) {
 
-
+                
                 await AsyncStorage.setItem('auth_token', response.data.token);
                 await AsyncStorage.setItem('auth_user', JSON.stringify(response.data.user));
                 await AsyncStorage.setItem('auth_patient', JSON.stringify(response.data.user.patient));
@@ -51,25 +66,34 @@ export const AuthProvider = ({ children }) => {
                 setPatient(response.data.user.patient)
                 setOtpValidationError(false);
 
-                const fcm_token = await registerForPushNotifications();
-                
+              
+                const pushToken = await registerForPushNotifications();
+
                 const userId = response.data.user.id;
-                  
-                if (fcm_token) {
+
+                if (pushToken) {
 
                     try {
+
                         const tokenResponse = await api.post('/store-fcm-token', {
                             userId,
-                            fcm_token,
+                            device_id: pushToken.device_id,
+                            platform: pushToken.platform,
+                            pushToken,
                             device_manufacturer: Device.manufacturer,
-                            device_model : Device.modelName
+                            device_model: Device.modelName
                         });
-                       
-                        await AsyncStorage.setItem('fcm_token', fcm_token)
 
+                        if (tokenResponse) {
+                            
+                            await AsyncStorage.setItem('pushToken', JSON.stringify(pushToken))
+                        }
+                        else {
+                             
+                        }
                     }
                     catch (error) {
-                        console.log("Error storing FCM token:", error.response);
+                     
                     }
 
                 }
@@ -84,17 +108,17 @@ export const AuthProvider = ({ children }) => {
 
 
         } catch (error) {
-            console.log(error.response);
+            
             setOtpValidationError(true);
         }
     };
 
     const logout = async () => {
-        
+
         setToken(null);
         setUser(null);
         AsyncStorage.clear()
-        
+
 
 
     };

@@ -38,7 +38,12 @@ export default function CareSelect({ onNext, handleCancel, title, currentStep, p
     const handleNext = () => {
 
         if (selectedItems.length > 0) {
-            const selectedObjects = cares.filter(item => selectedItems.includes(item.id));
+            // const selectedObjects = cares.filter(item => selectedItems.includes(item.id));
+
+            const selectedObjects = cares.filter(item =>
+  selectedItems.some(selected => selected.id === item.id)
+);
+
             onNext({ selectedItems: selectedObjects });
         }
         else {
@@ -65,7 +70,7 @@ export default function CareSelect({ onNext, handleCancel, title, currentStep, p
                     <>
 
                         <View style={{ flex: 1 }}>
-
+ 
                             <View style={{ flex: 1, marginTop: 16 }}>
 
                                 {loading ? <ActivityIndicator size="large" /> :

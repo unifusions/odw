@@ -35,7 +35,7 @@ export default function GuidedEstimate() {
     const nextStep = (data, screenTitle) => {
         setFormData({ ...formData, ...data });
         setCurrentStep(currentStep + 1);
-
+console.log(formData);
 
     };
     const prevStep = () => {
@@ -69,6 +69,7 @@ export default function GuidedEstimate() {
         });
         const headers = { 'Content-Type': 'application/json' };
 
+ 
         try {
             const response = await api.post('/estimation', finalFormData, { headers });
             if (response.status == 200) {

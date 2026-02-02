@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 
-const RowItem = ({ title, subTitle, icon }) => {
+const RowItem = ({ title, subTitle, icon, fieldError = '', hasError = false }) => {
 
     const { theme } = useTheme();
     const styles = StyleSheet.create({
@@ -15,7 +15,7 @@ const RowItem = ({ title, subTitle, icon }) => {
 
         infoContainer: {
             marginStart: 16,
-            flex:1
+            flex: 1
 
         },
 
@@ -32,18 +32,24 @@ const RowItem = ({ title, subTitle, icon }) => {
 
         iconContainer: {
             padding: 0
+        },
+        error: {
+            fontFamily: theme.font700,
+            flexWrap: "wrap",
+            color: theme.danger
         }
     });
 
     return (
         <>
             <View style={styles.rowContainer}>
-                {icon
-
-                }
+                {icon} 
                 <View style={styles.infoContainer}>
-                    <Text style={styles.rowTitle}>{title}</Text>
-                    {subTitle && <Text style={styles.rowSubtitle}>{subTitle}</Text>}
+
+                    {hasError ?  <Text style={styles.error}>{fieldError}</Text> : <>
+                        <Text style={styles.rowTitle}>{title}</Text>
+                        {subTitle && <Text style={styles.rowSubtitle}>{subTitle}</Text>}
+                    </>}
                 </View>
             </View>
         </>

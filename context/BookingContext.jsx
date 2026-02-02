@@ -219,6 +219,15 @@ export const BookingProvider = ({ children }) => {
     provider_type: null,
   });
 
+  const hasError =
+  !booking?.time?.selectedSlot ||
+   !booking?.time?.selectedDate
+ 
+  !booking.clinic ||
+ 
+ 
+  !booking.provider_type;
+
   const [error, setError] = useState({});
 
   const [steps, setSteps] = useState([]); // Each navigator will set this
@@ -320,12 +329,14 @@ export const BookingProvider = ({ children }) => {
 
       if (response.status === 200) {
 
-        return response.data;
+        return response.status;
       }
+      // else console.log(response.error.data);
     } catch (error) {
-      console.log("catch error");
-      console.log(error)
-      setError(error)
+      // return error;
+    
+      // console.log(error)
+      // setError(error)
 
     }
   };
@@ -346,7 +357,7 @@ export const BookingProvider = ({ children }) => {
         countableSteps,
         resetBooking,
         confirmBooking,
-        error
+        error, hasError
       }}
     >
       {children}

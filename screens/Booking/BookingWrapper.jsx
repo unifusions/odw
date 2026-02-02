@@ -108,11 +108,12 @@ export default function BookingWrapper({ children, screenTitle, heading }) {
                                         setLoading(true);
                                         try {
                                             const bookingRequest = await confirmBooking();
-
-                                            navigation.replace("Confirmation", { bookingRequest: bookingRequest });
+                                            bookingRequest && navigation.replace("Confirmation", { bookingRequest: bookingRequest });
+                                            
 
                                         } catch (err) {
-                                            Alert.alert("Booking error:", err);
+                                            console.log(err);
+                                            // Alert.alert("Booking error:", err);
                                         }
                                         finally {
                                             setLoading(false);

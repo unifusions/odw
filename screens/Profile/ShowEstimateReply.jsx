@@ -1,6 +1,6 @@
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { APP_URL } from "../../config";
 import { useEffect, useState } from "react";
@@ -19,6 +19,7 @@ export default function ShowEstimateReply({ reply }) {
 
     // const fileUrl = APP_URL + reply.file_url;
     const { token } = useAuth();
+        const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
 
     const [localUri, setLocalUri] = useState(null);
@@ -75,7 +76,10 @@ export default function ShowEstimateReply({ reply }) {
 
         <>
 
-            <TouchableOpacity onPress={handleViewFile}>
+          
+             <TouchableOpacity onPress={() => navigation.navigate("ShowPdf", {
+                        pdfUrl: reply.file_url
+                    })}>
                 <Card>
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 

@@ -47,13 +47,13 @@ const InsuranceCard = ({ insurance, handlePress }) => {
 
 const AddInsuranceOverlay = ({ visibility, requestClose, onSelect }) => {
 
-    const { user } = useAuth();
+    const { user, patient } = useAuth();
     const { theme } = useContext(ThemeContext);
     const [processing, setProcessing] = useState(true);
 
 
 
-    const { insurances, loading, errors } = useInsurance({ patientId: user.patient.id });
+    const { insurances, loading, errors } = useInsurance({ patientId: patient?.id });
 
 
     return (

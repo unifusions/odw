@@ -27,7 +27,7 @@ export default function ShowSoReply({ reply }) {
     const [loading, setLoading] = useState(false);
 
     const [localUri, setLocalUri] = useState(null);
-
+ const remoteUri = `${APP_URL}/files?path=${reply.path}`;
     const { theme } = useTheme();
     const navigation = useNavigation();
     const handleViewFile = async () => {
@@ -38,23 +38,7 @@ export default function ShowSoReply({ reply }) {
         try {
             setLoading(true);
 
-            // Step 1: Check if file already exists
-            // const fileInfo = await FileSystem.getInfoAsync(localFileUri);
-
-            // if (!fileInfo.exists) {
-
-            // const downloadResumable = FileSystem.createDownloadResumable(
-            //     remoteUri,
-            //     localFileUri,
-            //     {
-            //         headers: {
-            //             Authorization: `Bearer ${token}`,
-            //             Accept: "application/pdf",
-            //         },
-            //     }
-            // );
-
-            // const { uri } = await downloadResumable.downloadAsync();
+             
 
             const { uri } = await FileSystem.downloadAsync(
                 remoteUri,
@@ -86,8 +70,7 @@ export default function ShowSoReply({ reply }) {
             // navigation.navigate("ShowSoReplyPdf", { uri: localUri });
 
         } catch (error) {
-            console.error("Error handling file:", error);
-            Alert.alert("Error", "Unable to open or download file.");
+             Alert.alert("Error", "Unable to open or download file.");
         } finally {
             setLoading(false);
         }
@@ -96,8 +79,12 @@ export default function ShowSoReply({ reply }) {
     return (
 
         <>
+  
 
-            <TouchableOpacity onPress={handleViewFile}>
+            {/* <TouchableOpacity onPress={handleViewFile}> */}
+            <TouchableOpacity onPress={() => navigation.navigate("ShowPdf", {
+                        pdfUrl: reply.file_url
+                    })}>
                 <Card>
                     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
 

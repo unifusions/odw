@@ -53,8 +53,7 @@ export default function LoginScreen() {
             try {
 
 
-                console.log("trying");
-                const response = await api.post('/login', { loginInput: contact.value });
+                 const response = await api.post('/login', { loginInput: contact.value });
 
                 if (response.status === 200) {
 
@@ -110,7 +109,7 @@ export default function LoginScreen() {
 
                 else { Alert.alert("Something went wrong. Try again later"); }
                 setProcessing(false);
-                console.log(error);
+                
             }
 
 

@@ -117,12 +117,8 @@ export default function EditProfileScreen() {
 
         let form;
         let headers;
-
-        setLoading(true)
-        if (imageData) {
-
-            const newImageUri = Platform.OS === 'ios' ? imageData.uri.replace('file://', '') : imageData.uri;
-            form = new FormData();
+setLoading(true)
+         form = new FormData();
             form.append('patient_id', user.patient.id);
             form.append('first_name', formData.first_name);
             form.append('middle_name', formData.middle_name);
@@ -133,6 +129,12 @@ export default function EditProfileScreen() {
             form.append('gender', formData.gender);
             form.append('gender', formData.gender);
             form.append('avatar', formData.avatar);
+
+        
+        if (imageData) {
+
+            const newImageUri = Platform.OS === 'ios' ? imageData.uri.replace('file://', '') : imageData.uri;
+            
             form.append('image', {
                 uri: newImageUri,
                 name: imageData.name,
@@ -147,41 +149,30 @@ export default function EditProfileScreen() {
 
         }
         else {
-            form = new FormData();
-            form.append('patient_id', user.patient.id);
-            form.append('first_name', formData.first_name);
-            form.append('middle_name', formData.middle_name);
-            form.append('last_name', formData.last_name);
-            form.append('phone', formData.phone);
-            form.append('email', formData.email);
-            form.append('dob', formData.dob);
-            form.append('gender', formData.gender);
-            form.append('gender', formData.gender);
-            form.append('avatar', formData.avatar);
+           
 
             headers = {
                 'Content-Type': 'application/json',
             };
 
         }
-
+ 
+ 
         
     
         try {
             const response = await api.post('/update-profile', form, {headers} );
 
-
-            const data = await response.data;
              
             if (response.data) {
-                setPatient(data.patient);
+                setPatient(response.data.patient);
                 Alert.alert('Profile Updated Successfully!');
             } else {
-                console.error(data);
-                Alert.alert('Upload failed', data.message || 'Error occurred');
+                console.error(response.data);
+                Alert.alert('Upload failed', response.data.message || 'Error occurred');
             }
         } catch (error) {
-            console.error(error);
+            console.error(error.response);
             Alert.alert('Error uploading');
         }
         finally{

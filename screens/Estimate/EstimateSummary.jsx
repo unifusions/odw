@@ -97,7 +97,7 @@ export default function EstimateSummary({ formData, currentStep, handlePress }) 
                 <View style={gStyles.infoCard}>
                     <Text style={gStyles.cardTitle}>Selected Services</Text>
 
-                    {selectedItems && selectedItems.map((item, index) => <CareRender item={item} />)}
+                    {selectedItems && selectedItems.map((item, index) => <CareRender key={item.id} item={item} />)}
                 </View>
                 <InfoCard title='Notes'>
 

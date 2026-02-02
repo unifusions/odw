@@ -58,7 +58,7 @@ const ClinicSelect = ({ theme, gStyles, onNext, handleCancel, prevStep }) => {
                 <View>
                     <Image source={{ uri: item.logo_url }} />
                 </View>
-                {console.log(item.logo_url)}
+              
                 <Text style={{ fontFamily: theme.font600, color: theme.dark, marginBottom: 4 }}>{item.name}</Text>
                 <Text style={{ fontSize: 12, fontFamily: theme.font400, color: theme.gray }}>
                     {item.address_line_1}{"\n"}{item.address_line_2}</Text>

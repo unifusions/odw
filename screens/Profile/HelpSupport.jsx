@@ -5,7 +5,7 @@ import { ThemeContext } from "../../theme/ThemeProvider";
 import SafeAreaContainer from "../../components/SafeAreaContainer";
 import { EnvelopeIcon, PhoneArrowUpRightIcon } from "react-native-heroicons/outline";
 import Card from "../../components/Card";
-import { ExclamationCircleIcon } from "react-native-heroicons/solid";
+import { ExclamationCircleIcon, TrashIcon } from "react-native-heroicons/solid";
 
 const HelpSupport = () => {
     const { theme, toggleTheme, resetTheme } = useContext(ThemeContext);
@@ -24,6 +24,11 @@ const HelpSupport = () => {
             color: theme.amber,
             marginBottom: 6,
         },
+
+        deactivate :{fontFamily: theme.font700,
+            fontSize: 16,
+            color: theme.danger,
+            marginBottom: 6,},
 
         emergencyText: {
             fontFamily: theme.font500,
@@ -61,7 +66,7 @@ const HelpSupport = () => {
                     <PhoneArrowUpRightIcon color={theme.blue} style={{ marginEnd: 16 }} size={40} />
                     <View >
                         <Text style={localStyles.infoTitle}>Call Support</Text>
-                        <Text style={localStyles.info}>+1 (702) 997-5057</Text>
+                        <Text style={localStyles.info}>+1 (702) 706-2704</Text>
                     </View>
                 </View>
             </Card>
@@ -79,6 +84,21 @@ const HelpSupport = () => {
 
                 </View>
             </View>
+
+            <View style={{ backgroundColor: theme.danger50, padding: 8, borderRadius: 24 }}>
+
+                <View style={{ flexDirection: "row", marginVertical: 16, alignItems: "top" }}>
+                    <TrashIcon color={theme.danger} size={30} style={{ marginEnd: 16 }} />
+                    <View style={{ flex: 1 }}>
+                        <Text style={localStyles.deactivate}>Delete/Deactivate Account</Text>
+                        <Text style={[localStyles.info, { flexWrap: "wrap" }]}>To delete/deactivate your account, please email us from your registered email address.
+This helps us verify your identity and protect your data.
+                        </Text>
+                    </View>
+
+                </View>
+            </View>
+
              
         </SafeAreaContainer>
 
